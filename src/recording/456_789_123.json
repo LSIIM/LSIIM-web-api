@@ -1,0 +1,10 @@
+{
+  "baby_info": "Informações do bebê",
+  "mov_id": "123",
+  "baby_id": "456",
+  "project_id": "789",
+  "videos": [
+    "video_cam1.mp4",
+    "video_cam2.mp4"
+  ]
+}
