@@ -4,7 +4,6 @@ import prisma from "../client";
 import ApiError from "../utils/apiError";
 import { encryptPassword } from "../utils/encryption";
 import { PartialEntity, tNovoUser } from "../types/response";
-import { get } from "http";
 
 /**
  * Criando usuários
@@ -24,7 +23,7 @@ const createUsers = async (newUsers: tNovoUser[]): Promise<User[]> => {
 
         user.password = await encryptPassword(user.password);
     }
-
+    //TODO - não retornar senha
     const createUsers = prisma.user.createManyAndReturn({
         data: newUsers.map(({ name, email, password, cpf, role }) => ({
             name,
@@ -121,7 +120,6 @@ const blOutroUsuarioComEsteEmail = async (email: string, userId?: number): Promi
 /**
  * Update user by id
  * @param {object} dadosUser => Dados do usuário a ser atualizado
- * @param {ObjectId} userId => Id do usuário que está realizando a modificação
  * @returns {Promise<User>}
  */
 const updateUserById = async <Key extends keyof User>(

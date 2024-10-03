@@ -1,6 +1,4 @@
-import {User} from "@prisma/client";
-
-
+import { User, BabyInfo } from "@prisma/client";
 
 export interface TokenResponse {
     token: string;
@@ -16,8 +14,11 @@ export interface AuthTokensResponse {
 //USER
 export type tNovoUser = PartialEntity<User, "name" | "email" | "password" | "cpf" | "role">;
 
-
-
+//BABYINFO
+export type tNovoBabyInfo = PartialEntity<
+    BabyInfo,
+    "name" | "birthDate" | "isPremature" | "gestationalAge"
+>;
 
 //TIPOS AUXILIARES
 export type PartialEntity<Entity, Keys extends keyof Entity> = {

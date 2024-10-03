@@ -42,13 +42,11 @@ model Token {
 
 model BabyInfo {
   id             Int      @id @default(autoincrement())
-  name           String
-  birth_year     Int
-  birth_month    Int
-  birth_day      Int
-  isPremature    Boolean
+  name           String   @db.VarChar(256)
+  birthDate      DateTime
+  isPremature    Boolean  
   gestationalAge Int
-  atipicidade    String?
+  atipicidade    String?  @db.VarChar(256)
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
