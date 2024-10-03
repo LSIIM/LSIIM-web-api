@@ -4,17 +4,50 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index.js"
+    "start": "nodemon -e ts,json src/server.ts",
+    "create-admin": "ts-node ./src/scripts/createDefaultAdmin"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/compression": "^1.7.5",
+    "@types/dotenv": "^8.2.0",
+    "@types/express": "^5.0.0",
+    "@types/helmet": "^4.0.0",
+    "@types/joi": "^17.2.3",
+    "@types/moment": "^2.13.0",
+    "@types/node": "^22.7.4",
+    "@types/passport-jwt": "^4.0.1",
+    "prisma": "^5.20.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.2"
+  },
   "dependencies": {
-    "body-parser": "^1.20.3",
+    "@prisma/client": "^5.20.0",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/nodemon": "^1.19.6",
+    "@types/passport": "^1.0.16",
+    "@types/winston": "^2.4.4",
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
+    "compression": "^1.7.4",
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
+    "express-rate-limit": "^7.4.0",
+    "helmet": "^8.0.0",
+    "http-status": "^1.7.4",
+    "httpstatus": "^1.0.0",
+    "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
-    "nodemon": "^3.1.4"
-  },
-  "description": ""
+    "moment": "^2.30.1",
+    "nodemon": "^3.1.7",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
+    "winston": "^3.14.2",
+    "yup": "^1.4.0"
+  }
 }

@@ -1,0 +1,197 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(256)
+  email     String   @unique @db.VarChar(256)
+  password  String   @db.VarChar(256)
+  cpf       String   @db.VarChar(14)
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  tokens    Token[]
+
+  @@map("usuarios")
+}
+
+model Token {
+  id          String    @id @default(uuid())
+  token       String
+  type        TokenType
+  expires     DateTime
+  createdAt   DateTime  @default(now())
+  blacklisted Boolean
+  userId      Int
+  user        User      @relation(fields: [userId], references: [id])
+
+  @@map("tokens")
+}
+
+model BabyInfo {
+  id             Int      @id @default(autoincrement())
+  name           String
+  birth_year     Int
+  birth_month    Int
+  birth_day      Int
+  isPremature    Boolean
+  gestationalAge Int
+  atipicidade    String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  recordings Recording[]
+}
+
+model CamInfo {
+  id         Int      @id @default(autoincrement())
+  model      String
+  isInfraRed Boolean
+  framerate  Float
+  //videoTypeId
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  //recordings Recording[] 
+  recordVideoTypes RecordVideoTypeCamUsed[]
+}
+
+model MovesInfo {
+  id          Int      @id @default(autoincrement())
+  description String
+  projectId   Int
+  project     Project  @relation(fields: [projectId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  recordings Recording[]
+}
+
+model Recording {
+  id             Int       @id @default(autoincrement())
+  ignore         Boolean
+  observation    String?
+  babyId         Int
+  babyInfo       BabyInfo  @relation(fields: [babyId], references: [id])
+  recordingYear  Int
+  recordingMonth Int
+  recordingDay   Int
+  moveId         Int
+  movesInfo      MovesInfo @relation(fields: [moveId], references: [id])
+  movAux         Boolean
+  //camId           Int
+  //camInfo        CamInfo  @relation(fields: [camId], references: [id])
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  recordVideoTypes RecordVideoTypeCamUsed[]
+  annotations      Annotation[]
+  processed        Processing[]
+}
+
+model Project {
+  id          Int      @id @default(autoincrement())
+  projectName String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  projectsVideoTypes ProjectVideoType[]
+  movesInfo          MovesInfo[]
+}
+
+model ProjectVideoType {
+  id        Int      @id @default(autoincrement())
+  projectId Int
+  project   Project  @relation(fields: [projectId], references: [id])
+  isMain    Boolean
+  typeName  String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  recordVideoType RecordVideoTypeCamUsed[]
+}
+
+model RecordVideoTypeCamUsed {
+  id                 Int              @id @default(autoincrement())
+  camIdUsed          Int
+  camInfo            CamInfo          @relation(fields: [camIdUsed], references: [id])
+  recordingId        Int
+  recording          Recording        @relation(fields: [recordingId], references: [id])
+  projectVideoTypeId String
+  projectVT          ProjectVideoType @relation(fields: [projectVideoTypeId], references: [typeName])
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  annotations Annotation[]
+}
+
+model AnnotationType {
+  id        Int     @id @default(autoincrement())
+  name      String
+  jsonModel String?
+
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  annotations Annotation[]
+}
+
+model Annotation {
+  id               Int                    @id @default(autoincrement())
+  recordingId      Int
+  recording        Recording              @relation(fields: [recordingId], references: [id])
+  videoTypeId      Int
+  videoType        RecordVideoTypeCamUsed @relation(fields: [videoTypeId], references: [id])
+  annotationTypeId Int
+  annotationType   AnnotationType         @relation(fields: [annotationTypeId], references: [id])
+  createdAt        DateTime               @default(now())
+  updatedAt        DateTime               @updatedAt
+  frames           Json
+  comment          String?
+}
+
+model ProcessingType {
+  id          Int          @id @default(autoincrement())
+  name        String
+  description String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  processings Processing[]
+}
+
+model Processing {
+  id               Int            @id @default(autoincrement())
+  videoUrl         String
+  processingTypeId Int
+  processingType   ProcessingType @relation(fields: [processingTypeId], references: [id])
+  status           String
+  recordingId      Int
+  recording        Recording      @relation(fields: [recordingId], references: [id])
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  resultUrl String?
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum TokenType {
+  ACCESS
+  REFRESH
+  RESET_PASSWORD
+  VERIFY_EMAIL
+}
