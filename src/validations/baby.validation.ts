@@ -41,7 +41,10 @@ const createBabyInfo: yup.ObjectSchema<tValidCreateSchema<tNovoBabyInfo>> = yup.
 });
 
 const queryBabyInfo: yup.ObjectSchema<
-    tValidQuerySchema<PartialEntity<BabyInfo, "name">, PartialEntity<BabyInfo, "name" | "createdAt">>
+    tValidQuerySchema<
+    PartialEntity<BabyInfo, "name">, 
+    PartialEntity<BabyInfo, "name" | "createdAt">
+    >
 > = yup.object({
     query: yup
         .object({

@@ -42,11 +42,11 @@ model Token {
 
 model BabyInfo {
   id             Int      @id @default(autoincrement())
-  name           String   @db.VarChar(256)
+  name           String
   birthDate      DateTime
-  isPremature    Boolean  
+  isPremature    Boolean
   gestationalAge Int
-  atipicidade    String?  @db.VarChar(256)
+  atipicidade    String?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
@@ -54,15 +54,15 @@ model BabyInfo {
 }
 
 model CamInfo {
-  id         Int      @id @default(autoincrement())
-  model      String
-  isInfraRed Boolean
-  framerate  Float
-  //videoTypeId
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id                 Int               @id @default(autoincrement())
+  model              String
+  isInfraRed         Boolean
+  framerate          Float?
+  projectVideoTypeId Int?
+  projectVideoType   ProjectVideoType? @relation(fields: [projectVideoTypeId], references: [id])
 
-  //recordings Recording[] 
+  createdAt        DateTime                 @default(now())
+  updatedAt        DateTime                 @updatedAt
   recordVideoTypes RecordVideoTypeCamUsed[]
 }
 
@@ -78,21 +78,19 @@ model MovesInfo {
 }
 
 model Recording {
-  id             Int       @id @default(autoincrement())
-  ignore         Boolean
-  observation    String?
-  babyId         Int
-  babyInfo       BabyInfo  @relation(fields: [babyId], references: [id])
-  recordingYear  Int
-  recordingMonth Int
-  recordingDay   Int
-  moveId         Int
-  movesInfo      MovesInfo @relation(fields: [moveId], references: [id])
-  movAux         Boolean
-  //camId           Int
-  //camInfo        CamInfo  @relation(fields: [camId], references: [id])
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  id            Int        @id @default(autoincrement())
+  ignore        Boolean
+  observation   String?
+  babyId        Int
+  babyInfo      BabyInfo   @relation(fields: [babyId], references: [id])
+  recordingDate DateTime
+  moveId        Int?
+  movesInfo     MovesInfo? @relation(fields: [moveId], references: [id])
+  movAux        Boolean
+  projectId     Int
+  projects      Project    @relation(fields: [projectId], references: [id])
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
 
   recordVideoTypes RecordVideoTypeCamUsed[]
   annotations      Annotation[]
@@ -107,17 +105,18 @@ model Project {
 
   projectsVideoTypes ProjectVideoType[]
   movesInfo          MovesInfo[]
+  recordings         Recording[]
 }
 
 model ProjectVideoType {
-  id        Int      @id @default(autoincrement())
-  projectId Int
-  project   Project  @relation(fields: [projectId], references: [id])
-  isMain    Boolean
-  typeName  String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
+  id              Int                      @id @default(autoincrement())
+  projectId       Int
+  isMain          Boolean
+  typeName        String
+  project         Project                  @relation(fields: [projectId], references: [id])
+  createdAt       DateTime                 @default(now())
+  updatedAt       DateTime                 @updatedAt
+  camsInfo        CamInfo[]
   recordVideoType RecordVideoTypeCamUsed[]
 }
 
@@ -127,8 +126,8 @@ model RecordVideoTypeCamUsed {
   camInfo            CamInfo          @relation(fields: [camIdUsed], references: [id])
   recordingId        Int
   recording          Recording        @relation(fields: [recordingId], references: [id])
-  projectVideoTypeId String
-  projectVT          ProjectVideoType @relation(fields: [projectVideoTypeId], references: [typeName])
+  projectVideoTypeId Int
+  projectVideoType   ProjectVideoType @relation(fields: [projectVideoTypeId], references: [id])
   createdAt          DateTime         @default(now())
   updatedAt          DateTime         @updatedAt
 
@@ -136,9 +135,8 @@ model RecordVideoTypeCamUsed {
 }
 
 model AnnotationType {
-  id        Int     @id @default(autoincrement())
-  name      String
-  jsonModel String?
+  id        Int    @id @default(autoincrement())
+  descricao String
 
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
@@ -153,10 +151,10 @@ model Annotation {
   videoType        RecordVideoTypeCamUsed @relation(fields: [videoTypeId], references: [id])
   annotationTypeId Int
   annotationType   AnnotationType         @relation(fields: [annotationTypeId], references: [id])
+  frames           Int[]
+  comment          String?
   createdAt        DateTime               @default(now())
   updatedAt        DateTime               @updatedAt
-  frames           Json
-  comment          String?
 }
 
 model ProcessingType {
@@ -178,8 +176,7 @@ model Processing {
   recording        Recording      @relation(fields: [recordingId], references: [id])
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
-
-  resultUrl String?
+  resultUrl        String?
 }
 
 enum Role {

@@ -15,11 +15,13 @@ export interface AuthTokensResponse {
 export type tNovoUser = PartialEntity<User, "name" | "email" | "password" | "cpf" | "role">;
 
 //BABYINFO
-export type tNovoBabyInfo = PartialEntity<
-    BabyInfo,
-    "name" | "birthDate" | "isPremature" | "gestationalAge"
->;
+export type tNovoBabyInfo = PartialEntity<BabyInfo, "name" | "birthDate" | "isPremature" | "gestationalAge">;
 
+//RECORDING
+export type tNovoRecording = PartialEntity<
+    Recording,
+    "ignore" | "observation" | "babyId" | "recordingDate" | "moveId" | "movAux" | "projectId"
+>;
 //TIPOS AUXILIARES
 export type PartialEntity<Entity, Keys extends keyof Entity> = {
     [Key in Keys]: Entity[Key];

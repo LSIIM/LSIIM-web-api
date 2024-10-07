@@ -20,8 +20,8 @@ router
     })
     .get(yupValidate(babyValidation.queryBabyInfo), (req, res, next) => {
         try {
-            // const validRequest = req as unknown as ReqQueryBabyInfo;
-            // const params = validRequest.query.where;
+            const validRequest = req as unknown as ReqQueryBabyInfo;
+            const params = validRequest.query.where;
 
             babyController.queryBabyInfo(req, res, next);
         } catch (error) {

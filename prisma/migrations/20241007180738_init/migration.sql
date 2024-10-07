@@ -1,3 +1,36 @@
+-- CreateEnum
+CREATE TYPE "Role" AS ENUM ('ADMIN', 'USER');
+
+-- CreateEnum
+CREATE TYPE "TokenType" AS ENUM ('ACCESS', 'REFRESH', 'RESET_PASSWORD', 'VERIFY_EMAIL');
+
+-- CreateTable
+CREATE TABLE "usuarios" (
+    "id" SERIAL NOT NULL,
+    "name" VARCHAR(256) NOT NULL,
+    "email" VARCHAR(256) NOT NULL,
+    "password" VARCHAR(256) NOT NULL,
+    "cpf" VARCHAR(14) NOT NULL,
+    "role" "Role" NOT NULL DEFAULT 'USER',
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "usuarios_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "tokens" (
+    "id" TEXT NOT NULL,
+    "token" TEXT NOT NULL,
+    "type" "TokenType" NOT NULL,
+    "expires" TIMESTAMP(3) NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "blacklisted" BOOLEAN NOT NULL,
+    "userId" INTEGER NOT NULL,
+
+    CONSTRAINT "tokens_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateTable
 CREATE TABLE "BabyInfo" (
     "id" SERIAL NOT NULL,
@@ -17,7 +50,8 @@ CREATE TABLE "CamInfo" (
     "id" SERIAL NOT NULL,
     "model" TEXT NOT NULL,
     "isInfraRed" BOOLEAN NOT NULL,
-    "framerate" DOUBLE PRECISION NOT NULL,
+    "framerate" DOUBLE PRECISION,
+    "projectVideoTypeId" INTEGER,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -41,11 +75,10 @@ CREATE TABLE "Recording" (
     "ignore" BOOLEAN NOT NULL,
     "observation" TEXT,
     "babyId" INTEGER NOT NULL,
-    "recordingYear" INTEGER NOT NULL,
-    "recordingMonth" INTEGER NOT NULL,
-    "recordingDay" INTEGER NOT NULL,
-    "moveId" INTEGER NOT NULL,
+    "recordingDate" TIMESTAMP(3) NOT NULL,
+    "moveId" INTEGER,
     "movAux" BOOLEAN NOT NULL,
+    "projectId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -79,7 +112,7 @@ CREATE TABLE "RecordVideoTypeCamUsed" (
     "id" SERIAL NOT NULL,
     "camIdUsed" INTEGER NOT NULL,
     "recordingId" INTEGER NOT NULL,
-    "projectVideoTypeId" TEXT NOT NULL,
+    "projectVideoTypeId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -89,8 +122,7 @@ CREATE TABLE "RecordVideoTypeCamUsed" (
 -- CreateTable
 CREATE TABLE "AnnotationType" (
     "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
-    "jsonModel" TEXT,
+    "descricao" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -103,10 +135,10 @@ CREATE TABLE "Annotation" (
     "recordingId" INTEGER NOT NULL,
     "videoTypeId" INTEGER NOT NULL,
     "annotationTypeId" INTEGER NOT NULL,
+    "frames" INTEGER[],
+    "comment" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "frames" JSONB NOT NULL,
-    "comment" TEXT,
 
     CONSTRAINT "Annotation_pkey" PRIMARY KEY ("id")
 );
@@ -137,7 +169,13 @@ CREATE TABLE "Processing" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "ProjectVideoType_typeName_key" ON "ProjectVideoType"("typeName");
+CREATE UNIQUE INDEX "usuarios_email_key" ON "usuarios"("email");
+
+-- AddForeignKey
+ALTER TABLE "tokens" ADD CONSTRAINT "tokens_userId_fkey" FOREIGN KEY ("userId") REFERENCES "usuarios"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "CamInfo" ADD CONSTRAINT "CamInfo_projectVideoTypeId_fkey" FOREIGN KEY ("projectVideoTypeId") REFERENCES "ProjectVideoType"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "MovesInfo" ADD CONSTRAINT "MovesInfo_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "Project"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -146,7 +184,10 @@ ALTER TABLE "MovesInfo" ADD CONSTRAINT "MovesInfo_projectId_fkey" FOREIGN KEY ("
 ALTER TABLE "Recording" ADD CONSTRAINT "Recording_babyId_fkey" FOREIGN KEY ("babyId") REFERENCES "BabyInfo"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Recording" ADD CONSTRAINT "Recording_moveId_fkey" FOREIGN KEY ("moveId") REFERENCES "MovesInfo"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Recording" ADD CONSTRAINT "Recording_moveId_fkey" FOREIGN KEY ("moveId") REFERENCES "MovesInfo"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Recording" ADD CONSTRAINT "Recording_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "Project"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ProjectVideoType" ADD CONSTRAINT "ProjectVideoType_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "Project"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -158,7 +199,7 @@ ALTER TABLE "RecordVideoTypeCamUsed" ADD CONSTRAINT "RecordVideoTypeCamUsed_camI
 ALTER TABLE "RecordVideoTypeCamUsed" ADD CONSTRAINT "RecordVideoTypeCamUsed_recordingId_fkey" FOREIGN KEY ("recordingId") REFERENCES "Recording"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "RecordVideoTypeCamUsed" ADD CONSTRAINT "RecordVideoTypeCamUsed_projectVideoTypeId_fkey" FOREIGN KEY ("projectVideoTypeId") REFERENCES "ProjectVideoType"("typeName") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "RecordVideoTypeCamUsed" ADD CONSTRAINT "RecordVideoTypeCamUsed_projectVideoTypeId_fkey" FOREIGN KEY ("projectVideoTypeId") REFERENCES "ProjectVideoType"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Annotation" ADD CONSTRAINT "Annotation_recordingId_fkey" FOREIGN KEY ("recordingId") REFERENCES "Recording"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
