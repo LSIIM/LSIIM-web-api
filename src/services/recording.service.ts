@@ -56,23 +56,41 @@ const queryRecording = async <Key extends keyof Recording>(
         skip: page !== undefined && limit !== undefined ? page * limit : undefined,
     });
 
-    const getVideo = (recordingId: number): string[] => {
+    const getVideos = async (recordingId: number, projectId: number): Promise<{ url: string; isMain: boolean }[]> => {
         const basePath = "/Users/viniciusrosa/Desktop/Vinicius/Lsiim/recordings";
         const pathToVideos = path.join(basePath, String(recordingId));
         try {
-            const files = fs.readdirSync(pathToVideos);
-            return files.filter((file) => file.endsWith(".avi")).map((file) => path.join(pathToVideos, file));
+            const files = fs.readdirSync(pathToVideos).filter((file) => file.endsWith(".avi"));
+            const videos = await Promise.all(
+                files.map(async (file) => {
+                    const videoId = parseInt(file.split(".")[0], 10);
+
+                    const projectVideoType = await prisma.projectVideoType.findUnique({
+                        where: { id: videoId },
+                        select: { isMain: true },
+                    });
+
+                    return {
+                        url: path.join(pathToVideos, file),
+                        isMain: projectVideoType?.isMain ?? false,
+                    };
+                })
+            );
+            return videos;
         } catch (err) {
             console.log(err);
             return [];
         }
     };
 
-    const recordingsWithVideo = recordings.map((recording) => ({
-        ...recording,
-        videos: { url: getVideo((recording as Recording).id), is_main: true },
-    }));
-    return recordingsWithVideo as unknown as (Pick<Recording, Key> & { videos: { url: string; is_main: string } }[])[];
+    const recordingsWithVideos = await Promise.all(
+        recordings.map(async (recording) => ({
+            ...recording,
+            videos: await getVideos((recording as Recording).id, (recording as Recording).projectId),
+            
+        }))
+    );
+    return recordingsWithVideos as unknown as (Pick<Recording, Key> & { videos: { url: string; is_main: string } }[])[];
 };
 
 /**

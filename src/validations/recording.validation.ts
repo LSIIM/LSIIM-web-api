@@ -26,7 +26,7 @@ const queryRecording: yup.ObjectSchema<
             page: yup.number().integer("O page deve ser um número inteiro."),
             where: yup
                 .object({
-                    babyId: yup.number().integer().positive(),
+                    babyId: yup.number(),
                     projectId: yup.number(),
                     moveId: yup.number(),
                 })

@@ -13,10 +13,21 @@ Recomenda-se também a instalação do [Yarn](https://classic.yarnpkg.com/lang/e
 2. Copie o conteudo do arquivo `.env.example` e cole no arquivo `.env` criado.
 3. Modifique as variaveis de acordo com seu ambiente.
 
-### Instale as dependências e rode localmente
+### Instale as dependências 
 Para instalar as dependências do projeto e rodar localmente o sistema digite em um terminal na raiz do projeto:
 
 ```
     yarn
-    yarn start 
+```
+
+### Para inserir dados no banco local rode o comando
+
+```
+    yarn seed
+```
+
+### Para rodar localmente
+
+```
+    yarn start
 ```
