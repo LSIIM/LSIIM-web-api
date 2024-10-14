@@ -73,7 +73,7 @@ const getBabyInfoById = async <Key extends keyof BabyInfo>(
     ] as Key[]
 ): Promise<Pick<BabyInfo, Key> | null> => {
     return (await prisma.babyInfo.findUnique({
-        where: { id },
+        where: { id: Number(id) },
         select: keys.reduce((acc, key) => ({ ...acc, [key]: true }), {}),
     })) as Promise<Pick<BabyInfo, Key> | null>;
 };

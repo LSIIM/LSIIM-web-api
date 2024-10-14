@@ -15,6 +15,7 @@ const createBabyInfo = catchAsync(async (req, res) => {
 
 const queryBabyInfo = catchAsync(async (req, res) => {
     const validRequest = req as unknown as ReqQueryBabyInfo;
+
     const babyInfos = await babyService.queryBabyInfo(validRequest.query);
     res.send(babyInfos);
 });
@@ -23,9 +24,8 @@ const getBabyInfoById = catchAsync(async (req, res) => {
     const validRequest = req as unknown as ReqGetBabyInfo;
 
     const babyInfo = await babyService.getBabyInfoById(validRequest.params.id);
-    if (!babyInfo) {
-        throw new ApiError(httpStatus.NOT_FOUND, "BabyInfo not found");
-    }
+    if (!babyInfo) throw new ApiError(httpStatus.NOT_FOUND, "BabyInfo not found");
+
     res.send(babyInfo);
 });
 
@@ -33,4 +33,4 @@ export default {
     createBabyInfo,
     queryBabyInfo,
     getBabyInfoById,
-}
+};

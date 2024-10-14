@@ -9,6 +9,7 @@ import routes from "./routes";
 import { jwtStrategy } from "./config/passport";
 import ApiError from "./utils/apiError";
 import { errorConverter, errorHandler } from "./middlewares/error";
+import { reqInterceptor } from "./middlewares/reqInterceptor";
 
 dotenv.config();
 const server = express();
@@ -29,19 +30,22 @@ server.options("*", cors());
 server.use(passport.initialize());
 passport.use("jwt", jwtStrategy);
 
+//Lida com as querys
+server.use(reqInterceptor);
 //v1 api routes
 server.use("/v1", routes);
-//send back a 404 error for any unknown api request
 
 server.use((req, res, next) => {
     next(new ApiError(httpStatus.NOT_FOUND, "Not found"));
 })
-
+//send back a 404 error for any unknown api request
 // convert error to ApiError, if needed
 server.use(errorConverter);
 
 // handle error
 server.use(errorHandler);
+
+
 
 const port = process.env.PORT;
 const version = process.env.npm_package_version;

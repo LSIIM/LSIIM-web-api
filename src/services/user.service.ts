@@ -77,7 +77,7 @@ const getUserById = async <Key extends keyof User>(
     keys: Key[] = ["id", "name", "email", "role", "cpf", "createdAt", "updatedAt"] as Key[]
 ): Promise<Pick<User, Key>> => {
     const user = await prisma.user.findUnique({
-        where: { id },
+        where: { id: Number(id) },
         select: keys.reduce((acc, key) => ({ ...acc, [key]: true }), {}),
     });
 
@@ -133,7 +133,7 @@ const updateUserById = async <Key extends keyof User>(
     if (!userEmailExist) throw new ApiError(httpStatus.BAD_REQUEST, "Email já cadastrado!");
 
     const userToUpdate = prisma.user.update({
-        where: { id: user.id },
+        where: { id: Number(user.id) },
         data: dadosUser,
         select: keys.reduce((obj, k) => ({ ...obj, [k]: true }), {}),
     });
@@ -155,7 +155,7 @@ const deleteUseById = async (id: number): Promise<void> => {
     //TODO - EVITAR DELETES DE ADMINS(caso único admin)
 
     await prisma.user.delete({
-        where: { id: user.id },
+        where: { id: Number(user.id )},
     });
 };
 

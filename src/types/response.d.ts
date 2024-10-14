@@ -1,4 +1,4 @@
-import { User, BabyInfo } from "@prisma/client";
+import { User, BabyInfo, Recording, AnnotationType } from "@prisma/client";
 
 export interface TokenResponse {
     token: string;
@@ -9,8 +9,19 @@ export interface AuthTokensResponse {
     access: TokenResponse;
     refresh?: TokenResponse;
 }
-
 //TIPOS DERIVADOS
+//ANNOTATION
+export type tNovoAnnotation = {
+    annotations: {
+        projectVideoTypeId: number;
+        annotationTypeId: number;
+        frames: number[];
+        comment?: string;
+    }[];
+};
+
+//ANNOTATION TYPE
+export type tNovoAnnotationType = PartialEntity<AnnotationType, "name" | "descricao">;
 //USER
 export type tNovoUser = PartialEntity<User, "name" | "email" | "password" | "cpf" | "role">;
 
@@ -20,9 +31,11 @@ export type tNovoBabyInfo = PartialEntity<BabyInfo, "name" | "birthDate" | "isPr
 //RECORDING
 export type tNovoRecording = PartialEntity<
     Recording,
-    "ignore" | "observation" | "babyId" | "recordingDate" | "moveId" | "movAux" | "projectId"
+    "ignore" | "observation" | "babyId" | "recordingDate" | "moveId" | "movAux" | "projectId" | "camInfoId"
 >;
-//TIPOS AUXILIARES
+
+
+//TIPOS AUXILIARESj
 export type PartialEntity<Entity, Keys extends keyof Entity> = {
     [Key in Keys]: Entity[Key];
 };

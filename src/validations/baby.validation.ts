@@ -23,9 +23,7 @@ const createBabyInfo: yup.ObjectSchema<tValidCreateSchema<tNovoBabyInfo>> = yup.
                                 .required("Deve ser passado um nome.")
                                 .min(3, "O nome deve ter no mínimo 3 caracteres.")
                                 .max(50, "O nome deve ter no máximo 50 caracteres."),
-                            birthDate: yup
-                                .date()
-                                .required("Deve ser passado uma data de nascimento."),
+                            birthDate: yup.date().required("Deve ser passado uma data de nascimento."),
                             isPremature: yup.boolean().required("Deve ser passado se é prematuro."),
                             gestationalAge: yup.number().required("Deve ser passado a idade gestacional(semanas)."),
                             atipicidade: yup.string(),
@@ -41,10 +39,7 @@ const createBabyInfo: yup.ObjectSchema<tValidCreateSchema<tNovoBabyInfo>> = yup.
 });
 
 const queryBabyInfo: yup.ObjectSchema<
-    tValidQuerySchema<
-    PartialEntity<BabyInfo, "name">, 
-    PartialEntity<BabyInfo, "name" | "createdAt">
-    >
+    tValidQuerySchema<PartialEntity<BabyInfo, "name">, PartialEntity<BabyInfo, "name" | "createdAt">>
 > = yup.object({
     query: yup
         .object({
@@ -66,10 +61,13 @@ const queryBabyInfo: yup.ObjectSchema<
 const getBabyInfo: yup.ObjectSchema<tValidParamsSchema<PartialEntity<BabyInfo, "id">>> = yup.object({
     params: yup
         .object({
-            id: yup.number().integer("O id deve ser um número inteiro.").required("Deve ser passado id pelo params."),
+            id: yup
+                .number()
+                .integer("O id deve ser um número inteiro.")
+                .required("Deve ser passado id pelo params.")
+                .transform((value) => (typeof value === "string" ? parseInt(value) : value)),
         })
-        .noUnknown(true)
-        .strict(),
+        .noUnknown(true),
 });
 
 export type ReqCreateBabyInfo = InferType<typeof createBabyInfo>;
