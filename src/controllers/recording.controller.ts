@@ -18,11 +18,11 @@ const getRecording = catchAsync(async (req, res) => {
 });
 
 const createAnnotation = catchAsync(async (req, res) => {
-    const { params } = req as unknown as ReqGetRecording;
+    const { recordingId } = req.params
     const validRequest = req as unknown as ReqCreateAnnotation;
 
-    await recordingService.createAnnotation(validRequest.body.data, params.id);
-    res.status(httpStatus.CREATED).send();
+    const annotations = await recordingService.createAnnotation(validRequest.body.data, Number(recordingId));
+    res.status(httpStatus.CREATED).send(annotations);
 });
 
 export default {

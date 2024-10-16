@@ -87,7 +87,6 @@ const queryRecording = async <Key extends keyof Recording>(
         recordings.map(async (recording) => ({
             ...recording,
             videos: await getVideos((recording as Recording).id, (recording as Recording).projectId),
-            
         }))
     );
     return recordingsWithVideos as unknown as (Pick<Recording, Key> & { videos: { url: string; is_main: string } }[])[];
@@ -131,12 +130,16 @@ const createAnnotation = async (annotations: tNovoAnnotation[], recordingId: num
         "projectId",
     ]);
     if (!recordingParaAnotacao) throw new ApiError(httpStatus.NOT_FOUND, "Recording não encontrado.");
+    const annotationToCreate = annotations.map((annotation) => ({
+        ...annotation,
+        recordingId,
+    }));
+    const frames = annotationToCreate.map((annotation) => annotation.frames);
+    if (frames.length < 1 || frames.length > 2)
+        throw new Error("The frames array must have either one or two elements.");
 
-    const annotationsToCreate = annotations.flatMap(({ annotations }) =>
-        annotations.map((annotation) => ({ ...annotation, recordingId }))
-    );
     const createdAnnotations = await prisma.annotation.createManyAndReturn({
-        data: annotationsToCreate,
+        data: annotationToCreate
     });
 
     return createdAnnotations;

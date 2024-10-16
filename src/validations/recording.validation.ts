@@ -47,35 +47,34 @@ const getRecording: yup.ObjectSchema<tValidParamsSchema<PartialEntity<Recording,
                 .transform((value) => (typeof value === "string" ? parseInt(value) : value)),
         })
         .required("Deve ser passado um params.")
-        .noUnknown(true)
+        .noUnknown(true),
 });
 
 const createAnnotation: yup.ObjectSchema<tValidCreateSchema<tNovoAnnotation>> = yup.object({
+    params: yup
+        .object({
+            recordingId: yup
+                .number()
+                .required("Deve ser passado um recordingId.")
+                .transform((value) => (typeof value === "string" ? parseInt(value) : value)),
+        })
+        .required("Deve ser passado um params.")
+        .noUnknown(true),
     body: yup
         .object({
             data: yup
                 .array(
                     yup
                         .object({
-                            annotations: yup
-                                .array(
-                                    yup.object({
-                                        recordingId: yup.number().integer(),
-                                        projectVideoTypeId: yup
-                                            .number()
-                                            .integer()
-                                            .required("Deve ser passado um projectVideoTypeId."),
-                                        annotationTypeId: yup
-                                            .number()
-                                            .integer()
-                                            .required("Deve ser passado um annotationTypeId."),
-                                        frames: yup
-                                            .array(yup.number().integer().required("Frames precisam ser passados"))
-                                            .required("Deve ser passado um frame."),
-                                        comment: yup.string(),
-                                    })
-                                )
-                                .required("Deve ser passado um annotations."),
+                            projectVideoTypeId: yup
+                                .number()
+                                .integer()
+                                .required("Deve ser passado um projectVideoTypeId."),
+                            annotationTypeId: yup.number().integer().required("Deve ser passado um annotationTypeId."),
+                            frames: yup
+                                .array(yup.number().integer().required("Frames precisam ser passados"))
+                                .required("Deve ser passado um frame."),
+                            comment: yup.string(),
                         })
                         .noUnknown(true)
                         .strict()
