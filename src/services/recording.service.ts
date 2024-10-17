@@ -5,7 +5,6 @@ import ApiError from "../utils/apiError";
 import { PartialEntity, tNovoAnnotation, tNovoRecording } from "../types/response";
 import fs from "fs";
 import path from "path";
-import { get } from "http";
 /**
  * Query for recordings
  * @param {Object} query - Opções de busca
@@ -38,6 +37,7 @@ const queryRecording = async <Key extends keyof Recording>(
         "project",
         "camInfoId",
         "camInfo",
+        "recordVideoTypes",
         "createdAt",
         "updatedAt",
     ] as Key[]
@@ -108,6 +108,7 @@ const getRecordingById = async <Key extends keyof Recording>(
         "movAux",
         "projectId",
         "project",
+        "recordVideoTypes",
         "createdAt",
         "updatedAt",
     ] as Key[]

@@ -4,6 +4,7 @@ import authRoute from "./auth.route";
 import babyRoute from "./baby.route";
 import recordingRoute from "./recording.route";
 import annotationTypeRoute from "./annotationType.route";
+import projectRoute from "./project.route";
 const router = express.Router();
 
 const defaultRoutes = [
@@ -12,6 +13,7 @@ const defaultRoutes = [
     { path: "/baby", route: babyRoute },
     { path: "/recording", route: recordingRoute },
     { path: "/annotation-type", route: annotationTypeRoute },
+    { path: "/project", route: projectRoute },
 ];
 
 defaultRoutes.forEach((route) => {
