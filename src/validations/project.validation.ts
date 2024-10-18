@@ -1,4 +1,4 @@
-import { Project, ProjectVideoType } from "@prisma/client";
+import { Project, ProjectVideoType, MovesInfo } from "@prisma/client";
 import yup from "../config/yup";
 import {PartialEntity, tValidQuerySchema, tValidCreateSchema} from "../types/response";
 import { InferType } from "yup";
@@ -53,6 +53,8 @@ const queryProjectVideoType: yup.ObjectSchema<
         .noUnknown(true)
         .strict(),
 });
+
+
 
 export type ReqQueryProjectVideoType = InferType<typeof queryProjectVideoType>;
 export type ReqQueryProject = InferType<typeof queryProject>;
