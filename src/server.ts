@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import helmet from "helmet";
 import compression from "compression";
 import cors from "cors";
-import httpStatus from '../utils/httpStatus'
+import httpStatus from './utils/httpStatus';
 import passport from "passport";
 import routes from "./routes";
 import { jwtStrategy } from "./config/passport";

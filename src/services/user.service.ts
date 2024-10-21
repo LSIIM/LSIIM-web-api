@@ -1,5 +1,5 @@
 import { User, Role } from "@prisma/client";
-import httpStatus from '../utils/httpStatus'
+import httpStatus from './utils/httpStatus';
 import prisma from "../client";
 import ApiError from "../utils/apiError";
 import { encryptPassword } from "../utils/encryption";

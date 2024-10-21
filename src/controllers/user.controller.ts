@@ -1,4 +1,4 @@
-import httpStatus from '../utils/httpStatus'
+import httpStatus from './utils/httpStatus';
 import ApiError from "../utils/apiError";
 import catchAsync from "../utils/catchAsync";
 import { userService } from "../services";
