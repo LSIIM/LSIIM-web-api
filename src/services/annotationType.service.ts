@@ -1,6 +1,6 @@
 import { AnnotationType } from ".prisma/client";
 import { PartialEntity, tNovoAnnotationType } from "../types/response";
-import httpStatus from './utils/httpStatus';
+import httpStatus from '../utils/httpStatus';
 import prisma from "../client";
 import ApiError from "../utils/apiError";
 import { InferType } from "yup";

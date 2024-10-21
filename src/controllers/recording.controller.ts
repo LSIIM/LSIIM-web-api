@@ -1,4 +1,5 @@
-const { default: httpStatus } = require("http-status");
+
+import httpStatus from '../utils/httpStatus';
 import ApiError from "../utils/apiError";
 import catchAsync from "../utils/catchAsync";
 import { recordingService } from "../services";

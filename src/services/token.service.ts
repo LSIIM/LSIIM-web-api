@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import moment, { Moment } from "moment";
-import httpStatus from './utils/httpStatus';
+import httpStatus from '../utils/httpStatus';
 import { User, TokenType, Token } from "@prisma/client";
 import ApiError from "../utils/apiError";
 import prisma from "../client";

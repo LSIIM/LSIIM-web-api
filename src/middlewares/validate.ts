@@ -1,4 +1,5 @@
-import httpStatus from './utils/httpStatus';
+
+import httpStatus from '../utils/httpStatus';
 import ApiError from "../utils/apiError";
 import { NextFunction, Request, Response } from "express";
 import pick from "../utils/pick";

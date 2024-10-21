@@ -1,5 +1,5 @@
 import passport from 'passport';
-import httpStatus from './utils/httpStatus';
+import httpStatus from '../utils/httpStatus';
 import ApiError from '../utils/apiError';
 import { roleRights } from '../config/roles';
 import { NextFunction, Request, Response } from 'express';
@@ -24,7 +24,7 @@ const verifyCallback =
         userRights.includes(requiredRight)
       );
       if (!hasRequiredRights && req.params.userId !== user.id) {
-        return reject(new ApiError(httpStatus.FORBIDDEN, 'Forbidden'));
+        return reject(new ApiError(httpStatus.UNAUTHORIZED, 'UNAUTHORIZED'));
       }
     }
 

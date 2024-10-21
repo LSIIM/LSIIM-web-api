@@ -1,5 +1,5 @@
 import { Recording, Annotation } from "@prisma/client";
-import httpStatus from './utils/httpStatus';
+import httpStatus from '../utils/httpStatus';
 import prisma from "../client";
 import ApiError from "../utils/apiError";
 import { PartialEntity, tNovoAnnotation, tNovoRecording } from "../types/response";

@@ -1,5 +1,5 @@
 import { MovesInfo, Project, ProjectVideoType } from "@prisma/client";
-import httpStatus from './utils/httpStatus';
+import httpStatus from '../utils/httpStatus';
 import prisma from "../client";
 import ApiError from "../utils/apiError";
 
