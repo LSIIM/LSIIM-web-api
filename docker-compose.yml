@@ -6,8 +6,8 @@ services:
             - "5434:5432"
         container_name: lsiim-docker-db
         environment:
-            POSTGRES_USER: lsiim
-            POSTGRES_PASSWORD: lsiim
+            POSTGRES_USER: prisma
+            POSTGRES_PASSWORD: prisma
             POSTGRES_DB: lsiim
         networks:
             - lsiimnet
@@ -22,7 +22,7 @@ services:
         ports:
             - "5001:5000"
         environment:
-            DATABASE_URL: postgres://lsiim:lsiim@db:5432/lsiim
+            DATABASE_URL: postgres://prisma:prisma@db:5432/lsiim
         volumes:
           - /app/node_modules
         depends_on:
