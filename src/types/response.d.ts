@@ -14,7 +14,7 @@ export interface AuthTokensResponse {
 export type tNovoAnnotation = PartialEntity<Annotation, "annotationTypeId" | "frames" | "projectVideoTypeId" > & {comment?: string};
 
 //ANNOTATION TYPE
-export type tNovoAnnotationType = PartialEntity<AnnotationType, "name" | "descricao">;
+export type tNovoAnnotationType = PartialEntity<AnnotationType, "name" | "descricao" | "isTemporal">;
 //USER
 export type tNovoUser = PartialEntity<User, "name" | "email" | "password" | "cpf" | "role">;
 

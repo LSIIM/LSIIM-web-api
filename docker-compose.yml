@@ -1,0 +1,39 @@
+services:
+    db:
+        image: postgres:13
+        restart: always
+        ports:
+            - "5434:5432"
+        container_name: lsiim-docker-db
+        environment:
+            POSTGRES_USER: lsiim
+            POSTGRES_PASSWORD: lsiim
+            POSTGRES_DB: lsiim
+        networks:
+            - lsiimnet
+        volumes:
+            - db_data:/var/lib/postgresql/data
+        
+    
+    api:
+        build: 
+            context: .
+        container_name: lsiim-docker-api
+        ports:
+            - "5001:5000"
+        environment:
+            DATABASE_URL: postgres://lsiim:lsiim@db:5432/lsiim
+        volumes:
+          - /app/node_modules
+        depends_on:
+            - db
+        networks:
+            - lsiimnet
+        command: ["yarn", "start"]
+
+networks:
+  lsiimnet:
+    driver: bridge
+
+volumes:
+  db_data:

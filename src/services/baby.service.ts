@@ -1,5 +1,5 @@
 import { BabyInfo } from "@prisma/client";
-import httpStatus from "http-status";
+import httpStatus from '../utils/httpStatus'
 import prisma from "../client";
 import ApiError from "../utils/apiError";
 import { PartialEntity, tNovoBabyInfo } from "../types/response";

@@ -1,9 +1,9 @@
 import { ErrorRequestHandler } from "express";
-import httpStatus from "http-status";
 import ApiError from "../utils/apiError";
 import { Prisma } from "@prisma/client";
 import config from "../config/config";
 import logger from "../config/logger";
+import httpStatus from '../utils/httpStatus'
 
 export const errorConverter: ErrorRequestHandler = (err, req, res, next) => {
     let error = err;
@@ -39,3 +39,4 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
 
   res.status(statusCode).send(response);
 };
+

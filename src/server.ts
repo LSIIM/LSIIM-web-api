@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import helmet from "helmet";
 import compression from "compression";
 import cors from "cors";
-import httpStatus from "http-status";
+import httpStatus from '../utils/httpStatus'
 import passport from "passport";
 import routes from "./routes";
 import { jwtStrategy } from "./config/passport";
@@ -38,6 +38,7 @@ server.use("/v1", routes);
 server.use((req, res, next) => {
     next(new ApiError(httpStatus.NOT_FOUND, "Not found"));
 })
+
 //send back a 404 error for any unknown api request
 // convert error to ApiError, if needed
 server.use(errorConverter);
@@ -46,12 +47,5 @@ server.use(errorConverter);
 server.use(errorHandler);
 
 
-
-const port = process.env.PORT;
-const version = process.env.npm_package_version;
-
-server.listen(Number(port), () => {
-    console.log(`🚀 v${version} Servidor rodando em http://localhost:${port}`);
-});
 
 export default server;

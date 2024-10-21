@@ -1,4 +1,4 @@
-import httpStatus from "http-status";
+import httpStatus from '../utils/httpStatus'
 import catchAsync from "../utils/catchAsync";
 import { authService, tokenService } from "../services";
 import {

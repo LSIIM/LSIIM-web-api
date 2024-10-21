@@ -1,4 +1,4 @@
-import httpStatus from "http-status";
+import httpStatus from '../utils/httpStatus'
 import tokenService from "./token.service";
 import userService from "./user.service";
 import ApiError from "../utils/apiError";

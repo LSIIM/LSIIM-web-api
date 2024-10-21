@@ -1,5 +1,5 @@
 import { MovesInfo, Project, ProjectVideoType } from "@prisma/client";
-import httpStatus from "http-status";
+import httpStatus from '../utils/httpStatus'
 import prisma from "../client";
 import ApiError from "../utils/apiError";
 
@@ -78,7 +78,7 @@ const queryProjectVideoType = async <Key extends keyof ProjectVideoType>(
         sortBy?: Key;
         sortType?: "asc" | "desc";
     },
-    keys: Key[] = ["id", "isMain", "typeName", "camsInfo"] as Key[]
+    keys: Key[] = ["id", "isMain", "typeName"] as Key[]
 ): Promise<Pick<ProjectVideoType, Key>[]> => {
     const limit = query.limit;
     const page = query.page;

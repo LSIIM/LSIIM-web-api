@@ -98,14 +98,7 @@ model Recording {
   recordVideoTypes RecordVideoTypeCamUsed[]
   annotations      Annotation[]
   processed        Processing[]
-}
-
-model Video {
-  id        Int      @id @default(autoincrement())
-  url       String
-  isMain    Boolean
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  results          Result[]
 }
 
 model Project {
@@ -121,15 +114,16 @@ model Project {
 
 model ProjectVideoType {
   id              Int                      @id @default(autoincrement())
-  projectId       Int
   isMain          Boolean
   typeName        String
+  projectId       Int
   project         Project                  @relation(fields: [projectId], references: [id])
   createdAt       DateTime                 @default(now())
   updatedAt       DateTime                 @updatedAt
   camsInfo        CamInfo[]
   recordVideoType RecordVideoTypeCamUsed[]
   annotations     Annotation[]
+  results         Result[]
 }
 
 model RecordVideoTypeCamUsed {
@@ -145,9 +139,10 @@ model RecordVideoTypeCamUsed {
 }
 
 model AnnotationType {
-  id        Int    @id @default(autoincrement())
-  name      String
-  descricao String
+  id         Int     @id @default(autoincrement())
+  name       String
+  descricao  String
+  isTemporal Boolean
 
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
@@ -188,6 +183,43 @@ model Processing {
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
   resultUrl        String?
+}
+
+model ResultTypeOptions {
+  id          Int          @id @default(autoincrement())
+  name        String
+  description String
+  resultTypeId Int
+  resultType   ResultType   @relation(fields: [resultTypeId], references: [id])
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  results     Result[]
+}
+
+model ResultType {
+  id          Int              @id @default(autoincrement())
+  name        String
+  description String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  resultTypes ResultTypeOptions[]
+  results     Result[]
+}
+
+model Result {
+  id          Int      @id @default(autoincrement())
+  scalarResult Float
+  resultTypeId Int
+  resultType   ResultType @relation(fields: [resultTypeId], references: [id])
+  resultTypeOptionId Int
+  resultTypeOption   ResultTypeOptions @relation(fields: [resultTypeOptionId], references: [id])
+  projectVideoTypeId Int
+  projectVideoType   ProjectVideoType @relation(fields: [projectVideoTypeId], references: [id])
+  recordingId Int
+  recording   Recording @relation(fields: [recordingId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
 }
 
 enum Role {

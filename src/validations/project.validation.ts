@@ -1,13 +1,10 @@
 import { Project, ProjectVideoType, MovesInfo } from "@prisma/client";
 import yup from "../config/yup";
-import {PartialEntity, tValidQuerySchema, tValidCreateSchema} from "../types/response";
+import { PartialEntity, tValidQuerySchema, tValidCreateSchema } from "../types/response";
 import { InferType } from "yup";
 
 const queryProject: yup.ObjectSchema<
-    tValidQuerySchema<
-        PartialEntity<Project, "projectName">,
-        PartialEntity<Project, "id" | "projectName">
-    >
+    tValidQuerySchema<PartialEntity<Project, "projectName">, PartialEntity<Project, "id" | "projectName">>
 > = yup.object({
     query: yup
         .object({
@@ -26,15 +23,14 @@ const queryProject: yup.ObjectSchema<
         .strict(),
 });
 
-
 const queryProjectVideoType: yup.ObjectSchema<
     tValidQuerySchema<
         PartialEntity<ProjectVideoType, "isMain" | "typeName">,
         PartialEntity<ProjectVideoType, "id" | "isMain" | "typeName">
     >
 > = yup.object({
-    params:
-        yup.object({
+    params: yup
+        .object({
             projectId: yup
                 .number()
                 .integer()
@@ -54,12 +50,36 @@ const queryProjectVideoType: yup.ObjectSchema<
         .strict(),
 });
 
-
+const queryMovesInfo: yup.ObjectSchema<
+    tValidQuerySchema<PartialEntity<MovesInfo, "id">, PartialEntity<MovesInfo, "id">>
+> = yup.object({
+    params: yup
+        .object({
+            projectId: yup
+                .number()
+                .integer()
+                .required("Deve ser passado um projectId.")
+                .transform((value) => (typeof value === "string" ? parseInt(value) : value)),
+        })
+        .required("Deve ser passado um params.")
+        .noUnknown(true),
+    query: yup
+        .object({
+            sortBy: yup.mixed<"id">().oneOf(["id"]),
+            sortType: yup.mixed<"asc" | "desc">().oneOf(["asc", "desc"]),
+            limit: yup.number().integer("O limit deve ser um número inteiro."),
+            page: yup.number().integer("O page deve ser um número inteiro."),
+        })
+        .noUnknown(true)
+        .strict(),
+});
 
 export type ReqQueryProjectVideoType = InferType<typeof queryProjectVideoType>;
+export type ReqQueryMovesInfo = InferType<typeof queryMovesInfo>;
 export type ReqQueryProject = InferType<typeof queryProject>;
 
 export default {
     queryProjectVideoType,
-    queryProject
-}
+    queryProject,
+    queryMovesInfo,
+};

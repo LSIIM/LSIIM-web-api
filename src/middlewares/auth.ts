@@ -1,5 +1,5 @@
 import passport from 'passport';
-import httpStatus from 'http-status';
+import httpStatus from '../utils/httpStatus'
 import ApiError from '../utils/apiError';
 import { roleRights } from '../config/roles';
 import { NextFunction, Request, Response } from 'express';

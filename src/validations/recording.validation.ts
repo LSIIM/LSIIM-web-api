@@ -12,6 +12,32 @@ import {
 } from "../types/response";
 import { InferType } from "yup";
 
+const createRecording: yup.ObjectSchema<tValidCreateSchema<tNovoRecording>> = yup.object({
+    body: yup
+        .object({
+            data: yup
+                .array(
+                    yup
+                        .object({
+                            ignore: yup.boolean().required("Deve ser passado um ignore."),
+                            observation: yup.string().required("Deve ser passado um observation."),
+                            babyId: yup.number().integer().required("Deve ser passado um babyId."),
+                            recordingDate: yup.date().required("Deve ser passado um recordingDate."),
+                            moveId: yup.number().integer().required("Deve ser passado um moveId."),
+                            movAux: yup.boolean().required("Deve ser passado um movAux."),
+                            projectId: yup.number().integer().required("Deve ser passado um projectId."),
+                            camInfoId: yup.number().integer().required("Deve ser passado um camInfoId."),
+                        })
+                        .noUnknown(true)
+                        .strict()
+                )
+                .required("Deve ser passado um data."),
+        })
+        .required("Deve ser passado um body.")
+        .noUnknown(true)
+        .strict(),
+});
+
 const queryRecording: yup.ObjectSchema<
     tValidQuerySchema<
         PartialEntity<Recording, "babyId" | "moveId" | "projectId">,
@@ -86,11 +112,13 @@ const createAnnotation: yup.ObjectSchema<tValidCreateSchema<tNovoAnnotation>> = 
         .strict(),
 });
 
+export type ReqCreateRecording = InferType<typeof createRecording>;
 export type ReqQueryRecording = InferType<typeof queryRecording>;
 export type ReqGetRecording = InferType<typeof getRecording>;
 export type ReqCreateAnnotation = InferType<typeof createAnnotation>;
 
 export default {
+    createRecording,
     queryRecording,
     getRecording,
     createAnnotation,

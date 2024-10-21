@@ -12,6 +12,7 @@ const createAnnotationType: yup.ObjectSchema<tValidCreateSchema<tNovoAnnotationT
                         .object({
                             name: yup.string().required("O nome é obrigatório."),
                             descricao: yup.string().required("A descrição é obrigatória."),
+                            isTemporal: yup.boolean().required("O campo isTemporal é obrigatório."),
                         })
                         .noUnknown(true)
                         .strict()

@@ -1,10 +1,20 @@
 import { Recording, Annotation } from "@prisma/client";
-import httpStatus from "http-status";
+import httpStatus from '../utils/httpStatus'
 import prisma from "../client";
 import ApiError from "../utils/apiError";
 import { PartialEntity, tNovoAnnotation, tNovoRecording } from "../types/response";
+import config from "../config/config";
 import fs from "fs";
 import path from "path";
+const createRecording = async (novoRecording: tNovoRecording[]): Promise<Recording[]> => {
+    const _createRecording = prisma.recording.createManyAndReturn({
+        data: novoRecording,
+    });
+
+    const [recordingCriados] = await prisma.$transaction([_createRecording]);
+    return recordingCriados;
+};
+
 /**
  * Query for recordings
  * @param {Object} query - Opções de busca
@@ -57,9 +67,10 @@ const queryRecording = async <Key extends keyof Recording>(
     });
 
     const getVideos = async (recordingId: number, projectId: number): Promise<{ url: string; isMain: boolean }[]> => {
-        const basePath = "/Users/viniciusrosa/Desktop/Vinicius/Lsiim/recordings";
+        const basePath = config.recordingPath;
         const pathToVideos = path.join(basePath, String(recordingId));
         try {
+            //!Alterar o endsWith para .mp4 caso os vídeos sejam .mp4(no mac está como .avi)
             const files = fs.readdirSync(pathToVideos).filter((file) => file.endsWith(".avi"));
             const videos = await Promise.all(
                 files.map(async (file) => {
@@ -140,13 +151,14 @@ const createAnnotation = async (annotations: tNovoAnnotation[], recordingId: num
         throw new Error("The frames array must have either one or two elements.");
 
     const createdAnnotations = await prisma.annotation.createManyAndReturn({
-        data: annotationToCreate
+        data: annotationToCreate,
     });
 
     return createdAnnotations;
 };
 
 export default {
+    createRecording,
     queryRecording,
     getRecordingById,
     createAnnotation,
