@@ -46,7 +46,7 @@ export const reqInterceptor = (req: Request, _: Response, next: NextFunction) =>
     try {
         //TODO: Por algum motivo handleNumbers converte em número as datas quando convertidas (Por isso handleNumbers antes de handleDatas)
         //Tentar dar um jeito no handleNumbers para que isto não ocorra, enquanto isso manter handleNumbers antes de handleDatas
-        //handleDatas(req.body);
+        handleDatas(req.body);
 
         //handleBooleansOnlyQuery(req.query);
         handleNumbersOnlyQuery(req.query);
