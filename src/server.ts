@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import helmet from "helmet";
 import compression from "compression";
 import cors from "cors";
-import httpStatus from './utils/httpStatus';
+import httpStatus from './utils/httpStatus'
 import passport from "passport";
 import routes from "./routes";
 import { jwtStrategy } from "./config/passport";
@@ -23,8 +23,8 @@ server.use(compression());
 server.use(express.json());
 
 // enable cors
-server.use(cors());
-server.options("", cors({ origin: true }))
+server.use(cors({origin: true}));
+server.options("*", cors());
 
 // jwt authentication
 server.use(passport.initialize());
