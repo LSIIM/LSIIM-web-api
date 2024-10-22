@@ -67,11 +67,12 @@ const queryRecording = async <Key extends keyof Recording>(
     });
 
     const getVideos = async (recordingId: number, projectId: number): Promise<{ url: string; isMain: boolean }[]> => {
-        const basePath = String(config.recordingPath);
+        const basePath = '/videos';
         const pathToVideos = path.join(basePath, String(recordingId));
         try {
             //!Alterar o endsWith para .mp4 caso os vídeos sejam .mp4(no mac está como .avi)
-            const files = fs.readdirSync(pathToVideos).filter((file) => file.endsWith(".avi"));
+            // Fazer o files arquivos que terminam com .avi ou .mp4
+            const files = fs.readdirSync(pathToVideos).filter((file) => file.endsWith(".avi") || file.endsWith(".mp4"));
             const videos = await Promise.all(
                 files.map(async (file) => {
                     const videoId = parseInt(file.split(".")[0], 10);

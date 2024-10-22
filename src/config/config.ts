@@ -22,7 +22,7 @@ const envSchema = Joi.object()
         JWT_VERIFY_EMAIL_EXPIRATION_MINUTES: Joi.number()
             .default(10)
             .description('minutes after which verify email token expires'),
-        RECORDING_PATH: Joi.string().description('path to the recordings'),
+        RECORDINGS_PATH: Joi.string().description('path to the recordings'),
         // SMTP_HOST: Joi.string().description('server that will send the emails'),
         // SMTP_PORT: Joi.number().description('port to connect to the email server'),
         // SMTP_USERNAME: Joi.string().description('username for email server'),
@@ -49,7 +49,7 @@ export default {
         resetPasswordExpirationMinutes: envVars.JWT_RESET_PASSWORD_EXPIRATION_MINUTES,
         verifyEmailExpirationMinutes: envVars.JWT_VERIFY_EMAIL_EXPIRATION_MINUTES,
     },
-    recordingPath: envVars.RECORDING_PATH,
+    recordingPath: envVars.RECORDINGS_PATH,
     // email:{
     //     smtp:{
     //         host: envVars.SMTP_HOST,

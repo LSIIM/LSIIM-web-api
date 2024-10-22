@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "db:up": "docker compose up -d --remove-orphans",
+    "db:up": "docker compose up",
     "db:down": "docker compose down",
     "prisma:dev": "npx prisma migrate dev",
     "prisma:deploy": "npx prisma migrate deploy",

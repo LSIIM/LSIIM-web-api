@@ -25,12 +25,12 @@ services:
         volumes:
             - .:/app
             - /app/node_modules
+            - ${RECORDINGS_PATH}:/videos
         depends_on:
             - db
         networks:
             - lsiimnet
         command: sh -c "sleep 10 && yarn start"
-
 
 networks:
     lsiimnet:
