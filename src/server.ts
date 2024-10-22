@@ -24,7 +24,7 @@ server.use(express.json());
 
 // enable cors
 server.use(cors());
-server.options("*", cors());
+server.options("", cors({ origin: true }))
 
 // jwt authentication
 server.use(passport.initialize());

@@ -22,7 +22,7 @@ const queryProject = async <Key extends keyof Project>(
         sortType?: "asc" | "desc";
         where?: { projectName?: string };
     },
-    keys: Key[] = ["id", "projectName", "createdAt", "updatedAt"] as Key[]
+    keys: Key[] = ["id", "projectName", "createdAt", "updatedAt", "projectsVideoTypes"] as Key[]
 ): Promise<Pick<Project, Key>[]> => {
     const limit = query.limit;
     const page = query.page;
@@ -32,13 +32,20 @@ const queryProject = async <Key extends keyof Project>(
     //Busca informações do project
     const projects = await prisma.project.findMany({
         where: query.where,
-        select: keys.reduce((acc, key) => ({ ...acc, [key]: true }), {}),
+        select: {
+            ...(keys.reduce((acc, key) => ({ ...acc, [key]: true }), {})),
+            projectsVideoTypes:{
+                include:{
+                    camsInfo:true,
+                    recordVideoType:true
+                }
+            }},
         orderBy: sortBy ? { [sortBy]: sortType } : undefined,
         take: limit,
         skip: page !== undefined && limit !== undefined ? page * limit : undefined,
     });
 
-    return projects as Pick<Project, Key>[];
+    return projects as unknown as Pick<Project, Key>[];
 };
 
 /*
@@ -49,10 +56,18 @@ const queryProject = async <Key extends keyof Project>(
 
 const getProjectById = async <Key extends keyof Project>(
     id: number,
-    keys: Key[] = ["id", "projectName", "createdAt", "updatedAt"] as Key[]
+    keys: Key[] = ["id", "projectName", "createdAt", "updatedAt", "projectsVideoTypes"] as Key[]
 ): Promise<Pick<Project, Key>> => {
     const project = await prisma.project.findUnique({
         where: { id: Number(id) },
+        include:{
+            projectsVideoTypes: {
+                include:{
+                    camsInfo:true,
+                    recordVideoType:true
+                }
+            }
+        }
     });
 
     if (!project) throw new ApiError(httpStatus.NOT_FOUND, "Projeto não encontrado.");
