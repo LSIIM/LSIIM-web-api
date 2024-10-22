@@ -19,7 +19,7 @@ services:
             context: .
         container_name: lsiim-docker-api
         ports:
-            - "5001:${PORT}"
+            - 5001:5000
         environment:
             DATABASE_URL: postgres://prisma:prisma@db:5432/lsiim
         volumes:
@@ -29,7 +29,7 @@ services:
             - db
         networks:
             - lsiimnet
-        command: sh -c "sleep 10 && yarn seed && yarn start"
+        command: sh -c "sleep 10 && yarn start"
 
 
 networks:
