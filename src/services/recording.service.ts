@@ -67,7 +67,7 @@ const queryRecording = async <Key extends keyof Recording>(
     });
 
     const getVideos = async (recordingId: number, projectId: number): Promise<{ url: string; isMain: boolean }[]> => {
-        const basePath = config.recordingPath;
+        const basePath = String(config.recordingPath);
         const pathToVideos = path.join(basePath, String(recordingId));
         try {
             //!Alterar o endsWith para .mp4 caso os vídeos sejam .mp4(no mac está como .avi)

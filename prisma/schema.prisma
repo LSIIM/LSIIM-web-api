@@ -6,6 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
 }
 
 datasource db {
@@ -51,6 +52,7 @@ model BabyInfo {
   updatedAt      DateTime @updatedAt
 
   recordings Recording[]
+  @@map("baby_info")
 }
 
 model CamInfo {
@@ -65,6 +67,9 @@ model CamInfo {
   updatedAt        DateTime                 @updatedAt
   recordVideoTypes RecordVideoTypeCamUsed[]
   recordings       Recording[]
+
+  @@map("cam_info")
+
 }
 
 model MovesInfo {
@@ -76,6 +81,8 @@ model MovesInfo {
   updatedAt   DateTime @updatedAt
 
   recordings Recording[]
+
+  @@map("moves_info")
 }
 
 model Recording {
@@ -97,8 +104,10 @@ model Recording {
 
   recordVideoTypes RecordVideoTypeCamUsed[]
   annotations      Annotation[]
-  processed        Processing[]
+  //processed        Processing[]
   results          Result[]
+
+  @@map("recordings")
 }
 
 model Project {
@@ -110,6 +119,8 @@ model Project {
   projectsVideoTypes ProjectVideoType[]
   movesInfo          MovesInfo[]
   recordings         Recording[]
+
+  @@map("projects")
 }
 
 model ProjectVideoType {
@@ -124,6 +135,8 @@ model ProjectVideoType {
   recordVideoType RecordVideoTypeCamUsed[]
   annotations     Annotation[]
   results         Result[]
+
+  @@map("project_video_type")
 }
 
 model RecordVideoTypeCamUsed {
@@ -136,6 +149,8 @@ model RecordVideoTypeCamUsed {
   projectVideoType   ProjectVideoType @relation(fields: [projectVideoTypeId], references: [id])
   createdAt          DateTime         @default(now())
   updatedAt          DateTime         @updatedAt
+
+  @@map("record_video_type_cam_used")
 }
 
 model AnnotationType {
@@ -147,6 +162,8 @@ model AnnotationType {
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   annotations Annotation[]
+
+  @@map("annotation_type")
 }
 
 model Annotation {
@@ -161,29 +178,35 @@ model Annotation {
   comment            String?
   createdAt          DateTime         @default(now())
   updatedAt          DateTime         @updatedAt
+
+  @@map("annotations")
 }
 
-model ProcessingType {
-  id          Int          @id @default(autoincrement())
-  name        String
-  description String?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  processings Processing[]
-}
+// model ProcessingType {
+//   id          Int          @id @default(autoincrement())
+//   name        String
+//   description String?
+//   createdAt   DateTime     @default(now())
+//   updatedAt   DateTime     @updatedAt
+//   processings Processing[]
 
-model Processing {
-  id               Int            @id @default(autoincrement())
-  videoUrl         String
-  processingTypeId Int
-  processingType   ProcessingType @relation(fields: [processingTypeId], references: [id])
-  status           String
-  recordingId      Int
-  recording        Recording      @relation(fields: [recordingId], references: [id])
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
-  resultUrl        String?
-}
+//   @@map("processing_type")
+// }
+
+// model Processing {
+//   id               Int            @id @default(autoincrement())
+//   videoUrl         String
+//   processingTypeId Int
+//   processingType   ProcessingType @relation(fields: [processingTypeId], references: [id])
+//   status           String
+//   recordingId      Int
+//   recording        Recording      @relation(fields: [recordingId], references: [id])
+//   createdAt        DateTime       @default(now())
+//   updatedAt        DateTime       @updatedAt
+//   resultUrl        String?
+
+//   @@map("processings")
+// }
 
 model ResultTypeOptions {
   id          Int          @id @default(autoincrement())
@@ -194,6 +217,8 @@ model ResultTypeOptions {
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   results     Result[]
+
+  @@map("result_type_options")
 }
 
 model ResultType {
@@ -204,6 +229,8 @@ model ResultType {
   updatedAt   DateTime         @updatedAt
   resultTypes ResultTypeOptions[]
   results     Result[]
+
+  @@map("result_type")
 }
 
 model Result {
@@ -219,6 +246,8 @@ model Result {
   recording   Recording @relation(fields: [recordingId], references: [id])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  @@map("results")
 
 }
 

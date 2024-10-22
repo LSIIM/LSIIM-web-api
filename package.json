@@ -4,14 +4,18 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "db:up": "docker compose up -d --remove-orphans",
+    "db:up": "docker compose up",
     "db:down": "docker compose down",
     "prisma:dev": "npx prisma migrate dev",
     "prisma:deploy": "npx prisma migrate deploy",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:dev": "nodemon -e ts,json src/index.ts",
-    "start": "yarn prisma:deploy && NODE_ENV=production node dist/src/index.js",
+    "seed": "yarn prisma:deploy && node dist/prisma/seeds/seed.js",
+    "start": "VERSION=$npm_package_version NODE_ENV=production node dist/src/index.js",
     "create-admin": "ts-node ./src/scripts/createDefaultAdmin"
+  },
+  "prisma": {
+    "seed:dev": "yarn prisma:dev && yarn ts-node ./prisma/seeds/seed.ts"
   },
   "keywords": [],
   "author": "",
@@ -47,7 +51,6 @@
     "express": "^4.21.0",
     "express-rate-limit": "^7.4.0",
     "helmet": "^8.0.0",
-    "httpstatus": "^1.0.0",
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
     "moment": "^2.30.1",
@@ -56,8 +59,5 @@
     "passport-jwt": "^4.0.1",
     "winston": "^3.14.2",
     "yup": "^1.4.0"
-  },
-  "prisma": {
-    "seed": "yarn prisma:dev && yarn ts-node ./prisma/seeds/seed.ts"
   }
 }
