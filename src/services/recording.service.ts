@@ -83,7 +83,7 @@ const queryRecording = async <Key extends keyof Recording>(
                     });
 
                     return {
-                        url: path.join(process.env.URL_BASE_PATH + pathToVideos, file),
+                        url: `${process.env.URL_BASE_PATH?process.env.URL_BASE_PATH.replace(/\/$/, ''):''}/${pathToVideos.replace(/^\//, '')}/${file}`,
                         isMain: projectVideoType?.isMain ?? false,
                     };
                 })
