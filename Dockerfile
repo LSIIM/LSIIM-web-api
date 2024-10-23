@@ -24,7 +24,8 @@ COPY tsconfig.json tsconfig.json
 COPY .env .env
 
 RUN yarn
-
+RUN npx prisma db seed
 RUN yarn build
+
 
 CMD ["yarn", "start"]

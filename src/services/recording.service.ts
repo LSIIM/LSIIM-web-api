@@ -1,5 +1,5 @@
 import { Recording, Annotation } from "@prisma/client";
-import httpStatus from '../utils/httpStatus';
+import httpStatus from "../utils/httpStatus";
 import prisma from "../client";
 import ApiError from "../utils/apiError";
 import { PartialEntity, tNovoAnnotation, tNovoRecording } from "../types/response";
@@ -67,7 +67,7 @@ const queryRecording = async <Key extends keyof Recording>(
     });
 
     const getVideos = async (recordingId: number, projectId: number): Promise<{ url: string; isMain: boolean }[]> => {
-        const basePath = '/videos';
+        const basePath = "/videos";
         const pathToVideos = path.join(basePath, String(recordingId));
         try {
             //!Alterar o endsWith para .mp4 caso os vídeos sejam .mp4(no mac está como .avi)
@@ -115,28 +115,33 @@ const getRecordingById = async <Key extends keyof Recording>(
         "ignore",
         "observation",
         "babyId",
+        "babyInfo",
         "recordingDate",
         "moveId",
+        "moveInfo",
         "movAux",
         "projectId",
         "project",
+        "camInfoId",
+        "camInfo",
         "recordVideoTypes",
         "createdAt",
         "updatedAt",
     ] as Key[]
-): Promise<Pick<Recording, Key> | null> => {
+): Promise<Pick<Recording, Key> & { videos: { url: string; is_main: string } }[]> => {
     const recording = await prisma.recording.findUnique({
         where: { id: Number(id) },
         select: keys.reduce((acc, key) => ({ ...acc, [key]: true }), {}),
     });
+    if (!recording) throw new ApiError(httpStatus.NOT_FOUND, "Recording não encontrado.");
 
-    const getVideos = async (recordingId: number, projectId: number): Promise<{ url: string; isMain: boolean }[]> => {
-        const basePath = '/videos';
-        const pathToVideos = path.join(basePath, String(recordingId));
+    const getVideos = async (id: number, projectId: number): Promise<{ url: string; isMain: boolean }[]> => {
+        const pathBase = "/videos";
+        const pathToRecordings = path.join(pathBase, String(id));
         try {
-            //!Alterar o endsWith para .mp4 caso os vídeos sejam .mp4(no mac está como .avi)
-            // Fazer o files arquivos que terminam com .avi ou .mp4
-            const files = fs.readdirSync(pathToVideos).filter((file) => file.endsWith(".avi") || file.endsWith(".mp4"));
+            const files = fs
+                .readdirSync(pathToRecordings)
+                .filter((file) => file.endsWith(".avi") || file.endsWith(".mp4"));
             const videos = await Promise.all(
                 files.map(async (file) => {
                     const videoId = parseInt(file.split(".")[0], 10);
@@ -147,7 +152,7 @@ const getRecordingById = async <Key extends keyof Recording>(
                     });
 
                     return {
-                        url: path.join(pathToVideos, file),
+                        url: path.join(process.env.URL_BASE_PATH + pathToRecordings, file),
                         isMain: projectVideoType?.isMain ?? false,
                     };
                 })
@@ -157,12 +162,12 @@ const getRecordingById = async <Key extends keyof Recording>(
             console.log(err);
             return [];
         }
-    }
+    };
     const recordingWithVideos = {
         ...recording,
-        videos: await getVideos((recording as Recording).id, (recording as Recording).projectId),
-    }
-    return recordingWithVideos as unknown as Promise<Pick<Recording, Key> | null>;
+        videos: await getVideos(id, (recording as Recording).projectId),
+    };
+    return recordingWithVideos as unknown as (Pick<Recording, Key> & { videos: { url: string; is_main: string } }[]);
 };
 
 const createAnnotation = async (annotations: tNovoAnnotation[], recordingId: number): Promise<Annotation[]> => {
@@ -191,8 +196,6 @@ const createAnnotation = async (annotations: tNovoAnnotation[], recordingId: num
 
     return createdAnnotations;
 };
-
-
 
 export default {
     createRecording,
