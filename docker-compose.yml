@@ -17,14 +17,24 @@ services:
     api:
         build:
             context: .
+            args: # PORT DATABASE_URL JWT_SECRET JWT_ACCESS_EXPIRATION_MINUTES JWT_REFRESH_EXPIRATION_DAYS URL_BASE_PATH JWT_REFRESH_EXPIRATION_DAYS RECORDINGS_PATH
+                - RECORDINGS_PATH=${RECORDINGS_PATH}
+                - PORT=${PORT}
+                - DATABASE_URL=${DATABASE_URL}
+                - JWT_SECRET=${JWT_SECRET}
+                - JWT_ACCESS_EXPIRATION_MINUTES=${JWT_ACCESS_EXPIRATION_MINUTES}
+                - JWT_REFRESH_EXPIRATION_DAYS=${JWT_REFRESH_EXPIRATION_DAYS}
+                - URL_BASE_PATH=${URL_BASE_PATH}
+                
+
         container_name: lsiim-docker-api
         ports:
             - 5001:5000
         environment:
             DATABASE_URL: postgres://prisma:prisma@db:5432/lsiim
         volumes:
-            - .:/app
-            - /app/node_modules
+            # - .:/app
+            # - /app/node_modules
             - ${RECORDINGS_PATH}:/videos
         depends_on:
             - db

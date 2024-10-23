@@ -10,7 +10,7 @@
     "prisma:deploy": "npx prisma migrate deploy",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:dev": "nodemon -e ts,json src/index.ts",
-    "start": "yarn prisma:deploy && npx prisma db seed && VERSION=$npm_package_version NODE_ENV=production node dist/src/index.js",
+    "start": "yarn prisma:deploy && npx prisma db seed && VERSION=$npm_package_version NODE_ENV=production node ./dist/src/index.js",
     "create-admin": "ts-node ./src/scripts/createDefaultAdmin"
   },
   "prisma": {
