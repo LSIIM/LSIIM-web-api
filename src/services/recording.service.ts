@@ -83,7 +83,7 @@ const queryRecording = async <Key extends keyof Recording>(
                     });
 
                     return {
-                        url: `${process.env.URL_BASE_PATH?process.env.URL_BASE_PATH.replace(/\/$/, ''):''}/${pathToVideos.replace(/^\//, '')}/${file}`,
+                        url: `${process.env.URL_BASE_PATH ? process.env.URL_BASE_PATH.replace(/\/$/, "") : ""}/${pathToVideos.replace(/^\//, "")}/${file}`,
                         isMain: projectVideoType?.isMain ?? false,
                     };
                 })
@@ -152,7 +152,7 @@ const getRecordingById = async <Key extends keyof Recording>(
                     });
 
                     return {
-                        url: path.join(process.env.URL_BASE_PATH + pathToRecordings, file),
+                        url: `${process.env.URL_BASE_PATH ? process.env.URL_BASE_PATH.replace(/\/$/, "") : ""}/${pathBase.replace(/^\//, "")}/${file}`,
                         isMain: projectVideoType?.isMain ?? false,
                     };
                 })
@@ -167,7 +167,7 @@ const getRecordingById = async <Key extends keyof Recording>(
         ...recording,
         videos: await getVideos(id, (recording as Recording).projectId),
     };
-    return recordingWithVideos as unknown as (Pick<Recording, Key> & { videos: { url: string; is_main: string } }[]);
+    return recordingWithVideos as unknown as Pick<Recording, Key> & { videos: { url: string; is_main: string } }[];
 };
 
 const createAnnotation = async (annotations: tNovoAnnotation[], recordingId: number): Promise<Annotation[]> => {
