@@ -25,7 +25,7 @@ services:
                 - JWT_ACCESS_EXPIRATION_MINUTES=${JWT_ACCESS_EXPIRATION_MINUTES}
                 - JWT_REFRESH_EXPIRATION_DAYS=${JWT_REFRESH_EXPIRATION_DAYS}
                 - URL_BASE_PATH=${URL_BASE_PATH}
-                
+
 
         container_name: lsiim-docker-api
         ports:
@@ -40,7 +40,7 @@ services:
             - db
         networks:
             - lsiimnet
-        command: sh -c "sleep 10 && yarn start"
+        command: sh -c "sleep 20 && yarn start"
 
 networks:
     lsiimnet:

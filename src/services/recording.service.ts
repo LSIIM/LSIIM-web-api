@@ -152,7 +152,7 @@ const getRecordingById = async <Key extends keyof Recording>(
                     });
 
                     return {
-                        url: `${process.env.URL_BASE_PATH ? process.env.URL_BASE_PATH.replace(/\/$/, "") : ""}/${pathBase.replace(/^\//, "")}/${file}`,
+                        url: `${process.env.URL_BASE_PATH ? process.env.URL_BASE_PATH.replace(/\/$/, "") : ""}/${pathBase.replace(/^\//, "")}/${id}/${file}`,
                         isMain: projectVideoType?.isMain ?? false,
                     };
                 })
