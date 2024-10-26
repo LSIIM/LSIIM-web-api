@@ -1,40 +1,40 @@
 import express from "express";
 import auth from "../middlewares/auth";
 import { yupValidate } from "../middlewares/validate";
-import babyValidation, { ReqCreateBabyInfo, ReqQueryBabyInfo, ReqGetBabyInfo } from "../validations/baby.validation";
-import { babyController } from "../controllers";
+import babyValidation, { ReqCreatePatient, ReqGetPatient, ReqQueryPatient } from "../validations/patient.validation";
+import { patientController } from "../controllers";
 
 const router = express.Router();
 
 router
     .route("/")
-    .post(yupValidate(babyValidation.createBabyInfo), (req, res, next) => {
+    .post(yupValidate(babyValidation.createPatient), (req, res, next) => {
         try {
             // const validRequest = req as unknown as ReqCreateBabyInfo;
             // const arrParams = validRequest.body.data;
 
-            babyController.createBabyInfo(req, res, next);
+            patientController.createPatient(req, res, next);
         } catch (error) {
             next(error);
         }
     })
-    .get(yupValidate(babyValidation.queryBabyInfo), (req, res, next) => {
+    .get(yupValidate(babyValidation.queryPatient), (req, res, next) => {
         try {
-            const validRequest = req as unknown as ReqQueryBabyInfo;
+            const validRequest = req as unknown as ReqQueryPatient;
             const params = validRequest.query.where;
 
-            babyController.queryBabyInfo(req, res, next);
+            patientController.queryPatient(req, res, next);
         } catch (error) {
             next(error);
         }
     });
 
-router.route("/:id").get(yupValidate(babyValidation.getBabyInfo), (req, res, next) => {
+router.route("/:id").get(yupValidate(babyValidation.getPatient), (req, res, next) => {
     try {
         // const validRequest = req as unknown as ReqGetBabyInfo;
         // const params = validRequest.params;
 
-        babyController.getBabyInfoById(req, res, next);
+        patientController.getPatient(req, res, next);
     } catch (error) {
         next(error);
     }

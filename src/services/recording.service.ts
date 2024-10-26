@@ -1,11 +1,12 @@
-import { Recording, Annotation } from "@prisma/client";
+import { Recording, Annotation, Result } from "@prisma/client";
 import httpStatus from "../utils/httpStatus";
 import prisma from "../client";
 import ApiError from "../utils/apiError";
-import { PartialEntity, tNovoAnnotation, tNovoRecording } from "../types/response";
+import { PartialEntity, tNovoAnnotation, tNovoRecording, tNovoResults } from "../types/response";
 import config from "../config/config";
 import fs from "fs";
 import path from "path";
+
 const createRecording = async (novoRecording: tNovoRecording[]): Promise<Recording[]> => {
     const _createRecording = prisma.recording.createManyAndReturn({
         data: novoRecording,
@@ -170,31 +171,46 @@ const getRecordingById = async <Key extends keyof Recording>(
     return recordingWithVideos as unknown as Pick<Recording, Key> & { videos: { url: string; is_main: string } }[];
 };
 
-const createAnnotation = async (annotations: tNovoAnnotation[], recordingId: number): Promise<Annotation[]> => {
+const createAnnotation = async (
+    events: tNovoAnnotation[],
+    results: tNovoResults[],
+    recordingId: number
+): Promise<(Annotation & Result)[]> => {
     const recordingParaAnotacao = await getRecordingById(recordingId, [
         "id",
         "ignore",
         "observation",
-        "babyId",
+        "patientId",
         "recordingDate",
         "moveId",
         "movAux",
         "projectId",
     ]);
     if (!recordingParaAnotacao) throw new ApiError(httpStatus.NOT_FOUND, "Recording não encontrado.");
-    const annotationToCreate = annotations.map((annotation) => ({
+    const annotationToCreate = events.map((annotation) => ({
         ...annotation,
         recordingId,
     }));
+    const resultsToCreate = results.map((result) => ({
+        ...result,
+        recordingId,
+    }));
+
     const frames = annotationToCreate.map((annotation) => annotation.frames);
     if (frames.length < 1 || frames.length > 2)
         throw new Error("The frames array must have either one or two elements.");
 
-    const createdAnnotations = await prisma.annotation.createManyAndReturn({
+    const createdAnnotations = prisma.annotation.createManyAndReturn({
         data: annotationToCreate,
     });
 
-    return createdAnnotations;
+    const createdResults = prisma.result.createManyAndReturn({
+        data: resultsToCreate,
+    });
+
+    const transaction = await prisma.$transaction([createdAnnotations, createdResults]);
+
+    return transaction as unknown as (Annotation & Result)[];
 };
 
 export default {

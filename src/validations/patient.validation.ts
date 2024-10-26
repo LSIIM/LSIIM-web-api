@@ -1,7 +1,7 @@
-import { BabyInfo } from "@prisma/client";
+import { Patient } from "@prisma/client";
 import yup from "../config/yup";
 import {
-    tNovoBabyInfo,
+    tNovoPatient,
     PartialEntity,
     tValidCreateSchema,
     tValidDeleteSchema,
@@ -11,7 +11,7 @@ import {
 } from "../types/response";
 import { InferType } from "yup";
 
-const createBabyInfo: yup.ObjectSchema<tValidCreateSchema<tNovoBabyInfo>> = yup.object({
+const createPatient: yup.ObjectSchema<tValidCreateSchema<tNovoPatient>> = yup.object({
     body: yup
         .object({
             data: yup
@@ -38,8 +38,8 @@ const createBabyInfo: yup.ObjectSchema<tValidCreateSchema<tNovoBabyInfo>> = yup.
         .strict(),
 });
 
-const queryBabyInfo: yup.ObjectSchema<
-    tValidQuerySchema<PartialEntity<BabyInfo, "name">, PartialEntity<BabyInfo, "name" | "createdAt">>
+const queryPatient: yup.ObjectSchema<
+    tValidQuerySchema<PartialEntity<Patient, "name">, PartialEntity<Patient, "name" | "createdAt">>
 > = yup.object({
     query: yup
         .object({
@@ -58,7 +58,7 @@ const queryBabyInfo: yup.ObjectSchema<
         .strict(),
 });
 
-const getBabyInfo: yup.ObjectSchema<tValidParamsSchema<PartialEntity<BabyInfo, "id">>> = yup.object({
+const getPatient: yup.ObjectSchema<tValidParamsSchema<PartialEntity<Patient, "id">>> = yup.object({
     params: yup
         .object({
             id: yup
@@ -70,12 +70,12 @@ const getBabyInfo: yup.ObjectSchema<tValidParamsSchema<PartialEntity<BabyInfo, "
         .noUnknown(true),
 });
 
-export type ReqCreateBabyInfo = InferType<typeof createBabyInfo>;
-export type ReqQueryBabyInfo = InferType<typeof queryBabyInfo>;
-export type ReqGetBabyInfo = InferType<typeof getBabyInfo>;
+export type ReqCreatePatient = InferType<typeof createPatient>;
+export type ReqQueryPatient = InferType<typeof queryPatient>;
+export type ReqGetPatient = InferType<typeof getPatient>;
 
 export default {
-    createBabyInfo,
-    queryBabyInfo,
-    getBabyInfo,
+    createPatient,
+    queryPatient,
+    getPatient,
 };

@@ -1,4 +1,4 @@
-import { User, BabyInfo, Recording, AnnotationType, Annotation } from "@prisma/client";
+import { User, Patient, Recording, AnnotationType, Annotation, ResultTypeOptions, Result } from "@prisma/client";
 
 export interface TokenResponse {
     token: string;
@@ -11,20 +11,31 @@ export interface AuthTokensResponse {
 }
 //TIPOS DERIVADOS
 //ANNOTATION
-export type tNovoAnnotation = PartialEntity<Annotation, "annotationTypeId" | "frames" | "projectVideoTypeId" > & {comment?: string};
+export type tNovoAnnotation = PartialEntity<Annotation, "annotationTypeId" | "frames" | "projectVideoTypeId"> & {
+    comment?: string;
+};
 
 //ANNOTATION TYPE
 export type tNovoAnnotationType = PartialEntity<AnnotationType, "name" | "descricao" | "isTemporal">;
 //USER
 export type tNovoUser = PartialEntity<User, "name" | "email" | "password" | "cpf" | "role">;
 
-//BABYINFO
-export type tNovoBabyInfo = PartialEntity<BabyInfo, "name" | "birthDate" | "isPremature" | "gestationalAge">;
+//Patient
+export type tNovoPatient = PartialEntity<Patient, "name" | "birthDate" | "isPremature" | "gestationalAge">;
+//RESULTS
+export type tNovoResults = PartialEntity<
+    Result,
+    "resultTypeId" | "projectVideoTypeId" | "resultTypeOptionId" > & { scalarResult?: number };
+export type tNovoAnnResult = { events: tNovoAnnotation[]; results: tNovoResults[] };
+//RESULTYPE
+export type tNovoResultType = PartialEntity<ResultTypeOptions, "name" | "description">;
 
+//RESULTTYPEOPTIONS
+export type tNovoResultsTypeOptions = PartialEntity<ResultTypeOptions, "name" | "description" | "resultTypeId">;
 //RECORDING
 export type tNovoRecording = PartialEntity<
     Recording,
-    "ignore" | "observation" | "babyId" | "recordingDate" | "moveId" | "movAux" | "projectId" | "camInfoId"
+    "ignore" | "observation" | "patientId" | "recordingDate" | "moveId" | "movAux" | "projectId" | "camInfoId"
 >;
 
 //TIPOS AUXILIARESj
@@ -39,6 +50,7 @@ export type tEntityOptional<Entity> = {
 export type tBodyParams<Entity> = {
     data: { [Key in keyof Entity]: Entity[Key] }[];
 };
+
 export type tUpdateBodyParams<Entity> = {
     data: { [Key in keyof Entity]: Entity[Key] };
 };
@@ -55,6 +67,9 @@ export type tValidQuerySchema<WhereEntity, SortEntity> = {
     query: tQueryParams<WhereEntity, SortEntity>;
 };
 export type tValidCreateSchema<Entity> = { body: tBodyParams<Entity> };
+export type tValidCustomCreate<Entity> = {
+    body: { events: { [Key in keyof Entity]: Entity[Key] }[]; results: { [Key in keyof Entity]: Entity[Key] }[] };
+};
 export type tValidSimpleCreateSchema<EntityBody, EntityQuery = undefined> = EntityQuery extends undefined
     ? { body: EntityBody }
     : { body: EntityBody; query: EntityQuery };

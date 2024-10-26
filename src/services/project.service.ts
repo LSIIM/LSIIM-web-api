@@ -22,7 +22,7 @@ const queryProject = async <Key extends keyof Project>(
         sortType?: "asc" | "desc";
         where?: { projectName?: string };
     },
-    keys: Key[] = ["id", "projectName", "createdAt", "updatedAt", "projectsVideoTypes"] as Key[]
+    keys: Key[] = ["id", "projectName", "createdAt", "updatedAt", "movesInfo", "projectsVideoTypes"] as Key[]
 ): Promise<Pick<Project, Key>[]> => {
     const limit = query.limit;
     const page = query.page;
@@ -36,8 +36,7 @@ const queryProject = async <Key extends keyof Project>(
             ...(keys.reduce((acc, key) => ({ ...acc, [key]: true }), {})),
             projectsVideoTypes:{
                 include:{
-                    camsInfo:true,
-                    recordVideoType:true
+                    camInfo:true,
                 }
             }},
         orderBy: sortBy ? { [sortBy]: sortType } : undefined,
@@ -53,7 +52,6 @@ const queryProject = async <Key extends keyof Project>(
  * @param {number} id - Id do projeto
  * @returns {Promise<Project>}
  */
-
 const getProjectById = async <Key extends keyof Project>(
     id: number,
     keys: Key[] = ["id", "projectName", "createdAt", "updatedAt", "projectsVideoTypes"] as Key[]
@@ -61,10 +59,10 @@ const getProjectById = async <Key extends keyof Project>(
     const project = await prisma.project.findUnique({
         where: { id: Number(id) },
         include:{
+            movesInfo:true,
             projectsVideoTypes: {
                 include:{
-                    camsInfo:true,
-                    recordVideoType:true
+                    camInfo:true,
                 }
             }
         }

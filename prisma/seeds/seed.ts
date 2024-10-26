@@ -230,11 +230,33 @@ async function seed() {
         },
     ];
 
+    const dataCamInfo = [
+        {
+            model: "HardLine Cutie 6809",
+            isInfraRed: true,
+            framerate: 25.74,
+        },
+        {
+            model: "(adicionar o modelo da pequena aqui)",
+            isInfraRed: true,
+        },
+        {
+            model: "(adicionar o modelo da que usam pra auxiliar a...",
+            isInfraRed: false,
+        },
+        {
+            model: "camera muito foda JKV",
+            isInfraRed: true,
+            framerate: 765781000000.0,
+        },
+    ];
+
     const dataProjectVideoType = [
         {
             projectId: 1,
             isMain: true,
             typeName: "Camera principal",
+            dafaultCamInfoId: 1,
         },
         {
             projectId: 1,
@@ -255,29 +277,6 @@ async function seed() {
             projectId: 2,
             isMain: false,
             typeName: "Auxiliar",
-        },
-    ];
-
-    const dataCamInfo = [
-        {
-            model: "HardLine Cutie 6809",
-            isInfraRed: true,
-            framerate: 25.74,
-        },
-        {
-            model: "(adicionar o modelo da pequena aqui)",
-            isInfraRed: true,
-            projectVideoTypeId: 2,
-        },
-        {
-            model: "(adicionar o modelo da que usam pra auxiliar a...",
-            isInfraRed: false,
-        },
-        {
-            model: "camera muito foda JKV",
-            isInfraRed: true,
-            framerate: 765781000000.0,
-            projectVideoTypeId: 1,
         },
     ];
 

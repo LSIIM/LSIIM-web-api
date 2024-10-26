@@ -1,17 +1,17 @@
-import { BabyInfo } from "@prisma/client";
-import httpStatus from '../utils/httpStatus';
+import { Patient } from "@prisma/client";
+import httpStatus from "../utils/httpStatus";
 import prisma from "../client";
 import ApiError from "../utils/apiError";
-import { PartialEntity, tNovoBabyInfo } from "../types/response";
+import { PartialEntity, tNovoPatient } from "../types/response";
 
-const createBabyInfo = async (newBabyInfo: tNovoBabyInfo[]): Promise<BabyInfo[]> => {    
-    const babyInfo = prisma.babyInfo.createManyAndReturn({
+const createPatient = async (newBabyInfo: tNovoPatient[]): Promise<Patient[]> => {
+    const patient = prisma.patient.createManyAndReturn({
         data: newBabyInfo,
     });
 
-    const [babyInfoCriados] = await prisma.$transaction([babyInfo]);
+    const [patientCriados] = await prisma.$transaction([patient]);
 
-    return babyInfoCriados;
+    return patientCriados;
 };
 
 /**
@@ -24,7 +24,7 @@ const createBabyInfo = async (newBabyInfo: tNovoBabyInfo[]): Promise<BabyInfo[]>
  * @param {Object} [query.where] - Opções de where para usar no prisma
  * @returns {Promise<QueryResult>}
  */
-const queryBabyInfo = async <Key extends keyof BabyInfo>(
+const queryPatient = async <Key extends keyof Patient>(
     query: { limit?: number; page?: number; sortBy?: Key; sortType?: "asc" | "desc"; where?: { name?: string } },
     keys: Key[] = [
         "id",
@@ -36,14 +36,14 @@ const queryBabyInfo = async <Key extends keyof BabyInfo>(
         "createdAt",
         "updatedAt",
     ] as Key[]
-): Promise<Pick<BabyInfo, Key>[]> => {
+): Promise<Pick<Patient, Key>[]> => {
     const limit = query.limit;
     const page = query.page;
     const sortBy = query.sortBy ?? "name";
     const sortType = query.sortType ?? "asc";
 
     //Busca informações do BEBE
-    const babyInfo = await prisma.babyInfo.findMany({
+    const patient = await prisma.patient.findMany({
         where: query.where,
         select: keys.reduce((acc, key) => ({ ...acc, [key]: true }), {}),
         orderBy: sortBy ? { [sortBy]: sortType } : undefined,
@@ -51,7 +51,7 @@ const queryBabyInfo = async <Key extends keyof BabyInfo>(
         skip: page !== undefined && limit !== undefined ? page * limit : undefined,
     });
 
-    return babyInfo as Pick<BabyInfo, Key>[];
+    return patient as Pick<Patient, Key>[];
 };
 
 /**
@@ -59,7 +59,7 @@ const queryBabyInfo = async <Key extends keyof BabyInfo>(
  * @param {number} id
  */
 
-const getBabyInfoById = async <Key extends keyof BabyInfo>(
+const getPatientById = async <Key extends keyof Patient>(
     id: number,
     keys: Key[] = [
         "id",
@@ -71,26 +71,26 @@ const getBabyInfoById = async <Key extends keyof BabyInfo>(
         "createdAt",
         "updatedAt",
     ] as Key[]
-): Promise<Pick<BabyInfo, Key> | null> => {
-    return (await prisma.babyInfo.findUnique({
+): Promise<Pick<Patient, Key> | null> => {
+    return (await prisma.patient.findUnique({
         where: { id: Number(id) },
         select: keys.reduce((acc, key) => ({ ...acc, [key]: true }), {}),
-    })) as Promise<Pick<BabyInfo, Key> | null>;
+    })) as Promise<Pick<Patient, Key> | null>;
 };
 
 /**
  * Update BabyInfo by id
  * @param {object} dadosBabyInfo
- * @return {Promise<BabyInfo>}
+ * @return {Promise<Patient>}
  */
-const updateBabyInfo = async <Key extends keyof BabyInfo>(
+const updatePatient = async <Key extends keyof Patient>(
     dadosBabyInfo: {
         name?: string;
         birthDate?: Date;
         isPremature?: boolean;
         gestationalAge?: number;
         atipicidade?: string;
-    } & PartialEntity<BabyInfo, "id">,
+    } & PartialEntity<Patient, "id">,
     keys: Key[] = [
         "id",
         "name",
@@ -101,37 +101,37 @@ const updateBabyInfo = async <Key extends keyof BabyInfo>(
         "createdAt",
         "updatedAt",
     ] as Key[]
-): Promise<Pick<BabyInfo, Key> | null> => {
+): Promise<Pick<Patient, Key> | null> => {
     //Busca bebê info pelo id, confere se existe
-    const babyInfoToEdit = await getBabyInfoById(dadosBabyInfo.id);
-    if (!babyInfoToEdit) throw new ApiError(httpStatus.NOT_FOUND, "Informações do bebê não encontradas.");
+    const patientToEdit = await getPatientById(dadosBabyInfo.id);
+    if (!patientToEdit) throw new ApiError(httpStatus.NOT_FOUND, "Informações do bebê não encontradas.");
 
-    const updateBaby = prisma.babyInfo.update({
+    const updatePatient = prisma.patient.update({
         where: { id: dadosBabyInfo.id },
         data: dadosBabyInfo,
         select: keys.reduce((acc, key) => ({ ...acc, [key]: true }), {}),
     });
 
-    const [updatedBabyInfo] = await prisma.$transaction([updateBaby]);
+    const [updatedPatient] = await prisma.$transaction([updatePatient]);
 
-    return updatedBabyInfo as Pick<BabyInfo, Key> | null;
+    return updatedPatient as Pick<Patient, Key> | null;
 };
 
 /**
  * Delete BabyInfo by id
  * @param {number} id
  */
-const deleteBabyInfo = async (id: number): Promise<void> => {
+const deletePatient = async (id: number): Promise<void> => {
     //Busca bebê info pelo id, confere se existe
-    const babyInfoToDelete = await getBabyInfoById(id);
+    const babyInfoToDelete = await getPatientById(id);
     if (!babyInfoToDelete) throw new ApiError(httpStatus.NOT_FOUND, "Informações do bebê não encontradas.");
 
-    await prisma.babyInfo.delete({ where: { id } });
-}
+    await prisma.patient.delete({ where: { id } });
+};
 export default {
-    createBabyInfo,
-    queryBabyInfo,
-    getBabyInfoById,
-    updateBabyInfo,
-    deleteBabyInfo,
+    createPatient,
+    queryPatient,
+    getPatientById,
+    updatePatient,
+    deletePatient,
 };

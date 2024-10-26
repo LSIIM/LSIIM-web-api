@@ -1,7 +1,7 @@
 import express from "express";
 import auth from "../middlewares/auth";
 import { yupValidate } from "../middlewares/validate";
-import recordingValidation, { ReqQueryRecording, } from "../validations/recording.validation";
+import recordingValidation, { ReqQueryRecording } from "../validations/recording.validation";
 import { recordingController } from "../controllers";
 import { fnSubjects } from "../config/subjects";
 const router = express.Router();
@@ -34,9 +34,9 @@ router.route("/:id").get(yupValidate(recordingValidation.getRecording), (req, re
         next(error);
     }
 });
-router.route("/:recordingId/annotation").post(yupValidate(recordingValidation.createAnnotation), (req, res, next) => {
+router.route("/:recordingId/annotation").post(yupValidate(recordingValidation.createAnnAndRes), (req, res, next) => {
     try {
-        recordingController.createAnnotation(req, res, next);
+        recordingController.createAnnAndRes(req, res, next);
     } catch (error) {
         next(error);
     }

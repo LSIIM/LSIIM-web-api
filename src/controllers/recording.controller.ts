@@ -1,12 +1,11 @@
-
-import httpStatus from '../utils/httpStatus';
+import httpStatus from "../utils/httpStatus";
 import ApiError from "../utils/apiError";
 import catchAsync from "../utils/catchAsync";
 import { recordingService } from "../services";
 import {
     ReqQueryRecording,
     ReqGetRecording,
-    ReqCreateAnnotation,
+    ReqCreateAnnotationAndResult,
     ReqCreateRecording,
 } from "../validations/recording.validation";
 
@@ -31,11 +30,15 @@ const getRecording = catchAsync(async (req, res) => {
     res.send(recording);
 });
 
-const createAnnotation = catchAsync(async (req, res) => {
+const createAnnAndRes = catchAsync(async (req, res) => {
     const { recordingId } = req.params;
-    const validRequest = req as unknown as ReqCreateAnnotation;
+    const validRequest = req as unknown as ReqCreateAnnotationAndResult;
+    const { data: annotationAndResults } = validRequest.body;
 
-    const annotations = await recordingService.createAnnotation(validRequest.body.data, Number(recordingId));
+    const events = annotationAndResults.flatMap((item) => item.events);
+    const results = annotationAndResults.flatMap((item) => item.results);
+
+    const annotations = await recordingService.createAnnotation(events, results, Number(recordingId));
     res.status(httpStatus.CREATED).send(annotations);
 });
 
@@ -43,5 +46,5 @@ export default {
     createRecording,
     queryRecording,
     getRecording,
-    createAnnotation,
+    createAnnAndRes,
 };
