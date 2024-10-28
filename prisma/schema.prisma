@@ -15,14 +15,14 @@ datasource db {
 }
 
 model User {
-  id           Int            @id @default(autoincrement())
-  nome         String         @db.VarChar(256)
-  email        String         @unique @db.VarChar(256)
-  password     String         @db.VarChar(256)
-  documento    String?        @map("cpf") @db.VarChar(14)
-  isSysAdm     Role           @default(USER)
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
+  id           Int           @id @default(autoincrement())
+  name         String        @db.VarChar(256)
+  email        String        @unique @db.VarChar(256)
+  password     String        @db.VarChar(256)
+  documento    String?       @map("cpf") @db.VarChar(14)
+  role         Role          @default(USER)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
   tokens       Token[]
   UserProjects UserProject[]
 
@@ -35,7 +35,7 @@ model UserProject {
   user      User     @relation(fields: [userId], references: [id])
   projectId Int
   project   Project  @relation(fields: [projectId], references: [id])
-  isSysProj Boolean
+  role      Role
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -57,7 +57,7 @@ model Token {
 
 model Patient {
   id             Int      @id @default(autoincrement())
-  nome           String
+  name           String
   birthDate      DateTime
   isPremature    Boolean
   gestationalAge Int
@@ -105,6 +105,7 @@ model CamInfo {
   createdAt        DateTime                 @default(now())
   updatedAt        DateTime                 @updatedAt
   recordVideoTypes RecordVideoTypeCamUsed[]
+  //projectVideoTypes ProjectVideoType[]
 
   @@map("cam_info")
 }
@@ -123,18 +124,18 @@ model MoveInfo {
 }
 
 model Recording {
-  id            Int        @id @default(autoincrement())
+  id            Int       @id @default(autoincrement())
   ignore        Boolean
   observation   String?
-  patientId     Int        @map("babyId")
-  patient       Patient    @relation(fields: [patientId], references: [id])
+  patientId     Int       @map("babyId")
+  patient       Patient   @relation(fields: [patientId], references: [id])
   recordingDate DateTime
   moveId        Int?
   moveInfo      MoveInfo? @relation(fields: [moveId], references: [id])
   projectId     Int
-  project       Project    @relation(fields: [projectId], references: [id])
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
+  project       Project   @relation(fields: [projectId], references: [id])
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
   recordVideoTypes RecordVideoTypeCamUsed[]
   annotationVideos AnnotationVideo[]
@@ -202,59 +203,45 @@ model RecordVideoTypeCamUsed {
 }
 
 model AnnotationResult {
-  id                 Int               @id @default(autoincrement())
+  id                 Int              @id @default(autoincrement())
   scalarResult       Float?
   resultTypeId       Int
-  result             ResultType        @relation(fields: [resultTypeId], references: [id])
+  result             ResultType       @relation(fields: [resultTypeId], references: [id])
   resultTypeOptionId Int
   resultTypeOption   ResultTypeOption @relation(fields: [resultTypeOptionId], references: [id])
   annotationVideoId  Int
-  annotationVideo    AnnotationVideo   @relation(fields: [annotationVideoId], references: [id])
-  createdAt          DateTime          @default(now())
-  updatedAt          DateTime          @updatedAt
+  annotationVideo    AnnotationVideo  @relation(fields: [annotationVideoId], references: [id])
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
 
   @@map("annotation_results")
 }
 
 model AnnotationVideo {
-  id                 Int                 @id @default(autoincrement())
+  id                 Int                @id @default(autoincrement())
   recordingId        Int
-  recording          Recording           @relation(fields: [recordingId], references: [id])
+  recording          Recording          @relation(fields: [recordingId], references: [id])
   projectVideoTypeId Int
-  projectVideoType   ProjectVideoType    @relation(fields: [projectVideoTypeId], references: [id])
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime            @updatedAt
+  projectVideoType   ProjectVideoType   @relation(fields: [projectVideoTypeId], references: [id])
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
   AnnotationEvents   AnnotationEvent[]
   annotationResults  AnnotationResult[]
 
   @@map("annotation_video")
 }
 
-model AnnotationType {
-  id         Int     @id @default(autoincrement())
-  nome       String
-  descricao  String
-  isTemporal Boolean
-
-  createdAt   DateTime           @default(now())
-  updatedAt   DateTime           @updatedAt
-  annotations AnnotationEvent[]
-
-  @@map("annotation_type")
-}
 
 model AnnotationEvent {
-  id                  Int                @id @default(autoincrement())
+  id                  Int               @id @default(autoincrement())
   annotationVideoId   Int
-  annotationType      AnnotationVideo    @relation(fields: [annotationVideoId], references: [id])
+  annotationType      AnnotationVideo   @relation(fields: [annotationVideoId], references: [id])
   eventTypeId         Int
-  eventType           EventType          @relation(fields: [eventTypeId], references: [id])
+  eventType           EventType         @relation(fields: [eventTypeId], references: [id])
   frames              Int[]
   comment             String?
-  createdAt           DateTime           @default(now())
-  updatedAt           DateTime           @updatedAt
-  AnnotationType      AnnotationType?    @relation(fields: [annotationTypeId], references: [id])
-  annotationTypeId    Int?
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
   EventTypeProjects   EventTypeProject? @relation(fields: [eventTypeProjectsId], references: [id])
   eventTypeProjectsId Int?
 
@@ -262,12 +249,12 @@ model AnnotationEvent {
 }
 
 model EventType {
-  id                 Int                 @id @default(autoincrement())
-  nome               String
-  descricao        String
+  id                 Int                @id @default(autoincrement())
+  name               String
+  description        String
   isTemporal         Boolean
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime            @updatedAt
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
   annotations        AnnotationEvent[]
   eventTypesProjects EventTypeProject[]
 
@@ -275,39 +262,37 @@ model EventType {
 }
 
 model EventTypeProject {
-  id          Int                @id @default(autoincrement())
+  id          Int               @id @default(autoincrement())
   projectId   Int
-  project     Project            @relation(fields: [projectId], references: [id])
+  project     Project           @relation(fields: [projectId], references: [id])
   eventTypeId Int
-  eventType   EventType          @relation(fields: [eventTypeId], references: [id])
-  createdAt   DateTime           @default(now())
-  updatedAt   DateTime           @updatedAt
+  eventType   EventType         @relation(fields: [eventTypeId], references: [id])
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
   annotations AnnotationEvent[]
 
   @@map("event_type_projects")
 }
 
-
-
 model ResultTypeOption {
-  id                Int                 @id @default(autoincrement())
-  nome              String
-  descricao       String
-  resultTypeId      Int
-  resultType        ResultType          @relation(fields: [resultTypeId], references: [id])
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
-  results           AnnotationResult[]
+  id           Int                @id @default(autoincrement())
+  name         String
+  description  String
+  resultTypeId Int
+  resultType   ResultType         @relation(fields: [resultTypeId], references: [id])
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  results      AnnotationResult[]
 
   @@map("result_type_options")
 }
 
 model ResultType {
-  id                 Int                  @id @default(autoincrement())
-  nome               String
-  descricao        String
-  createdAt          DateTime             @default(now())
-  updatedAt          DateTime             @updatedAt
+  id                 Int                 @id @default(autoincrement())
+  name               String
+  description        String
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
   resultTypesOptions ResultTypeOption[]
   results            AnnotationResult[]
   resultTypeProjects ResultTypeProject[]

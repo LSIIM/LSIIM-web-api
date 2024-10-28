@@ -3,7 +3,7 @@ import userRoute from "./user.route";
 import authRoute from "./auth.route";
 import patientRoute from "./patient.route";
 import recordingRoute from "./recording.route";
-import annotationTypeRoute from "./annotationType.route";
+import annotationTypeRoute from "./eventType.route";
 import projectRoute from "./project.route";
 import resultTypeRoute from "./resultType.route";
 import resultTypeOpRoute from "./resTypeOptions.route";

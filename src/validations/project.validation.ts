@@ -1,4 +1,4 @@
-import { Project, ProjectVideoType, MovesInfo } from "@prisma/client";
+import { Project, ProjectVideoType, MoveInfo } from "@prisma/client";
 import yup from "../config/yup";
 import { PartialEntity, tValidQuerySchema, tValidCreateSchema } from "../types/response";
 import { InferType } from "yup";
@@ -51,7 +51,7 @@ const queryProjectVideoType: yup.ObjectSchema<
 });
 
 const queryMovesInfo: yup.ObjectSchema<
-    tValidQuerySchema<PartialEntity<MovesInfo, "id">, PartialEntity<MovesInfo, "id">>
+    tValidQuerySchema<PartialEntity<MoveInfo, "id">, PartialEntity<MoveInfo, "id">>
 > = yup.object({
     params: yup
         .object({

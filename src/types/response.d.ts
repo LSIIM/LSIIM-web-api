@@ -1,4 +1,4 @@
-import { User, Patient, Recording, AnnotationType, Annotation, ResultTypeOptions, Result } from "@prisma/client";
+import { User, Patient, Recording, EventType, Annotation, ResultTypeOptions, Result } from "@prisma/client";
 
 export interface TokenResponse {
     token: string;
@@ -16,7 +16,7 @@ export type tNovoAnnotation = PartialEntity<Annotation, "annotationTypeId" | "fr
 };
 
 //ANNOTATION TYPE
-export type tNovoAnnotationType = PartialEntity<AnnotationType, "name" | "descricao" | "isTemporal">;
+export type tNovoEventType = PartialEntity<EventType, "name" | "description" | "isTemporal">;
 //USER
 export type tNovoUser = PartialEntity<User, "name" | "email" | "password" | "cpf" | "role">;
 

@@ -21,7 +21,7 @@ const loginUserWithEmailAndPassword = async (email: string, password: string): P
         "name",
         "email",
         "role",
-        "cpf",
+        "documento",
         "createdAt",
         "updatedAt",
         "password",
