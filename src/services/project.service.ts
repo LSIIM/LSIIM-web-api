@@ -22,7 +22,7 @@ const queryProject = async <Key extends keyof Project>(
         sortType?: "asc" | "desc";
         where?: { projectName?: string };
     },
-    keys: Key[] = ["id", "projectName", "createdAt", "updatedAt", "movesInfo", "projectsVideoTypes"] as Key[]
+    keys: Key[] = ["id", "projectName", "createdAt", "updatedAt", "movesInfo"] as Key[]
 ): Promise<Pick<Project, Key>[]> => {
     const limit = query.limit;
     const page = query.page;
@@ -32,7 +32,10 @@ const queryProject = async <Key extends keyof Project>(
     //Busca informações do project
     const projects = await prisma.project.findMany({
         where: query.where,
-        select: keys.reduce((acc, key) => ({ ...acc, [key]: true }), {}),
+        select: {
+            ...keys.reduce((acc, key) => ({ ...acc, [key]: true }), {}),
+            projectsVideoTypes: { include: { recordVideoType: { include: { camInfo: true } } } },
+        },
         orderBy: sortBy ? { [sortBy]: sortType } : undefined,
         take: limit,
         skip: page !== undefined && limit !== undefined ? page * limit : undefined,

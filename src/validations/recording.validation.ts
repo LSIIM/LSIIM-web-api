@@ -94,6 +94,7 @@ const createAnnAndRes: yup.ObjectSchema<tValidCreateSchema<tNovoAnnotationVideo>
                     yup
                         .object({
                             projectVideoTypeId: yup.number().required("Deve ser passado um projectVideoTypeId."),
+                            comment: yup.string(),
                             events: yup
                                 .array(
                                     yup.object({
@@ -101,7 +102,6 @@ const createAnnAndRes: yup.ObjectSchema<tValidCreateSchema<tNovoAnnotationVideo>
                                         frames: yup
                                             .array(yup.number().required())
                                             .required("Deve ser passado um frames."),
-                                        comment: yup.string(),
                                     })
                                 )
                                 .required("Deve ser passado um annotationEvents."),

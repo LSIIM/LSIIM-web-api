@@ -189,8 +189,8 @@ model ProjectVideoType {
 
 model RecordVideoTypeCamUsed {
   id                 Int              @id @default(autoincrement())
-  camIdUsed          Int
-  camInfo            CamInfo          @relation(fields: [camIdUsed], references: [id])
+  camIdUsed          Int?
+  camInfo            CamInfo?        @relation(fields: [camIdUsed], references: [id])
   recordingId        Int
   recording          Recording        @relation(fields: [recordingId], references: [id])
   projectVideoTypeId Int
@@ -218,7 +218,7 @@ model AnnotationResult {
 
 model AnnotationVideo {
   id                 Int                @id @default(autoincrement())
-  comment             String?
+  comment            String?
   recordingId        Int
   recording          Recording          @relation(fields: [recordingId], references: [id])
   projectVideoTypeId Int

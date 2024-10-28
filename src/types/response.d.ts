@@ -17,6 +17,7 @@ export type tNovoAnnotation = PartialEntity<Annotation,| "projectVideoTypeId"> &
 };
 //ANNOTATION VIDEO
 export type tNovoAnnotationVideo = PartialEntity<AnnotationVideo, "projectVideoTypeId" > & {
+    comment?: string;
     events: tNovoAnnotationEvent[];
     results: tNovoAnnotationResults[];
 };
@@ -24,7 +25,7 @@ export type tNovoAnnotationVideo = PartialEntity<AnnotationVideo, "projectVideoT
 export type tNovoEventType = PartialEntity<EventType, "name" | "description" | "isTemporal">;
 
 //ANNOTATION EVENT
-export type tNovoAnnotationEvent = PartialEntity<AnnotationEvent, "eventTypeId" | "frames" > & {comment?: string};
+export type tNovoAnnotationEvent = PartialEntity<AnnotationEvent, "eventTypeId" | "frames" > 
 
 //USER
 export type tNovoUser = PartialEntity<User, "name" | "email" | "password" | "documento" | "role">;
