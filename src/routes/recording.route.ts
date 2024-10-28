@@ -34,12 +34,21 @@ router.route("/:id").get(yupValidate(recordingValidation.getRecording), (req, re
         next(error);
     }
 });
-// router.route("/:recordingId/annotation").post(yupValidate(recordingValidation.createAnnAndRes), (req, res, next) => {
-//     try {
-//         recordingController.createAnnAndRes(req, res, next);
-//     } catch (error) {
-//         next(error);
-//     }
-// });
+router
+    .route("/:recordingId/annotation")
+    .post(yupValidate(recordingValidation.createAnnAndRes), (req, res, next) => {
+        try {
+            recordingController.createAnnAndRes(req, res, next);
+        } catch (error) {
+            next(error);
+        }
+    })
+    .get(yupValidate(recordingValidation.queryAnnotatioVideo), (req, res, next) => {
+        try {
+            recordingController.queryAnnotatioVideo(req, res, next);
+        } catch (error) {
+            next(error);
+        }
+    });
 
 export default router;

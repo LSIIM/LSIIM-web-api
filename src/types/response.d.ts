@@ -1,4 +1,4 @@
-import { User, Patient, Recording, EventType, Annotation, ResultTypeOptions, Result, AnnotationVideo } from "@prisma/client";
+import { User, Patient, Recording, EventType, Annotation, ResultTypeOptions, Result, AnnotationVideo, AnnotationEvent, AnnotationResult } from "@prisma/client";
 
 export interface TokenResponse {
     token: string;
@@ -11,23 +11,38 @@ export interface AuthTokensResponse {
 }
 //TIPOS DERIVADOS
 //ANNOTATION
-export type tNovoAnnotation = PartialEntity<AnnotationVideo,| "projectVideoTypeId"> & {
+export type tNovoAnnotation = PartialEntity<Annotation,| "projectVideoTypeId"> & {
     comment?: string;
-    results: tNovoResults[];
+    results: tNovoAnnotationResults[];
 };
-
-//ANNOTATION TYPE
+//ANNOTATION VIDEO
+export type tNovoAnnotationVideo = PartialEntity<AnnotationVideo, "projectVideoTypeId" > & {
+    events: tNovoAnnotationEvent[];
+    results: tNovoAnnotationResults[];
+};
+//ECENT TYPE
 export type tNovoEventType = PartialEntity<EventType, "name" | "description" | "isTemporal">;
+
+//ANNOTATION EVENT
+export type tNovoAnnotationEvent = PartialEntity<AnnotationEvent, "eventTypeId" | "frames" > & {comment?: string};
+
 //USER
 export type tNovoUser = PartialEntity<User, "name" | "email" | "password" | "documento" | "role">;
 
 //Patient
 export type tNovoPatient = PartialEntity<Patient, "name" | "birthDate" | "isPremature" | "gestationalAge">;
+
 //RESULTS
-export type tNovoResults = PartialEntity<
-    Result,
-    "resultTypeId" | "projectVideoTypeId" | "resultTypeOptionId"  > & { scalarResult?: number };
-export type tNovoAnnResult = { events: tNovoAnnotation[]; results: tNovoResults[] };
+export type tNovoAnnotationResults = PartialEntity<
+    AnnotationResult,
+    "resultTypeId"  | "resultTypeOptionId"  > & { scalarResult?: number };
+
+
+
+export type tNovoAnnResult = { events: tNovoAnnotationVideo[]; results: tNovoAnnotationResults[] };
+
+
+
 //RESULTYPE
 export type tNovoResultType = PartialEntity<ResultTypeOptions, "name" | "description">;
 
@@ -36,7 +51,7 @@ export type tNovoResultsTypeOptions = PartialEntity<ResultTypeOptions, "name" | 
 //RECORDING
 export type tNovoRecording = PartialEntity<
     Recording,
-    "ignore" | "observation" | "patientId" | "recordingDate" | "moveId" | "movAux" | "projectId" | "camInfoId"
+    "ignore" | "observation" | "patientId" | "recordingDate" | "moveId" | "projectId" | "camInfoId"
 >;
 
 //TIPOS AUXILIARESj

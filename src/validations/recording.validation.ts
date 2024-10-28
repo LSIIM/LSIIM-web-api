@@ -1,15 +1,15 @@
-import { Recording } from "@prisma/client";
+import { AnnotationVideo, Recording } from "@prisma/client";
 import yup from "../config/yup";
 import {
     tNovoRecording,
     PartialEntity,
-    tNovoAnnResult,
     tValidCreateSchema,
     tValidCustomCreate,
     tValidDeleteSchema,
     tValidParamsSchema,
     tValidQuerySchema,
     tValidUpdateSchema,
+    tNovoAnnotationVideo,
 } from "../types/response";
 import { InferType } from "yup";
 
@@ -77,84 +77,90 @@ const getRecording: yup.ObjectSchema<tValidParamsSchema<PartialEntity<Recording,
         .noUnknown(true),
 });
 
-// const createAnnAndRes: yup.ObjectSchema<tValidCreateSchema<tNovoAnnResult>> = yup.object({
-//     params: yup
-//         .object({
-//             recordingId: yup
-//                 .number()
-//                 .required("Deve ser passado um recordingId.")
-//                 .transform((value) => (typeof value === "string" ? parseInt(value) : value)),
-//         })
-//         .required("Deve ser passado um params.")
-//         .noUnknown(true),
-//     body: yup
-//         .object({
-//             data: yup
-//                 .array(
-//                     yup
-//                         .object({
-//                             events: yup
-//                                 .array(
-//                                     yup
-//                                         .object({
-//                                             projectVideoTypeId: yup
-//                                                 .number()
-//                                                 .integer()
-//                                                 .required("Deve ser passado um projectVideoTypeId."),
-//                                             annotationTypeId: yup
-//                                                 .number()
-//                                                 .integer()
-//                                                 .required("Deve ser passado um annotationTypeId."),
-//                                             frames: yup
-//                                                 .array(yup.number().integer().required("Frames precisam ser passados"))
-//                                                 .required("Deve ser passado um frame."),
-//                                             comment: yup.string(),
-//                                         })
-//                                         .noUnknown(true)
-//                                         .strict()
-//                                 )
-//                                 .required("Deve ser passado um events."),
-//                             results: yup
-//                                 .array(
-//                                     yup
-//                                         .object({
-//                                             resultTypeId: yup
-//                                                 .number()
-//                                                 .integer()
-//                                                 .required("Deve ser passado um resultTypeId."),
-//                                             projectVideoTypeId: yup
-//                                                 .number()
-//                                                 .integer()
-//                                                 .required("Deve ser passado um projectVideoTypeId."),
-//                                             resultTypeOptionId: yup
-//                                                 .number()
-//                                                 .integer()
-//                                                 .required("Deve ser passado um resultTypeOptionId."),
-//                                             scalarResult: yup.number(),
-//                                         })
-//                                         .noUnknown(true)
-//                                         .strict()
-//                                 )
-//                                 .required("Deve ser passado um results."),
-//                         })
-//                         .noUnknown(true)
-//                         .strict()
-//                 )
-//                 .required("Deve ser passado um data."),
-//         })
-//         .required("Deve ser passado um body.")
-//         .noUnknown(true)
-//         .strict(),
-// });
+const createAnnAndRes: yup.ObjectSchema<tValidCreateSchema<tNovoAnnotationVideo>> = yup.object({
+    params: yup
+        .object({
+            recordingId: yup
+                .number()
+                .required("Deve ser passado um recordingId.")
+                .transform((value) => (typeof value === "string" ? parseInt(value) : value)),
+        })
+        .required("Deve ser passado um params.")
+        .noUnknown(true),
+    body: yup
+        .object({
+            data: yup
+                .array(
+                    yup
+                        .object({
+                            projectVideoTypeId: yup.number().required("Deve ser passado um projectVideoTypeId."),
+                            events: yup
+                                .array(
+                                    yup.object({
+                                        eventTypeId: yup.number().required("Deve ser passado um eventTypeId."),
+                                        frames: yup
+                                            .array(yup.number().required())
+                                            .required("Deve ser passado um frames."),
+                                        comment: yup.string(),
+                                    })
+                                )
+                                .required("Deve ser passado um annotationEvents."),
+                            results: yup
+                                .array(
+                                    yup.object({
+                                        resultTypeId: yup.number().required("Deve ser passado um resultTypeId."),
+                                        resultTypeOptionId: yup
+                                            .number()
+                                            .required("Deve ser passado um resultTypeOptionId."),
+                                        scalarResults: yup.number(),
+                                    })
+                                )
+                                .required("Deve ser passado um annotationResults."),
+                        })
+                        .noUnknown(true)
+                        .strict()
+                )
+                .required("Deve ser passado um data."),
+        })
+        .required("Deve ser passado um body.")
+        .noUnknown(true)
+        .strict(),
+});
+
+const queryAnnotatioVideo: yup.ObjectSchema<
+    tValidQuerySchema<PartialEntity<AnnotationVideo, "id">, PartialEntity<AnnotationVideo, "id" | "createdAt">>
+> = yup.object({
+    params: yup
+        .object({
+            recordingId: yup
+                .number()
+                .integer()
+                .required("Deve ser passado um recordingId.")
+                .transform((value) => (typeof value === "string" ? parseInt(value) : value)),
+        })
+        .required("Deve ser passado um params.")
+        .noUnknown(true),
+    query: yup
+        .object({
+            sortBy: yup.mixed<"id" | "createdAt">().oneOf(["id", "createdAt"]),
+            sortType: yup.mixed<"asc" | "desc">().oneOf(["asc", "desc"]),
+            limit: yup.number().integer("O limit deve ser um número inteiro."),
+            page: yup.number().integer("O page deve ser um número inteiro."),
+        })
+        .noUnknown(true)
+        .strict(),
+});
 
 export type ReqCreateRecording = InferType<typeof createRecording>;
 export type ReqQueryRecording = InferType<typeof queryRecording>;
 export type ReqGetRecording = InferType<typeof getRecording>;
-//export type ReqCreateAnnotationAndResult = InferType<typeof createAnnAndRes>;
+export type ReqCreateAnnotationAndResult = InferType<typeof createAnnAndRes>;
+export type ReqQueryAnnotationVideo = InferType<typeof queryAnnotatioVideo>;
 
 export default {
     createRecording,
     queryRecording,
     getRecording,
-   // createAnnAndRes,
+    createAnnAndRes,
+    queryAnnotatioVideo
 };

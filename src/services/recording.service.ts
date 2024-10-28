@@ -2,10 +2,11 @@ import { Recording, AnnotationVideo, AnnotationResult } from "@prisma/client";
 import httpStatus from "../utils/httpStatus";
 import prisma from "../client";
 import ApiError from "../utils/apiError";
-import { PartialEntity, tNovoAnnotation, tNovoRecording, tNovoResults } from "../types/response";
+import { PartialEntity, tNovoAnnotation, tNovoAnnotationVideo, tNovoRecording, tNovoAnnotationResults } from "../types/response";
 import config from "../config/config";
 import fs from "fs";
 import path from "path";
+import e from "express";
 
 const createRecording = async (novoRecording: tNovoRecording[]): Promise<Recording[]> => {
     const _createRecording = prisma.recording.createManyAndReturn({
@@ -38,16 +39,13 @@ const queryRecording = async <Key extends keyof Recording>(
         "id",
         "ignore",
         "observation",
-        "babyId",
-        "babyInfo",
+        "patientId",
+        "patient",
         "recordingDate",
         "moveId",
         "moveInfo",
-        "movAux",
         "projectId",
         "project",
-        "camInfoId",
-        "camInfo",
         "recordVideoTypes",
         "createdAt",
         "updatedAt",
@@ -115,16 +113,13 @@ const getRecordingById = async <Key extends keyof Recording>(
         "id",
         "ignore",
         "observation",
-        "babyId",
-        "babyInfo",
+        "patientId",
+        "patient",
         "recordingDate",
         "moveId",
         "moveInfo",
-        "movAux",
         "projectId",
         "project",
-        "camInfoId",
-        "camInfo",
         "recordVideoTypes",
         "createdAt",
         "updatedAt",
@@ -171,10 +166,7 @@ const getRecordingById = async <Key extends keyof Recording>(
     return recordingWithVideos as unknown as Pick<Recording, Key> & { videos: { url: string; is_main: string } }[];
 };
 
-const createAnnotation = async (
-    events: tNovoAnnotation[],
-    recordingId: number
-): Promise<(AnnotationVideo)[]> => {
+const createAnnotation = async (annotationVideo: tNovoAnnotationVideo[], recordingId: number): Promise<AnnotationVideo[]> => {
     const recordingParaAnotacao = await getRecordingById(recordingId, [
         "id",
         "ignore",
@@ -185,28 +177,88 @@ const createAnnotation = async (
         "projectId",
     ]);
     if (!recordingParaAnotacao) throw new ApiError(httpStatus.NOT_FOUND, "Recording não encontrado.");
-    const annotationToCreate = events.map((annotation) => ({
+    const annotationToCreate = annotationVideo.map((annotation) => ({
         ...annotation,
         recordingId,
     }));
 
-    // const frames = annotationToCreate.map((annotation) => annotation.frames);
-    // if (frames.length < 1 || frames.length > 2)
-    //     throw new Error("The frames array must have either one or two elements.");
+    //função para verificar se projectVideoType é main
+    const isMain = async (projectVideoTypeId: number) => {
+        const projectVideoType = await prisma.projectVideoType.findUnique({
+            where: { id: projectVideoTypeId },
+            select: { isMain: true },
+        });
+        return projectVideoType?.isMain ?? false;
+    };
+    if (!isMain) throw new ApiError(httpStatus.NOT_FOUND, "ProjectVideoType não é main.");
 
-    const createdAnnotations = prisma.annotationVideo.createManyAndReturn({
-        data: annotationToCreate,
+    const createdAnnotations = annotationToCreate.map(({ ...events }) => {
+        events.events.forEach((annotationEvent) => {
+            if (annotationEvent.frames.length < 1 || annotationEvent.frames.length > 2)
+                throw new Error("The frames array in annotationEvent must have either one or two elements.");
+        });
+
+        return prisma.annotationVideo.create({
+            data: {
+                ...events,
+                events: {
+                    create: events.events.map((annotationEvent) => ({
+                        ...annotationEvent,
+                    })),
+                },
+                results: {
+                    create: events.results.map((annotationResult) => ({
+                        ...annotationResult,
+                    })),
+                }
+            },
+        });
     });
 
-
-    const transaction = await prisma.$transaction([createdAnnotations]);
+    const [...transaction] = await prisma.$transaction([...createdAnnotations]);
 
     return transaction as unknown as (AnnotationVideo & AnnotationResult)[];
 };
 
+const queryAnnotatioVideo = async <Key extends keyof AnnotationVideo>(
+    recordingId: number,
+    query: {
+        limit?: number;
+        page?: number;
+        sortBy?: Key;
+        sortType?: "asc" | "desc";
+    },
+    keys: Key[] = [
+        "id",
+        "recordingId",
+        "projectVideoTypeId",
+        "events",
+        "results",
+        "createdAt",
+        "updatedAt",
+    ] as Key[]
+): Promise<Pick<AnnotationVideo, Key>[]> => {
+    const limit = query.limit;
+    const page = query.page;
+    const sortBy = query.sortBy ?? "id";
+    const sortType = query.sortType ?? "asc";
+    const recording = await getRecordingById(recordingId, ["id"]);
+    if (!recording) throw new ApiError(httpStatus.NOT_FOUND, "Recording não encontrado.");
+
+    const annotations = await prisma.annotationVideo.findMany({
+        where: { recordingId: Number(recording.id) },
+        select: keys.reduce((acc, key) => ({ ...acc, [key]: true }), {}),
+        orderBy: sortBy ? { [sortBy]: sortType } : undefined,
+        take: limit,
+        skip: page !== undefined && limit !== undefined ? page * limit : undefined,
+    });
+
+    return annotations as unknown as Pick<AnnotationVideo, Key>[];
+}
 export default {
     createRecording,
     queryRecording,
     getRecordingById,
     createAnnotation,
+    queryAnnotatioVideo,
 };

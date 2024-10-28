@@ -5,8 +5,9 @@ import { recordingService } from "../services";
 import {
     ReqQueryRecording,
     ReqGetRecording,
-    //ReqCreateAnnotationAndResult,
+    ReqCreateAnnotationAndResult,
     ReqCreateRecording,
+    ReqQueryAnnotationVideo,
 } from "../validations/recording.validation";
 
 const createRecording = catchAsync(async (req, res) => {
@@ -31,20 +32,25 @@ const getRecording = catchAsync(async (req, res) => {
 });
 
 const createAnnAndRes = catchAsync(async (req, res) => {
-    // const { recordingId } = req.params;
-    // const validRequest = req as unknown as ReqCreateAnnotationAndResult;
-    // const { data: annotationAndResults } = validRequest.body;
+    const { recordingId } = req.params;
+    const validRequest = req as unknown as ReqCreateAnnotationAndResult;
+    const { data: annotationVideo } = validRequest.body;
 
-    // const events = annotationAndResults.flatMap((item) => item.events);
-    // const results = annotationAndResults.flatMap((item) => item.results);
-
-    // const annotations = await recordingService.createAnnotation(events, results, Number(recordingId));
-    // res.status(httpStatus.CREATED).send(annotations);
+    const annotations = await recordingService.createAnnotation(annotationVideo, Number(recordingId));
+    res.status(httpStatus.CREATED).send(annotations);
 });
+const queryAnnotatioVideo = catchAsync(async (req, res) => {
+    const { recordingId } = req.params;
+    const validRequest = req as unknown as ReqQueryAnnotationVideo;
+
+    const annotations = await recordingService.queryAnnotatioVideo(Number(recordingId), validRequest.query);
+    res.send(annotations);
+})
 
 export default {
     createRecording,
     queryRecording,
     getRecording,
     createAnnAndRes,
+    queryAnnotatioVideo
 };

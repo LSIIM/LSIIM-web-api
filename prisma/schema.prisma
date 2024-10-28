@@ -19,7 +19,7 @@ model User {
   name         String        @db.VarChar(256)
   email        String        @unique @db.VarChar(256)
   password     String        @db.VarChar(256)
-  documento    String       @db.VarChar(14)
+  documento    String        @db.VarChar(14)
   role         Role          @default(USER)
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
@@ -146,7 +146,6 @@ model Recording {
 model Project {
   id          Int      @id @default(autoincrement())
   projectName String
-  description String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -219,18 +218,18 @@ model AnnotationResult {
 
 model AnnotationVideo {
   id                 Int                @id @default(autoincrement())
+  comment             String?
   recordingId        Int
   recording          Recording          @relation(fields: [recordingId], references: [id])
   projectVideoTypeId Int
   projectVideoType   ProjectVideoType   @relation(fields: [projectVideoTypeId], references: [id])
   createdAt          DateTime           @default(now())
   updatedAt          DateTime           @updatedAt
-  AnnotationEvents   AnnotationEvent[]
-  annotationResults  AnnotationResult[]
+  events             AnnotationEvent[]
+  results            AnnotationResult[]
 
   @@map("annotation_video")
 }
-
 
 model AnnotationEvent {
   id                  Int               @id @default(autoincrement())
@@ -239,10 +238,9 @@ model AnnotationEvent {
   eventTypeId         Int
   eventType           EventType         @relation(fields: [eventTypeId], references: [id])
   frames              Int[]
-  comment             String?
   createdAt           DateTime          @default(now())
   updatedAt           DateTime          @updatedAt
-  EventTypeProjects   EventTypeProject? @relation(fields: [eventTypeProjectsId], references: [id])
+  eventTypeProjects   EventTypeProject? @relation(fields: [eventTypeProjectsId], references: [id])
   eventTypeProjectsId Int?
 
   @@map("annotations")

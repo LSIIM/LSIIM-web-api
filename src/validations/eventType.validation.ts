@@ -17,7 +17,7 @@ const createEventType: yup.ObjectSchema<tValidCreateSchema<tNovoEventType>> = yu
                     yup
                         .object({
                             name: yup.string().required("O nome é obrigatório."),
-                            description: yup.string().required("A descrição é obrigatória."),
+                            description: yup.string().required("A description é obrigatória."),
                             isTemporal: yup.boolean().required("O campo isTemporal é obrigatório."),
                         })
                         .noUnknown(true)
