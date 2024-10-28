@@ -1,4 +1,4 @@
-import { Recording, Annotation, Result } from "@prisma/client";
+import { Recording, AnnotationVideo, AnnotationResult } from "@prisma/client";
 import httpStatus from "../utils/httpStatus";
 import prisma from "../client";
 import ApiError from "../utils/apiError";
@@ -173,9 +173,8 @@ const getRecordingById = async <Key extends keyof Recording>(
 
 const createAnnotation = async (
     events: tNovoAnnotation[],
-    results: tNovoResults[],
     recordingId: number
-): Promise<(Annotation & Result)[]> => {
+): Promise<(AnnotationVideo)[]> => {
     const recordingParaAnotacao = await getRecordingById(recordingId, [
         "id",
         "ignore",
@@ -183,7 +182,6 @@ const createAnnotation = async (
         "patientId",
         "recordingDate",
         "moveId",
-        "movAux",
         "projectId",
     ]);
     if (!recordingParaAnotacao) throw new ApiError(httpStatus.NOT_FOUND, "Recording não encontrado.");
@@ -191,26 +189,19 @@ const createAnnotation = async (
         ...annotation,
         recordingId,
     }));
-    const resultsToCreate = results.map((result) => ({
-        ...result,
-        recordingId,
-    }));
 
-    const frames = annotationToCreate.map((annotation) => annotation.frames);
-    if (frames.length < 1 || frames.length > 2)
-        throw new Error("The frames array must have either one or two elements.");
+    // const frames = annotationToCreate.map((annotation) => annotation.frames);
+    // if (frames.length < 1 || frames.length > 2)
+    //     throw new Error("The frames array must have either one or two elements.");
 
-    const createdAnnotations = prisma.annotation.createManyAndReturn({
+    const createdAnnotations = prisma.annotationVideo.createManyAndReturn({
         data: annotationToCreate,
     });
 
-    const createdResults = prisma.result.createManyAndReturn({
-        data: resultsToCreate,
-    });
 
-    const transaction = await prisma.$transaction([createdAnnotations, createdResults]);
+    const transaction = await prisma.$transaction([createdAnnotations]);
 
-    return transaction as unknown as (Annotation & Result)[];
+    return transaction as unknown as (AnnotationVideo & AnnotationResult)[];
 };
 
 export default {

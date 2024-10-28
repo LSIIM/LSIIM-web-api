@@ -77,84 +77,84 @@ const getRecording: yup.ObjectSchema<tValidParamsSchema<PartialEntity<Recording,
         .noUnknown(true),
 });
 
-const createAnnAndRes: yup.ObjectSchema<tValidCreateSchema<tNovoAnnResult>> = yup.object({
-    params: yup
-        .object({
-            recordingId: yup
-                .number()
-                .required("Deve ser passado um recordingId.")
-                .transform((value) => (typeof value === "string" ? parseInt(value) : value)),
-        })
-        .required("Deve ser passado um params.")
-        .noUnknown(true),
-    body: yup
-        .object({
-            data: yup
-                .array(
-                    yup
-                        .object({
-                            events: yup
-                                .array(
-                                    yup
-                                        .object({
-                                            projectVideoTypeId: yup
-                                                .number()
-                                                .integer()
-                                                .required("Deve ser passado um projectVideoTypeId."),
-                                            annotationTypeId: yup
-                                                .number()
-                                                .integer()
-                                                .required("Deve ser passado um annotationTypeId."),
-                                            frames: yup
-                                                .array(yup.number().integer().required("Frames precisam ser passados"))
-                                                .required("Deve ser passado um frame."),
-                                            comment: yup.string(),
-                                        })
-                                        .noUnknown(true)
-                                        .strict()
-                                )
-                                .required("Deve ser passado um events."),
-                            results: yup
-                                .array(
-                                    yup
-                                        .object({
-                                            resultTypeId: yup
-                                                .number()
-                                                .integer()
-                                                .required("Deve ser passado um resultTypeId."),
-                                            projectVideoTypeId: yup
-                                                .number()
-                                                .integer()
-                                                .required("Deve ser passado um projectVideoTypeId."),
-                                            resultTypeOptionId: yup
-                                                .number()
-                                                .integer()
-                                                .required("Deve ser passado um resultTypeOptionId."),
-                                            scalarResult: yup.number(),
-                                        })
-                                        .noUnknown(true)
-                                        .strict()
-                                )
-                                .required("Deve ser passado um results."),
-                        })
-                        .noUnknown(true)
-                        .strict()
-                )
-                .required("Deve ser passado um data."),
-        })
-        .required("Deve ser passado um body.")
-        .noUnknown(true)
-        .strict(),
-});
+// const createAnnAndRes: yup.ObjectSchema<tValidCreateSchema<tNovoAnnResult>> = yup.object({
+//     params: yup
+//         .object({
+//             recordingId: yup
+//                 .number()
+//                 .required("Deve ser passado um recordingId.")
+//                 .transform((value) => (typeof value === "string" ? parseInt(value) : value)),
+//         })
+//         .required("Deve ser passado um params.")
+//         .noUnknown(true),
+//     body: yup
+//         .object({
+//             data: yup
+//                 .array(
+//                     yup
+//                         .object({
+//                             events: yup
+//                                 .array(
+//                                     yup
+//                                         .object({
+//                                             projectVideoTypeId: yup
+//                                                 .number()
+//                                                 .integer()
+//                                                 .required("Deve ser passado um projectVideoTypeId."),
+//                                             annotationTypeId: yup
+//                                                 .number()
+//                                                 .integer()
+//                                                 .required("Deve ser passado um annotationTypeId."),
+//                                             frames: yup
+//                                                 .array(yup.number().integer().required("Frames precisam ser passados"))
+//                                                 .required("Deve ser passado um frame."),
+//                                             comment: yup.string(),
+//                                         })
+//                                         .noUnknown(true)
+//                                         .strict()
+//                                 )
+//                                 .required("Deve ser passado um events."),
+//                             results: yup
+//                                 .array(
+//                                     yup
+//                                         .object({
+//                                             resultTypeId: yup
+//                                                 .number()
+//                                                 .integer()
+//                                                 .required("Deve ser passado um resultTypeId."),
+//                                             projectVideoTypeId: yup
+//                                                 .number()
+//                                                 .integer()
+//                                                 .required("Deve ser passado um projectVideoTypeId."),
+//                                             resultTypeOptionId: yup
+//                                                 .number()
+//                                                 .integer()
+//                                                 .required("Deve ser passado um resultTypeOptionId."),
+//                                             scalarResult: yup.number(),
+//                                         })
+//                                         .noUnknown(true)
+//                                         .strict()
+//                                 )
+//                                 .required("Deve ser passado um results."),
+//                         })
+//                         .noUnknown(true)
+//                         .strict()
+//                 )
+//                 .required("Deve ser passado um data."),
+//         })
+//         .required("Deve ser passado um body.")
+//         .noUnknown(true)
+//         .strict(),
+// });
 
 export type ReqCreateRecording = InferType<typeof createRecording>;
 export type ReqQueryRecording = InferType<typeof queryRecording>;
 export type ReqGetRecording = InferType<typeof getRecording>;
-export type ReqCreateAnnotationAndResult = InferType<typeof createAnnAndRes>;
+//export type ReqCreateAnnotationAndResult = InferType<typeof createAnnAndRes>;
 
 export default {
     createRecording,
     queryRecording,
     getRecording,
-    createAnnAndRes,
+   // createAnnAndRes,
 };

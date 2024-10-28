@@ -19,17 +19,17 @@ const createUsers = async (newUsers: tNovoUser[]): Promise<User[]> => {
     if (userWithSameEmail) throw new ApiError(httpStatus.BAD_REQUEST, "E-mail já cadastrado");
     // Gera as senhas encriptadas antes da criação
     for (const user of newUsers) {
-        if (!user.password) user.password = user.cpf; // Atribui o CPF à senha se estiver vazia
+        if (!user.password) user.password = user.documento; // Atribui o CPF à senha se estiver vazia
 
         user.password = await encryptPassword(user.password);
     }
     //TODO - não retornar senha
     const createUsers = prisma.user.createManyAndReturn({
-        data: newUsers.map(({ name, email, password, cpf, role }) => ({
+        data: newUsers.map(({ name, email, password, documento, role }) => ({
             name,
             email,
             password,
-            cpf,
+            documento,
             role,
         })),
     });
@@ -51,7 +51,7 @@ const createUsers = async (newUsers: tNovoUser[]): Promise<User[]> => {
  */
 const queryUsers = async <Key extends keyof User>(
     query: { limit?: number; page?: number; sortBy?: Key; sortType?: "asc" | "desc"; where?: { role?: Role } },
-    keys: Key[] = ["id", "name", "email", "role", "cpf", "createdAt", "updatedAt"] as Key[]
+    keys: Key[] = ["id", "name", "email", "role", "documento", "createdAt", "updatedAt"] as Key[]
 ): Promise<Pick<User, Key>[]> => {
     const limit = query.limit;
     const page = query.page;
@@ -74,7 +74,7 @@ const queryUsers = async <Key extends keyof User>(
  */
 const getUserById = async <Key extends keyof User>(
     id: number,
-    keys: Key[] = ["id", "name", "email", "role", "cpf", "createdAt", "updatedAt"] as Key[]
+    keys: Key[] = ["id", "name", "email", "role", "documento", "createdAt", "updatedAt"] as Key[]
 ): Promise<Pick<User, Key>> => {
     const user = await prisma.user.findUnique({
         where: { id: Number(id) },
@@ -94,7 +94,7 @@ const getUserById = async <Key extends keyof User>(
  */
 const getUserByEmail = async <Key extends keyof User>(
     email: string,
-    keys: Key[] = ["id", "email", "name", "password", "role", "cpf", "createdAt", "updatedAt"] as Key[]
+    keys: Key[] = ["id", "email", "name", "password", "role", "documento", "createdAt", "updatedAt"] as Key[]
 ): Promise<Pick<User, Key> | null> => {
     return prisma.user.findUnique({
         where: { email },
@@ -124,7 +124,7 @@ const blOutroUsuarioComEsteEmail = async (email: string, userId?: number): Promi
  */
 const updateUserById = async <Key extends keyof User>(
     dadosUser: { name?: string; email?: string; password?: string } & PartialEntity<User, "id">,
-    keys: Key[] = ["id", "email", "name", "role", "cpf", "updatedAt", "createdAt"] as Key[]
+    keys: Key[] = ["id", "email", "name", "role", "documento", "updatedAt", "createdAt"] as Key[]
 ): Promise<Pick<User, Key> | null> => {
     const user = await getUserById(dadosUser.id);
     if (!user) throw new ApiError(httpStatus.NOT_FOUND, "Usuário não encontrado");
@@ -149,7 +149,7 @@ const updateUserById = async <Key extends keyof User>(
  * @returns {Promise<void>}
  */
 const deleteUseById = async (id: number): Promise<void> => {
-    const user = await getUserById(id, ["id", "name", "email", "cpf"]);
+    const user = await getUserById(id, ["id", "name", "email", "documento"]);
     if (!user) throw new ApiError(httpStatus.NOT_FOUND, "Usuário não encontrado");
 
     //TODO - EVITAR DELETES DE ADMINS(caso único admin)

@@ -27,7 +27,7 @@ const createUser: yup.ObjectSchema<tValidCreateSchema<tNovoUser>> = yup.object({
                                 .max(50, "O nome deve ter no máximo 50 caracteres."),
                             email: yup.string().email("Insira um email válido").required("O email é obrigatório."),
                             password: yup.string().default(""),
-                            cpf: yup.string().required(),
+                            documento: yup.string().required(),
                             role: yup.string().oneOf(Object.values(Role)).required("Deve ser passado um role."),
                         })
                         .noUnknown(true)

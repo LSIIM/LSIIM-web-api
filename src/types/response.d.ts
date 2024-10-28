@@ -1,4 +1,4 @@
-import { User, Patient, Recording, EventType, Annotation, ResultTypeOptions, Result } from "@prisma/client";
+import { User, Patient, Recording, EventType, Annotation, ResultTypeOptions, Result, AnnotationVideo } from "@prisma/client";
 
 export interface TokenResponse {
     token: string;
@@ -11,21 +11,22 @@ export interface AuthTokensResponse {
 }
 //TIPOS DERIVADOS
 //ANNOTATION
-export type tNovoAnnotation = PartialEntity<Annotation, "annotationTypeId" | "frames" | "projectVideoTypeId"> & {
+export type tNovoAnnotation = PartialEntity<AnnotationVideo,| "projectVideoTypeId"> & {
     comment?: string;
+    results: tNovoResults[];
 };
 
 //ANNOTATION TYPE
 export type tNovoEventType = PartialEntity<EventType, "name" | "description" | "isTemporal">;
 //USER
-export type tNovoUser = PartialEntity<User, "name" | "email" | "password" | "cpf" | "role">;
+export type tNovoUser = PartialEntity<User, "name" | "email" | "password" | "documento" | "role">;
 
 //Patient
 export type tNovoPatient = PartialEntity<Patient, "name" | "birthDate" | "isPremature" | "gestationalAge">;
 //RESULTS
 export type tNovoResults = PartialEntity<
     Result,
-    "resultTypeId" | "projectVideoTypeId" | "resultTypeOptionId" > & { scalarResult?: number };
+    "resultTypeId" | "projectVideoTypeId" | "resultTypeOptionId"  > & { scalarResult?: number };
 export type tNovoAnnResult = { events: tNovoAnnotation[]; results: tNovoResults[] };
 //RESULTYPE
 export type tNovoResultType = PartialEntity<ResultTypeOptions, "name" | "description">;

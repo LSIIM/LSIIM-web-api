@@ -1,5 +1,5 @@
-import { MovesInfo, Project, ProjectVideoType } from "@prisma/client";
-import httpStatus from '../utils/httpStatus';
+import { MoveInfo, Project, ProjectVideoType } from "@prisma/client";
+import httpStatus from "../utils/httpStatus";
 import prisma from "../client";
 import ApiError from "../utils/apiError";
 
@@ -32,13 +32,7 @@ const queryProject = async <Key extends keyof Project>(
     //Busca informações do project
     const projects = await prisma.project.findMany({
         where: query.where,
-        select: {
-            ...(keys.reduce((acc, key) => ({ ...acc, [key]: true }), {})),
-            projectsVideoTypes:{
-                include:{
-                    camInfo:true,
-                }
-            }},
+        select: keys.reduce((acc, key) => ({ ...acc, [key]: true }), {}),
         orderBy: sortBy ? { [sortBy]: sortType } : undefined,
         take: limit,
         skip: page !== undefined && limit !== undefined ? page * limit : undefined,
@@ -52,20 +46,16 @@ const queryProject = async <Key extends keyof Project>(
  * @param {number} id - Id do projeto
  * @returns {Promise<Project>}
  */
+
 const getProjectById = async <Key extends keyof Project>(
     id: number,
     keys: Key[] = ["id", "projectName", "createdAt", "updatedAt", "projectsVideoTypes"] as Key[]
 ): Promise<Pick<Project, Key>> => {
     const project = await prisma.project.findUnique({
         where: { id: Number(id) },
-        include:{
-            movesInfo:true,
-            projectsVideoTypes: {
-                include:{
-                    camInfo:true,
-                }
-            }
-        }
+        include: {
+            movesInfo: true,
+        },
     });
 
     if (!project) throw new ApiError(httpStatus.NOT_FOUND, "Projeto não encontrado.");
@@ -121,7 +111,7 @@ const queryProjectVideoType = async <Key extends keyof ProjectVideoType>(
  * @param {Object} [query.where] - Opções de where para usar no prisma
  * @returns {Promise<QueryResult>}
  */
-const queryMovesInfo = async <Key extends keyof MovesInfo>(
+const queryMovesInfo = async <Key extends keyof MoveInfo>(
     projectId: number,
     query: {
         limit?: number;
@@ -130,7 +120,7 @@ const queryMovesInfo = async <Key extends keyof MovesInfo>(
         sortType?: "asc" | "desc";
     },
     keys: Key[] = ["id", "description"] as Key[]
-): Promise<Pick<MovesInfo, Key>[]> => {
+): Promise<Pick<MoveInfo, Key>[]> => {
     const limit = query.limit;
     const page = query.page;
     const sortBy = query.sortBy ?? "id";
@@ -138,7 +128,7 @@ const queryMovesInfo = async <Key extends keyof MovesInfo>(
 
     const project = await getProjectById(projectId, ["id", "projectName"]);
     if (!project) throw new ApiError(httpStatus.NOT_FOUND, "Projeto não encontrado.");
-    const moves = await prisma.movesInfo.findMany({
+    const moves = await prisma.moveInfo.findMany({
         where: { projectId: Number(project.id) },
         select: keys.reduce((acc, key) => ({ ...acc, [key]: true }), {}),
         orderBy: sortBy ? { [sortBy]: sortType } : undefined,
@@ -146,7 +136,7 @@ const queryMovesInfo = async <Key extends keyof MovesInfo>(
         skip: page !== undefined && limit !== undefined ? page * limit : undefined,
     });
 
-    return moves as Pick<MovesInfo, Key>[];
+    return moves as Pick<MoveInfo, Key>[];
 };
 export default {
     queryProjectVideoType,

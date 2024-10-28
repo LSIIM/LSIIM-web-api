@@ -1,4 +1,4 @@
-import { ResultTypeOptions } from "@prisma/client";
+import {  ResultTypeOption } from "@prisma/client";
 import yup from "../config/yup";
 import {
     tNovoResultsTypeOptions,
@@ -33,7 +33,7 @@ const createResultTypeOptions: yup.ObjectSchema<tValidCreateSchema<tNovoResultsT
 });
 
 const queryResultTypeOptions: yup.ObjectSchema<
-    tValidQuerySchema<PartialEntity<ResultTypeOptions, "name">, PartialEntity<ResultTypeOptions, "id" | "createdAt">>
+    tValidQuerySchema<PartialEntity<ResultTypeOption, "name">, PartialEntity<ResultTypeOption, "id" | "createdAt">>
 > = yup.object({
     query: yup
         .object({
@@ -52,7 +52,7 @@ const queryResultTypeOptions: yup.ObjectSchema<
         .strict(),
 });
 
-const getResultTypeOptionsById: yup.ObjectSchema<tValidParamsSchema<PartialEntity<ResultTypeOptions, "id">>> =
+const getResultTypeOptionsById: yup.ObjectSchema<tValidParamsSchema<PartialEntity<ResultTypeOption, "id">>> =
     yup.object({
         params: yup
             .object({
