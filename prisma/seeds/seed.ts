@@ -297,18 +297,32 @@ async function seed() {
             projectId: 1,
         },
     ];
-    
+
     const dataRecordings = [
-        { ignore: false, patientId: 8, recordingDate: new Date("2021-11-30"), moveId: 4,  projectId: 1 },
-        { ignore: false, patientId: 8, recordingDate: new Date("2021-11-30"), moveId: 1,  projectId: 1 },
-        { ignore: false, patientId: 8, recordingDate: new Date("2021-11-30"), moveId: 2,  projectId: 1 },
-        { ignore: false, patientId: 9, recordingDate: new Date("2021-11-30"), moveId: 4,  projectId: 1 },
+        { ignore: false, patientId: 8, recordingDate: new Date("2021-11-30"), moveId: 4, projectId: 1 },
+        { ignore: false, patientId: 8, recordingDate: new Date("2021-11-30"), moveId: 1, projectId: 1 },
+        { ignore: false, patientId: 8, recordingDate: new Date("2021-11-30"), moveId: 2, projectId: 1 },
+        { ignore: false, patientId: 9, recordingDate: new Date("2021-11-30"), moveId: 4, projectId: 1 },
         {
             ignore: true,
             observation: "Video corrompido",
             patientId: 9,
             recordingDate: new Date("2021-11-30"),
             moveId: 1,
+
+            projectId: 1,
+        },
+        { ignore: false, patientId: 9, recordingDate: new Date("2021-11-30"), moveId: 2, projectId: 1 },
+        { ignore: true, patientId: 10, recordingDate: new Date("2021-11-30"), projectId: 1 },
+        { ignore: false, patientId: 10, recordingDate: new Date("2021-11-30"), projectId: 1 },
+        { ignore: false, patientId: 10, recordingDate: new Date("2021-11-30"), projectId: 1 },
+        { ignore: true, patientId: 10, recordingDate: new Date("2021-11-30"), projectId: 1 },
+        {
+            ignore: false,
+            observation: "Infravermelho desligado",
+            patientId: 11,
+            recordingDate: new Date("2021-11-30"),
+
             projectId: 1,
         },
         {
@@ -316,6 +330,7 @@ async function seed() {
             observation: "Infravermelho desligado",
             patientId: 11,
             recordingDate: new Date("2021-11-30"),
+
             projectId: 1,
         },
         {
@@ -323,15 +338,572 @@ async function seed() {
             observation: "Infravermelho desligado",
             patientId: 11,
             recordingDate: new Date("2021-11-30"),
+
+            projectId: 1,
+        },
+        { ignore: false, patientId: 1, recordingDate: new Date("2021-12-07"), projectId: 1 },
+        { ignore: false, patientId: 1, recordingDate: new Date("2021-12-07"), projectId: 1 },
+        { ignore: false, patientId: 1, recordingDate: new Date("2021-12-07"), projectId: 1 },
+        {
+            ignore: true,
+            observation: "Não funcionou, ficou prestando atenção na logo do computador avell, desconsiderar.",
+            patientId: 2,
+            recordingDate: new Date("2021-12-07"),
+
+            projectId: 1,
+        },
+        {
+            ignore: true,
+            observation: "Não funcionou, ficou prestando atenção na logo do computador avell, desconsiderar.",
+            patientId: 2,
+            recordingDate: new Date("2021-12-07"),
+
+            projectId: 1,
+        },
+        {
+            ignore: true,
+            observation: "Não funcionou, ficou prestando atenção na logo do computador avell, desconsiderar.",
+            patientId: 2,
+            recordingDate: new Date("2021-12-07"),
+
             projectId: 1,
         },
         {
             ignore: false,
-            observation: "Infravermelho desligado",
-            patientId: 11,
-            recordingDate: new Date("2021-11-30"),
+            observation: "Sem Infravermelho",
+            patientId: 3,
+            recordingDate: new Date("2021-12-09"),
+
             projectId: 1,
         },
+        {
+            ignore: false,
+            observation: "Sem Infravermelho",
+            patientId: 3,
+            recordingDate: new Date("2021-12-09"),
+
+            projectId: 1,
+        },
+        {
+            ignore: false,
+            observation: "Sem Infravermelho",
+            patientId: 3,
+            recordingDate: new Date("2021-12-09"),
+
+            projectId: 1,
+        },
+        {
+            ignore: true,
+            observation: "primeiro teste, bebe não deixou movimentar para o lado esquerdo dela.",
+            patientId: 4,
+            recordingDate: new Date("2021-12-09"),
+
+            projectId: 1,
+        },
+        { ignore: false, patientId: 4, recordingDate: new Date("2021-12-09"), projectId: 1 },
+        { ignore: false, patientId: 4, recordingDate: new Date("2021-12-09"), projectId: 1 },
+        { ignore: false, patientId: 4, recordingDate: new Date("2021-12-09"), projectId: 1 },
+        {
+            ignore: false,
+            observation: "não colaborou nos movimentos",
+            patientId: 5,
+            recordingDate: new Date("2021-12-09"),
+
+            projectId: 1,
+        },
+        {
+            ignore: false,
+            observation: "não colaborou nos movimentos",
+            patientId: 5,
+            recordingDate: new Date("2021-12-09"),
+
+            projectId: 1,
+        },
+        {
+            ignore: false,
+            observation: "não colaborou nos movimentos",
+            patientId: 5,
+            recordingDate: new Date("2021-12-09"),
+
+            projectId: 1,
+        },
+        {
+            ignore: false,
+            observation: "não colaborou nos movimentos",
+            patientId: 6,
+            recordingDate: new Date("2021-12-09"),
+
+            projectId: 1,
+        },
+        {
+            ignore: false,
+            observation: "não colaborou nos movimentos",
+            patientId: 6,
+            recordingDate: new Date("2021-12-09"),
+
+            projectId: 1,
+        },
+        {
+            ignore: false,
+            observation: "não colaborou nos movimentos",
+            patientId: 6,
+            recordingDate: new Date("2021-12-09"),
+
+            projectId: 1,
+        },
+        { ignore: true, patientId: 7, recordingDate: new Date("2021-12-14"), projectId: 1 },
+        { ignore: false, patientId: 12, recordingDate: new Date("2022-02-22"), projectId: 1 },
+        { ignore: false, patientId: 12, recordingDate: new Date("2022-02-22"), projectId: 1 },
+        { ignore: false, patientId: 12, recordingDate: new Date("2022-02-22"), projectId: 1 },
+        { ignore: false, patientId: 12, recordingDate: new Date("2022-02-22"), projectId: 1 },
+        { ignore: false, patientId: 13, recordingDate: new Date("2022-02-22"), projectId: 1 },
+        { ignore: false, patientId: 13, recordingDate: new Date("2022-02-22"), projectId: 1 },
+        { ignore: false, patientId: 13, recordingDate: new Date("2022-02-22"), projectId: 1 },
+        { ignore: false, patientId: 13, recordingDate: new Date("2022-02-22"), projectId: 1 },
+        { ignore: false, patientId: 14, recordingDate: new Date("2022-02-22"), projectId: 1 },
+        { ignore: false, patientId: 14, recordingDate: new Date("2022-02-22"), projectId: 1 },
+        { ignore: false, patientId: 14, recordingDate: new Date("2022-02-22"), projectId: 1 },
+        { ignore: false, patientId: 14, recordingDate: new Date("2022-02-22"), projectId: 1 },
+        { ignore: false, patientId: 15, recordingDate: new Date("2022-03-22"), projectId: 1 },
+        { ignore: false, patientId: 15, recordingDate: new Date("2022-03-22"), projectId: 1 },
+        { ignore: false, patientId: 15, recordingDate: new Date("2022-03-22"), projectId: 1 },
+        { ignore: false, patientId: 15, recordingDate: new Date("2022-03-22"), projectId: 1 },
+        { ignore: false, patientId: 16, recordingDate: new Date("2022-03-22"), projectId: 1 },
+        { ignore: false, patientId: 16, recordingDate: new Date("2022-03-22"), projectId: 1 },
+        { ignore: false, patientId: 16, recordingDate: new Date("2022-03-22"), projectId: 1 },
+        { ignore: false, patientId: 16, recordingDate: new Date("2022-03-22"), projectId: 1 },
+        { ignore: false, patientId: 17, recordingDate: new Date("2022-04-05"), projectId: 1 },
+        { ignore: false, patientId: 17, recordingDate: new Date("2022-04-05"), projectId: 1 },
+        { ignore: false, patientId: 17, recordingDate: new Date("2022-04-05"), projectId: 1 },
+        { ignore: false, patientId: 17, recordingDate: new Date("2022-04-05"), projectId: 1 },
+        { ignore: false, patientId: 18, recordingDate: new Date("2022-04-05"), projectId: 1 },
+        { ignore: false, patientId: 19, recordingDate: new Date("2022-04-05"), projectId: 1 },
+        { ignore: false, patientId: 20, recordingDate: new Date("2022-04-05"), projectId: 1 },
+        { ignore: false, patientId: 20, recordingDate: new Date("2022-04-05"), projectId: 1 },
+        { ignore: false, patientId: 20, recordingDate: new Date("2022-04-05"), projectId: 1 },
+        { ignore: false, patientId: 20, recordingDate: new Date("2022-04-05"), projectId: 1 },
+        { ignore: true, patientId: 21, recordingDate: new Date("2022-04-05"), projectId: 1 },
+        { ignore: false, patientId: 21, recordingDate: new Date("2022-04-05"), projectId: 1 },
+        { ignore: false, patientId: 21, recordingDate: new Date("2022-04-05"), projectId: 1 },
+        { ignore: false, patientId: 21, recordingDate: new Date("2022-04-05"), projectId: 1 },
+        {
+            ignore: true,
+            observation: "O video não ta ali",
+            patientId: 22,
+            recordingDate: new Date("2022-05-31"),
+
+            projectId: 1,
+        },
+        { ignore: false, patientId: 18, recordingDate: new Date("2022-05-31"), projectId: 1 },
+        { ignore: false, patientId: 18, recordingDate: new Date("2022-05-31"), projectId: 1 },
+        { ignore: false, patientId: 18, recordingDate: new Date("2022-05-31"), projectId: 1 },
+        { ignore: false, patientId: 18, recordingDate: new Date("2022-05-31"), projectId: 1 },
+        { ignore: false, patientId: 19, recordingDate: new Date("2022-05-31"), projectId: 1 },
+        { ignore: false, patientId: 19, recordingDate: new Date("2022-05-31"), projectId: 1 },
+        { ignore: false, patientId: 19, recordingDate: new Date("2022-05-31"), projectId: 1 },
+        { ignore: false, patientId: 19, recordingDate: new Date("2022-05-31"), projectId: 1 },
+        { ignore: false, patientId: 23, recordingDate: new Date("2022-05-31"), projectId: 1 },
+        { ignore: false, patientId: 23, recordingDate: new Date("2022-05-31"), projectId: 1 },
+        { ignore: false, patientId: 23, recordingDate: new Date("2022-05-31"), projectId: 1 },
+        { ignore: false, patientId: 23, recordingDate: new Date("2022-05-31"), projectId: 1 },
+        {
+            ignore: false,
+            observation: "Ultimo movimento de olhar falso positiv",
+            patientId: 24,
+            recordingDate: new Date("2022-05-31"),
+
+            projectId: 1,
+        },
+        {
+            ignore: false,
+            observation: "Ultimo movimento de olhar falso positiv",
+            patientId: 24,
+            recordingDate: new Date("2022-05-31"),
+
+            projectId: 1,
+        },
+        {
+            ignore: false,
+            observation: "Ultimo movimento de olhar falso positiv",
+            patientId: 24,
+            recordingDate: new Date("2022-05-31"),
+
+            projectId: 1,
+        },
+        {
+            ignore: false,
+            observation: "Ultimo movimento de olhar falso positiv",
+            patientId: 24,
+            recordingDate: new Date("2022-05-31"),
+
+            projectId: 1,
+        },
+        {
+            ignore: false,
+            observation: "Sem resposta",
+            patientId: 25,
+            recordingDate: new Date("2022-06-14"),
+
+            projectId: 1,
+        },
+        { ignore: false, patientId: 26, recordingDate: new Date("2022-06-14"), projectId: 1 },
+        { ignore: false, patientId: 26, recordingDate: new Date("2022-06-14"), projectId: 1 },
+        { ignore: false, patientId: 26, recordingDate: new Date("2022-06-14"), projectId: 1 },
+        { ignore: false, patientId: 26, recordingDate: new Date("2022-06-14"), projectId: 1 },
+        { ignore: false, patientId: 27, recordingDate: new Date("2022-06-14"), projectId: 1 },
+        { ignore: false, patientId: 27, recordingDate: new Date("2022-06-14"), projectId: 1 },
+        { ignore: false, patientId: 27, recordingDate: new Date("2022-06-14"), projectId: 1 },
+        { ignore: false, patientId: 27, recordingDate: new Date("2022-06-14"), projectId: 1 },
+        { ignore: true, patientId: 10, recordingDate: new Date("2021-11-30"), projectId: 1 },
+        { ignore: false, patientId: 21, recordingDate: new Date("2022-04-05"), projectId: 1 },
+        { ignore: false, patientId: 28, recordingDate: new Date("2022-07-05"), moveId: 1, projectId: 1 },
+        { ignore: false, patientId: 28, recordingDate: new Date("2022-07-05"), moveId: 2, projectId: 1 },
+        { ignore: false, patientId: 28, recordingDate: new Date("2022-07-05"), moveId: 3, projectId: 1 },
+        { ignore: false, patientId: 28, recordingDate: new Date("2022-07-05"), moveId: 4, projectId: 1 },
+        {
+            ignore: true,
+            observation: "Nao fixa",
+            patientId: 29,
+            recordingDate: new Date("2022-07-05"),
+            moveId: 1,
+
+            projectId: 1,
+        },
+        {
+            ignore: true,
+            observation: "Muito agitada",
+            patientId: 14,
+            recordingDate: new Date("2022-07-05"),
+            moveId: 1,
+
+            projectId: 1,
+        },
+        {
+            ignore: true,
+            observation: "Muito agitada",
+            patientId: 14,
+            recordingDate: new Date("2022-07-05"),
+            moveId: 2,
+
+            projectId: 1,
+        },
+        {
+            ignore: true,
+            observation: "Muito agitada",
+            patientId: 14,
+            recordingDate: new Date("2022-07-05"),
+            moveId: 3,
+
+            projectId: 1,
+        },
+        {
+            ignore: true,
+            observation: "Muito agitada",
+            patientId: 14,
+            recordingDate: new Date("2022-07-05"),
+            moveId: 4,
+
+            projectId: 1,
+        },
+        {
+            ignore: true,
+            observation: "sem sucesso",
+            patientId: 21,
+            recordingDate: new Date("2022-07-05"),
+            moveId: 4,
+
+            projectId: 1,
+        },
+        {
+            ignore: true,
+            observation: "sem sucesso",
+            patientId: 21,
+            recordingDate: new Date("2022-07-05"),
+            moveId: 4,
+
+            projectId: 1,
+        },
+        {
+            ignore: true,
+            observation: "falha, crianca nao executou",
+            patientId: 9,
+            recordingDate: new Date("2022-07-15"),
+            moveId: 1,
+
+            projectId: 1,
+        },
+        {
+            ignore: true,
+            observation: "Falha, ambiente ruidoso",
+            patientId: 30,
+            recordingDate: new Date("2022-07-26"),
+            moveId: 1,
+
+            projectId: 1,
+        },
+        { ignore: false, patientId: 18, recordingDate: new Date("2022-07-26"), moveId: 1, projectId: 1 },
+        { ignore: false, patientId: 18, recordingDate: new Date("2022-07-26"), moveId: 2, projectId: 1 },
+        { ignore: false, patientId: 18, recordingDate: new Date("2022-07-26"), moveId: 3, projectId: 1 },
+        { ignore: false, patientId: 18, recordingDate: new Date("2022-07-26"), moveId: 4, projectId: 1 },
+        { ignore: false, patientId: 19, recordingDate: new Date("2022-07-26"), moveId: 1, projectId: 1 },
+        { ignore: false, patientId: 19, recordingDate: new Date("2022-07-26"), moveId: 2, projectId: 1 },
+        { ignore: false, patientId: 19, recordingDate: new Date("2022-07-26"), moveId: 3, projectId: 1 },
+        { ignore: false, patientId: 19, recordingDate: new Date("2022-07-26"), moveId: 4, projectId: 1 },
+        { ignore: false, patientId: 23, recordingDate: new Date("2022-07-26"), moveId: 1, projectId: 1 },
+        { ignore: false, patientId: 23, recordingDate: new Date("2022-07-26"), moveId: 2, projectId: 1 },
+        { ignore: false, patientId: 23, recordingDate: new Date("2022-07-26"), moveId: 3, projectId: 1 },
+        { ignore: false, patientId: 23, recordingDate: new Date("2022-07-26"), moveId: 4, projectId: 1 },
+        { ignore: false, patientId: 17, recordingDate: new Date("2022-07-26"), moveId: 1, projectId: 1 },
+        { ignore: false, patientId: 17, recordingDate: new Date("2022-07-26"), moveId: 2, projectId: 1 },
+        { ignore: false, patientId: 17, recordingDate: new Date("2022-07-26"), moveId: 3, projectId: 1 },
+        { ignore: false, patientId: 17, recordingDate: new Date("2022-07-26"), moveId: 4, projectId: 1 },
+        {
+            ignore: false,
+            observation: "movimento 1 ok",
+            patientId: 31,
+            recordingDate: new Date("2022-12-08"),
+            moveId: 1,
+
+            projectId: 1,
+        },
+        {
+            ignore: true,
+            observation: "movimento 2 nao",
+            patientId: 31,
+            recordingDate: new Date("2022-12-08"),
+            moveId: 2,
+
+            projectId: 1,
+        },
+        {
+            ignore: false,
+            observation: "movimento 3 e 4 - mesmo video. COnfirmou movimento 3.",
+            patientId: 31,
+            recordingDate: new Date("2022-12-08"),
+            moveId: 3,
+
+            projectId: 1,
+        },
+        {
+            ignore: true,
+            observation: "movimento 3 e 4 - mesmo video. COnfirmou movimento 3.",
+            patientId: 31,
+            recordingDate: new Date("2022-12-08"),
+            moveId: 4,
+
+            projectId: 1,
+        },
+        {
+            ignore: true,
+            observation: "sem resposta",
+            patientId: 28,
+            recordingDate: new Date("2022-12-08"),
+            moveId: 1,
+
+            projectId: 1,
+        },
+        {
+            ignore: true,
+            observation: "sem resposta",
+            patientId: 28,
+            recordingDate: new Date("2022-12-08"),
+            moveId: 2,
+
+            projectId: 1,
+        },
+        {
+            ignore: true,
+            observation: "sem resposta",
+            patientId: 28,
+            recordingDate: new Date("2022-12-08"),
+            moveId: 3,
+
+            projectId: 1,
+        },
+        {
+            ignore: true,
+            observation: "sem resposta",
+            patientId: 28,
+            recordingDate: new Date("2022-12-08"),
+            moveId: 4,
+
+            projectId: 1,
+        },
+        { ignore: false, patientId: 27, recordingDate: new Date("2022-09-01"), moveId: 1, projectId: 1 },
+        { ignore: false, patientId: 27, recordingDate: new Date("2022-09-01"), moveId: 2, projectId: 1 },
+        { ignore: false, patientId: 27, recordingDate: new Date("2022-09-01"), moveId: 3, projectId: 1 },
+        { ignore: false, patientId: 27, recordingDate: new Date("2022-09-01"), moveId: 4, projectId: 1 },
+        { ignore: false, patientId: 32, recordingDate: new Date("2022-09-01"), moveId: 1, projectId: 1 },
+        { ignore: false, patientId: 32, recordingDate: new Date("2022-09-01"), moveId: 2, projectId: 1 },
+        { ignore: false, patientId: 32, recordingDate: new Date("2022-09-01"), moveId: 3, projectId: 1 },
+        { ignore: false, patientId: 32, recordingDate: new Date("2022-09-01"), moveId: 4, projectId: 1 },
+        {
+            ignore: true,
+            observation: "Nao fixou",
+            patientId: 33,
+            recordingDate: new Date("2022-09-01"),
+            moveId: 1,
+
+            projectId: 1,
+        },
+        {
+            ignore: true,
+            observation: "Nao fixou",
+            patientId: 33,
+            recordingDate: new Date("2022-09-01"),
+            moveId: 2,
+
+            projectId: 1,
+        },
+        {
+            ignore: true,
+            observation: "sem resposta, nao executado os seguintes",
+            patientId: 34,
+            recordingDate: new Date("2022-12-09"),
+            moveId: 1,
+
+            projectId: 1,
+        },
+        {
+            ignore: true,
+            observation: "sem resposta, nao executado os seguintes",
+            patientId: 34,
+            recordingDate: new Date("2022-12-09"),
+            moveId: 2,
+
+            projectId: 1,
+        },
+        {
+            ignore: false,
+            observation: "Muito disperso",
+            patientId: 15,
+            recordingDate: new Date("2022-09-16"),
+            moveId: 1,
+
+            projectId: 1,
+        },
+        {
+            ignore: false,
+            observation: "Muito disperso",
+            patientId: 15,
+            recordingDate: new Date("2022-09-16"),
+            moveId: 2,
+
+            projectId: 1,
+        },
+        {
+            ignore: true,
+            observation: "3 falhou, 4 nao feito",
+            patientId: 15,
+            recordingDate: new Date("2022-09-16"),
+            moveId: 3,
+
+            projectId: 1,
+        },
+        { ignore: false, patientId: 3, recordingDate: new Date("2022-09-30"), moveId: 1, projectId: 1 },
+        { ignore: false, patientId: 3, recordingDate: new Date("2022-09-30"), moveId: 2, projectId: 1 },
+        { ignore: false, patientId: 3, recordingDate: new Date("2022-09-30"), moveId: 3, projectId: 1 },
+        { ignore: false, patientId: 3, recordingDate: new Date("2022-09-30"), moveId: 4, projectId: 1 },
+        {
+            ignore: true,
+            observation: "Falhou",
+            patientId: 4,
+            recordingDate: new Date("2022-09-30"),
+            moveId: 1,
+
+            projectId: 1,
+        },
+        { ignore: false, patientId: 13, recordingDate: new Date("2022-09-30"), moveId: 1, projectId: 1 },
+        { ignore: false, patientId: 13, recordingDate: new Date("2022-09-30"), moveId: 2, projectId: 1 },
+        { ignore: false, patientId: 13, recordingDate: new Date("2022-09-30"), moveId: 3, projectId: 1 },
+        { ignore: false, patientId: 13, recordingDate: new Date("2022-09-30"), moveId: 4, projectId: 1 },
+        { ignore: false, patientId: 35, recordingDate: new Date("2022-10-14"), moveId: 1, projectId: 1 },
+        { ignore: false, patientId: 35, recordingDate: new Date("2022-10-14"), moveId: 2, projectId: 1 },
+        { ignore: false, patientId: 35, recordingDate: new Date("2022-10-14"), moveId: 3, projectId: 1 },
+        {
+            ignore: false,
+            observation: "ultimo movimento durou poucoo tempo, invalido",
+            patientId: 35,
+            recordingDate: new Date("2022-10-14"),
+            moveId: 4,
+
+            projectId: 1,
+        },
+        {
+            ignore: false,
+            observation: "Lado direito nao fixando ?",
+            patientId: 36,
+            recordingDate: new Date("2022-10-14"),
+            moveId: 1,
+
+            projectId: 1,
+        },
+        {
+            ignore: false,
+            observation: "Lado direito nao fixando ?",
+            patientId: 36,
+            recordingDate: new Date("2022-10-14"),
+            moveId: 2,
+
+            projectId: 1,
+        },
+        {
+            ignore: false,
+            observation: "Lado direito nao fixando ?",
+            patientId: 36,
+            recordingDate: new Date("2022-10-14"),
+            moveId: 3,
+
+            projectId: 1,
+        },
+        {
+            ignore: false,
+            observation: "Lado direito nao fixando ?",
+            patientId: 36,
+            recordingDate: new Date("2022-10-14"),
+            moveId: 4,
+
+            projectId: 1,
+        },
+        {
+            ignore: true,
+            observation: "nao fixou em nenhum movimento, 4 nao realizado",
+            patientId: 37,
+            recordingDate: new Date("2022-11-04"),
+            moveId: 1,
+
+            projectId: 1,
+        },
+        {
+            ignore: true,
+            observation: "nao fixou em nenhum movimento, 4 nao realizado",
+            patientId: 37,
+            recordingDate: new Date("2022-11-04"),
+            moveId: 2,
+
+            projectId: 1,
+        },
+        {
+            ignore: true,
+            observation: "nao fixou em nenhum movimento, 4 nao realizado",
+            patientId: 37,
+            recordingDate: new Date("2022-11-04"),
+            moveId: 3,
+
+            projectId: 1,
+        },
+        { ignore: false, patientId: 18, recordingDate: new Date("2022-11-04"), moveId: 1, projectId: 1 },
+        { ignore: false, patientId: 18, recordingDate: new Date("2022-11-04"), moveId: 2, projectId: 1 },
+        { ignore: false, patientId: 18, recordingDate: new Date("2022-11-04"), moveId: 3, projectId: 1 },
+        { ignore: false, patientId: 18, recordingDate: new Date("2022-11-04"), moveId: 4, projectId: 1 },
+        { ignore: false, patientId: 19, recordingDate: new Date("2022-11-04"), moveId: 1, projectId: 1 },
+        { ignore: false, patientId: 19, recordingDate: new Date("2022-11-04"), moveId: 2, projectId: 1 },
+        { ignore: false, patientId: 19, recordingDate: new Date("2022-11-04"), moveId: 3, projectId: 1 },
+        { ignore: false, patientId: 19, recordingDate: new Date("2022-11-04"), moveId: 4, projectId: 1 },
+        { ignore: false, patientId: 23, recordingDate: new Date("2022-11-04"), moveId: 1, projectId: 1 },
+        { ignore: false, patientId: 23, recordingDate: new Date("2022-11-04"), moveId: 2, projectId: 1 },
+        { ignore: false, patientId: 23, recordingDate: new Date("2022-11-04"), moveId: 3, projectId: 1 },
+        { ignore: false, patientId: 23, recordingDate: new Date("2022-11-04"), moveId: 4, projectId: 1 },
     ];
 
     const dataResultType = [
@@ -355,28 +927,29 @@ async function seed() {
             name: "Reflexo Vestibulo-ocular",
             description: "RVO",
         },
-    ]
-    const dataResultTypeOptions = [{
-        resultTypeId: 1,
-        name: "Continuo",
-        description: "Acompanhamento visual contínuo",
-    },
-    {
-        resultTypeId: 1,
-        name: "Descontinuo",
-        description: "Acompanhamento visual Descontinuo",
-    },
-    {
-        resultTypeId: 2,
-        name: "Realiza",
-        description: "Realiza acompanhamento visual",
-    },
-    {
-        resultTypeId: 2,
-        name: "Não realiza",
-        description: "Não realiza acompanhamento visual",
-    }
-    ]
+    ];
+    const dataResultTypeOptions = [
+        {
+            resultTypeId: 1,
+            name: "Continuo",
+            description: "Acompanhamento visual contínuo",
+        },
+        {
+            resultTypeId: 1,
+            name: "Descontinuo",
+            description: "Acompanhamento visual Descontinuo",
+        },
+        {
+            resultTypeId: 2,
+            name: "Realiza",
+            description: "Realiza acompanhamento visual",
+        },
+        {
+            resultTypeId: 2,
+            name: "Não realiza",
+            description: "Não realiza acompanhamento visual",
+        },
+    ];
     const dataEventTypes = [
         {
             name: "Encontrou estímulo periférico",
@@ -394,7 +967,6 @@ async function seed() {
             isTemporal: true,
         },
     ];
-
 
     try {
         // Manipulação de dataBabyInfo para tratar o campo `isPremature`
