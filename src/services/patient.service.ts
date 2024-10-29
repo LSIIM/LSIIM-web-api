@@ -32,7 +32,7 @@ const queryPatient = async <Key extends keyof Patient>(
         "birthDate",
         "isPremature",
         "gestationalAge",
-        "atipicidade",
+        "atipicidades",
         "createdAt",
         "updatedAt",
     ] as Key[]
@@ -67,7 +67,7 @@ const getPatientById = async <Key extends keyof Patient>(
         "birthDate",
         "isPremature",
         "gestationalAge",
-        "atipicidade",
+        "atipicidades",
         "createdAt",
         "updatedAt",
     ] as Key[]
