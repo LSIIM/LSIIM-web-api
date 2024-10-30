@@ -908,20 +908,12 @@ async function seed() {
 
     const dataResultType = [
         {
-            name: "Rastreamento visiual vertical Esquerda",
-            description: "RSVE",
+            name: "Rastreamento visiual vertical",
+            description: "RSV",
         },
         {
-            name: "Rastreamento visiual vertical Direita",
-            description: "RSVD",
-        },
-        {
-            name: "Rastreamento visiual horizontal Esquerda",
-            description: "RSHE",
-        },
-        {
-            name: "Rastreamento visiual horizontal Direita",
-            description: "RSHD",
+            name: "Rastreamento visiual horizontal",
+            description: "RSH",
         },
         {
             name: "Campo Visual Esquerda",
@@ -945,133 +937,113 @@ async function seed() {
         },
     ];
     const dataResultTypeOptions = [
+        // Rastreamento visual vertical (RSV) - resultTypeId: 1
         {
             resultTypeId: 1,
             name: "Continuo",
-            description: "Acompanhamento visual Contínuo",
+            description: "Acompanhamento visual contínuo por toda amplitude",
         },
         {
             resultTypeId: 1,
             name: "Descontinuo",
-            description: "Acompanhamento visual Descontinuo",
+            description: "Acompanhamento visual descontinuo, não cobre toda amplitude",
         },
         {
             resultTypeId: 1,
             name: "Breve",
-            description: "Acompanhamento visual Breve",
+            description: "Acompanhamento visual breve, por poucos graus de amplitude",
         },
         {
             resultTypeId: 1,
-            name: "Não Realiza",
-            description: "...",
-        },{
+            name: "Não realiza",
+            description: "Não realiza o acompanhamento visual",
+        },
+    
+        // Rastreamento visual horizontal (RSH) - resultTypeId: 2
+        {
             resultTypeId: 2,
             name: "Continuo",
-            description: "Acompanhamento visual Contínuo",
+            description: "Acompanhamento visual contínuo por toda amplitude",
         },
         {
             resultTypeId: 2,
             name: "Descontinuo",
-            description: "Acompanhamento visual Descontinuo",
+            description: "Acompanhamento visual descontinuo, não cobre toda amplitude",
         },
         {
             resultTypeId: 2,
             name: "Breve",
-            description: "Acompanhamento visual Breve",
+            description: "Acompanhamento visual breve, por poucos graus de amplitude",
         },
         {
             resultTypeId: 2,
-            name: "Não Realiza",
-            description: "...",
-        },{
-            resultTypeId: 3,
-            name: "Continuo",
-            description: "Acompanhamento visual Contínuo",
+            name: "Não realiza",
+            description: "Não realiza o acompanhamento visual",
         },
+    
+        // Campo visual esquerda (CVE) - resultTypeId: 3
         {
             resultTypeId: 3,
-            name: "Descontinuo",
-            description: "Acompanhamento visual Descontinuo",
+            name: "Realiza",
+            description: "Encontra o estímulo na periferia (esquerda)",
         },
         {
             resultTypeId: 3,
-            name: "Breve",
-            description: "Acompanhamento visual Breve",
+            name: "Não realiza",
+            description: "Não encontra o estímulo na periferia (esquerda)",
         },
+    
+        // Campo visual direita (CVD) - resultTypeId: 4
         {
-            resultTypeId: 3,
-            name: "Não Realiza",
-            description: "...",
-        },{
             resultTypeId: 4,
-            name: "Continuo",
-            description: "Acompanhamento visual Contínuo",
+            name: "Realiza",
+            description: "Encontra o estímulo na periferia (direita)",
         },
         {
             resultTypeId: 4,
-            name: "Descontinuo",
-            description: "Acompanhamento visual Descontinuo",
+            name: "Não realiza",
+            description: "Não encontra o estímulo na periferia (direita)",
         },
-        {
-            resultTypeId: 4,
-            name: "Breve",
-            description: "Acompanhamento visual Breve",
-        },
-        {
-            resultTypeId: 4,
-            name: "Não Realiza",
-            description: "...",
-        },
+    
+        // Fixação visual (FV) - resultTypeId: 5
         {
             resultTypeId: 5,
-            name: "Realiza",
-            description: "Encontra estímulo na períferia",
-        },
-        {
-            resultTypeId: 5,
-            name: "Não realiza",
-            description: "Não realiza acompanhamento visual",
-        },{
-            resultTypeId: 6,
-            name: "Realiza",
-            description: "Encontra estímulo na períferia",
-        },
-        {
-            resultTypeId: 6,
-            name: "Não realiza",
-            description: "Não realiza acompanhamento visual",
-        },
-        {
-            resultTypeId: 7,
             name: "Estável",
             description: "Fixa o olhar no estímulo por no mínimo 3 segundos",
         },
         {
-            resultTypeId: 7,
+            resultTypeId: 5,
             name: "Instável",
-            description: "...",
+            description: "Fixação visual instável",
         },
+    
+        // Reflexo vestíbulo-ocular esquerda (RVE) - resultTypeId: 6
         {
-            resultTypeId: 8,
+            resultTypeId: 6,
             name: "Realiza",
-            description: "Movimenta os olhos para o lado contrério da cabeça",
+            description: "Movimenta os olhos para o lado contrário da cabeça (esquerda)",
         },
         {
-            resultTypeId: 8,
+            resultTypeId: 6,
             name: "Não realiza",
-            description: "Não realiza movimento de rastreamento",
+            description: "Não realiza o movimento dos olhos (esquerda)",
         },
+    
+        // Reflexo vestíbulo-ocular direita (RVD) - resultTypeId: 7
         {
-            resultTypeId: 9,
+            resultTypeId: 7,
             name: "Realiza",
-            description: "Movimenta os olhos para o lado contrério da cabeça",
+            description: "Movimenta os olhos para o lado contrário da cabeça (direita)",
         },
         {
-            resultTypeId: 9,
+            resultTypeId: 7,
             name: "Não realiza",
-            description: "Não realiza movimento de rastreamento",
-        },
+            description: "Não realiza o movimento dos olhos (direita)",
+        }
     ];
+
+    
+    
     const dataEventTypes = [
         {
             name: "Encontrou estímulo periférico",
