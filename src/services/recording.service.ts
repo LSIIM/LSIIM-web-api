@@ -182,6 +182,12 @@ const createAnnotation = async (annotationVideo: tNovoAnnotationVideo[], recordi
         recordingId,
     }));
 
+    const anotacaoExiste = await prisma.annotationVideo.findFirst({
+        where: { recordingId: recordingId },
+        select: { events: true },
+    });
+    if (anotacaoExiste) throw new ApiError(httpStatus.BAD_REQUEST, "Já existe uma anotação para esse recording.");
+
     //função para verificar se projectVideoType é main
     const isMain = async (projectVideoTypeId: number) => {
         const projectVideoType = await prisma.projectVideoType.findUnique({

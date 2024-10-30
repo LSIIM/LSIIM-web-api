@@ -908,31 +908,47 @@ async function seed() {
 
     const dataResultType = [
         {
-            name: "Rastreamento visiual vertical",
-            description: "RSV",
+            name: "Rastreamento visiual vertical Esquerda",
+            description: "RSVE",
         },
         {
-            name: "Rastreamento visiual horizontal",
-            description: "RSH",
+            name: "Rastreamento visiual vertical Direita",
+            description: "RSVD",
         },
         {
-            name: "Campo Visual",
-            description: "CV",
+            name: "Rastreamento visiual horizontal Esquerda",
+            description: "RSHE",
+        },
+        {
+            name: "Rastreamento visiual horizontal Direita",
+            description: "RSHD",
+        },
+        {
+            name: "Campo Visual Esquerda",
+            description: "CVE",
+        },
+        {
+            name: "Campo Visual Direita",
+            description: "CVD",
         },
         {
             name: "Fixação Visual",
             description: "FV",
         },
         {
-            name: "Reflexo Vestibulo-ocular",
-            description: "RVO",
+            name: "Reflexo Vestibulo-ocular Esquerda",
+            description: "RVE",
+        },
+        {
+            name: "Reflexo Vestibulo-ocular Direita",
+            description: "RVD",
         },
     ];
     const dataResultTypeOptions = [
         {
             resultTypeId: 1,
             name: "Continuo",
-            description: "Acompanhamento visual contínuo",
+            description: "Acompanhamento visual Contínuo",
         },
         {
             resultTypeId: 1,
@@ -940,14 +956,82 @@ async function seed() {
             description: "Acompanhamento visual Descontinuo",
         },
         {
+            resultTypeId: 1,
+            name: "Breve",
+            description: "Acompanhamento visual Breve",
+        },
+        {
+            resultTypeId: 1,
+            name: "Não Realiza",
+            description: "...",
+        },{
             resultTypeId: 2,
-            name: "Realiza",
-            description: "Realiza acompanhamento visual",
+            name: "Continuo",
+            description: "Acompanhamento visual Contínuo",
         },
         {
             resultTypeId: 2,
+            name: "Descontinuo",
+            description: "Acompanhamento visual Descontinuo",
+        },
+        {
+            resultTypeId: 2,
+            name: "Breve",
+            description: "Acompanhamento visual Breve",
+        },
+        {
+            resultTypeId: 2,
+            name: "Não Realiza",
+            description: "...",
+        },
+        {
+            resultTypeId: 5,
+            name: "Realiza",
+            description: "Encontra estímulo na períferia",
+        },
+        {
+            resultTypeId: 5,
             name: "Não realiza",
             description: "Não realiza acompanhamento visual",
+        },{
+            resultTypeId: 6,
+            name: "Realiza",
+            description: "Encontra estímulo na períferia",
+        },
+        {
+            resultTypeId: 6,
+            name: "Não realiza",
+            description: "Não realiza acompanhamento visual",
+        },
+        {
+            resultTypeId: 7,
+            name: "Estável",
+            description: "Fixa o olhar no estímulo por no mínimo 3 segundos",
+        },
+        {
+            resultTypeId: 7,
+            name: "Instável",
+            description: "...",
+        },
+        {
+            resultTypeId: 8,
+            name: "Realiza",
+            description: "Movimenta os olhos para o lado contrério da cabeça",
+        },
+        {
+            resultTypeId: 8,
+            name: "Não realiza",
+            description: "Não realiza movimento de rastreamento",
+        },
+        {
+            resultTypeId: 9,
+            name: "Realiza",
+            description: "Movimenta os olhos para o lado contrério da cabeça",
+        },
+        {
+            resultTypeId: 9,
+            name: "Não realiza",
+            description: "Não realiza movimento de rastreamento",
         },
     ];
     const dataEventTypes = [

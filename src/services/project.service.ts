@@ -104,7 +104,6 @@ const queryProjectVideoType = async <Key extends keyof ProjectVideoType>(
     return projectVideoTypes as Pick<ProjectVideoType, Key>[];
 };
 
-
 /**
  *
  * @param projectId - Id do projeto
@@ -162,19 +161,21 @@ const queryEventsResults = async <Key extends keyof AnnotationVideo>(
     if (!project) throw new ApiError(httpStatus.NOT_FOUND, "Projeto não encontrado.");
     const events = await prisma.project.findMany({
         where: { id: Number(project.id) },
-        select: {projectsVideoTypes:{include:{annotationVideos: {include: {events:true,results: true}}}}},
+        select: {
+            projectsVideoTypes: { select: { id:true, annotationVideos: { select: { id:true,events: true, results: true } } } },
+        },
         orderBy: sortBy ? { [sortBy]: sortType } : undefined,
         take: limit,
         skip: page !== undefined && limit !== undefined ? page * limit : undefined,
     });
 
     return events as unknown as Pick<AnnotationVideo, Key>[];
-}
+};
 
 export default {
     queryProjectVideoType,
     getProjectById,
     queryProject,
     queryMovesInfo,
-    queryEventsResults
+    queryEventsResults,
 };
