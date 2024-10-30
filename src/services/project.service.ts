@@ -1,4 +1,4 @@
-import { MoveInfo, Project, ProjectVideoType } from "@prisma/client";
+import { AnnotationVideo, MoveInfo, Project, ProjectVideoType } from "@prisma/client";
 import httpStatus from "../utils/httpStatus";
 import prisma from "../client";
 import ApiError from "../utils/apiError";
@@ -104,6 +104,7 @@ const queryProjectVideoType = async <Key extends keyof ProjectVideoType>(
     return projectVideoTypes as Pick<ProjectVideoType, Key>[];
 };
 
+
 /**
  *
  * @param projectId - Id do projeto
@@ -129,7 +130,7 @@ const queryMovesInfo = async <Key extends keyof MoveInfo>(
     const sortBy = query.sortBy ?? "id";
     const sortType = query.sortType ?? "asc";
 
-    const project = await getProjectById(projectId, ["id", "projectName"]);
+    const project = await getProjectById(projectId);
     if (!project) throw new ApiError(httpStatus.NOT_FOUND, "Projeto não encontrado.");
     const moves = await prisma.moveInfo.findMany({
         where: { projectId: Number(project.id) },
@@ -141,8 +142,39 @@ const queryMovesInfo = async <Key extends keyof MoveInfo>(
 
     return moves as Pick<MoveInfo, Key>[];
 };
+
+const queryEventsResults = async <Key extends keyof AnnotationVideo>(
+    projectId: number,
+    query: {
+        limit?: number;
+        page?: number;
+        sortBy?: Key;
+        sortType?: "asc" | "desc";
+    },
+    keys: Key[] = ["id", "events", "results"] as Key[]
+): Promise<Pick<AnnotationVideo, Key>[]> => {
+    const limit = query.limit;
+    const page = query.page;
+    const sortBy = query.sortBy ?? "id";
+    const sortType = query.sortType ?? "asc";
+
+    const project = await getProjectById(projectId);
+    if (!project) throw new ApiError(httpStatus.NOT_FOUND, "Projeto não encontrado.");
+    const events = await prisma.project.findMany({
+        where: { id: Number(project.id) },
+        select: {projectsVideoTypes:{include:{annotationVideos: {include: {events:true,results: true}}}}},
+        orderBy: sortBy ? { [sortBy]: sortType } : undefined,
+        take: limit,
+        skip: page !== undefined && limit !== undefined ? page * limit : undefined,
+    });
+
+    return events as unknown as Pick<AnnotationVideo, Key>[];
+}
+
 export default {
     queryProjectVideoType,
+    getProjectById,
     queryProject,
     queryMovesInfo,
+    queryEventsResults
 };

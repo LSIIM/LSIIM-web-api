@@ -12,6 +12,13 @@ router.route("/").get(yupValidate(projectValidation.queryProject), (req, res, ne
         next(error);
     }
 });
+router.route("/:projectId").get(yupValidate(projectValidation.queryProject), (req, res, next) => {
+    try {
+        projectController.getProjectById(req, res, next);
+    } catch (error) {
+        next(error);
+    }
+});
 router.route("/:projectId/moves").get(yupValidate(projectValidation.queryMovesInfo), (req, res, next) => {
     try {
         projectController.queryMovesInfo(req, res, next);
@@ -23,6 +30,14 @@ router.route("/:projectId/moves").get(yupValidate(projectValidation.queryMovesIn
 router.route("/:projectId/camtype").get(yupValidate(projectValidation.queryProjectVideoType), (req, res, next) => {
     try {
         projectController.queryProjectVideoType(req, res, next);
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.route("/:projectId/annotation_info").get(yupValidate(projectValidation.queryEventsResults), (req, res, next) => {
+    try {
+        projectController.queryEventsResults(req, res, next);
     } catch (error) {
         next(error);
     }

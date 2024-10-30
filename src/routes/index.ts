@@ -14,7 +14,7 @@ const defaultRoutes = [
     { path: "/auth", route: authRoute },
     { path: "/patient", route: patientRoute },
     { path: "/recording", route: recordingRoute },
-    { path: "/annotation-type", route: annotationTypeRoute },
+    { path: "/event-type", route: annotationTypeRoute },
     { path: "/project", route: projectRoute },
     { path: "/result-type", route: resultTypeRoute },
     { path: "/result-type-options", route: resultTypeOpRoute },

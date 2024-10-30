@@ -2,13 +2,22 @@ import httpStatus from '../utils/httpStatus';
 import ApiError from "../utils/apiError";
 import catchAsync from "../utils/catchAsync";
 import { projectService } from "../services";
-import { ReqQueryProjectVideoType, ReqQueryProject, ReqQueryMovesInfo } from "../validations/project.validation";
+import { ReqQueryProjectVideoType, ReqQueryProject, ReqQueryMovesInfo, ReqQueryEventsResults } from "../validations/project.validation";
 
 const queryProject = catchAsync(async (req, res) => {
     const validRequest = req as unknown as ReqQueryProject;
     const project = await projectService.queryProject(validRequest.query);
     res.send(project);
 });
+
+const getProjectById = catchAsync(async (req, res) => {
+    const { projectId } = req.params;
+    const project = await projectService.getProjectById(Number(projectId));
+    if (!project) {
+        throw new ApiError(httpStatus.NOT_FOUND, "Projeto não encontrado.");
+    }
+    res.send(project);
+})
 
 const queryProjectVideoType = catchAsync(async (req, res) => {
     const validRequest = req as unknown as ReqQueryProjectVideoType;
@@ -24,8 +33,17 @@ const queryMovesInfo = catchAsync(async (req, res) => {
     res.send(moves);
 });
 
+const queryEventsResults = catchAsync(async (req, res) => {
+    const validRequest = req as unknown as ReqQueryEventsResults;
+    const { projectId } = req.params;
+    const events = await projectService.queryEventsResults(Number(projectId), validRequest.query);
+    res.send(events);
+});
+
 export default {
     queryMovesInfo,
+    getProjectById,
     queryProjectVideoType,
     queryProject,
+    queryEventsResults,
 };
