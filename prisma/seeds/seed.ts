@@ -983,6 +983,44 @@ async function seed() {
             resultTypeId: 2,
             name: "Não Realiza",
             description: "...",
+        },{
+            resultTypeId: 3,
+            name: "Continuo",
+            description: "Acompanhamento visual Contínuo",
+        },
+        {
+            resultTypeId: 3,
+            name: "Descontinuo",
+            description: "Acompanhamento visual Descontinuo",
+        },
+        {
+            resultTypeId: 3,
+            name: "Breve",
+            description: "Acompanhamento visual Breve",
+        },
+        {
+            resultTypeId: 3,
+            name: "Não Realiza",
+            description: "...",
+        },{
+            resultTypeId: 4,
+            name: "Continuo",
+            description: "Acompanhamento visual Contínuo",
+        },
+        {
+            resultTypeId: 4,
+            name: "Descontinuo",
+            description: "Acompanhamento visual Descontinuo",
+        },
+        {
+            resultTypeId: 4,
+            name: "Breve",
+            description: "Acompanhamento visual Breve",
+        },
+        {
+            resultTypeId: 4,
+            name: "Não Realiza",
+            description: "...",
         },
         {
             resultTypeId: 5,
