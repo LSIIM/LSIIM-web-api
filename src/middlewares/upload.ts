@@ -1,5 +1,6 @@
 import multer from "multer";
 import path from "path";
+import fs from "fs";
 import config from "../config/config";
 
 const storage = multer.diskStorage({
@@ -8,6 +9,11 @@ const storage = multer.diskStorage({
 
         const basePath = config.URL_BASE_PATH || "";
         const folderPath = path.join(__dirname, basePath, `videos`, String(id));
+        // Verificar se o diretório existe
+        if (!fs.existsSync(folderPath)) {
+            // Criar diretório se não existir
+            fs.mkdirSync(folderPath, { recursive: true });
+        }
 
         cb(null, folderPath);
     },
