@@ -120,7 +120,6 @@ const queryRecording = async <Key extends keyof Recording>(
             recordingsVideos: await getVideos(recording.id as number),
         }))
     );
-    console.log(recordingsWithVideos)
 
     return recordingsWithVideos as unknown as (Pick<Recording, Key> & {
         recordingsVideos: { id: number; projectVideoTypeId: number; camIdUsed: number; url: string; isMain: boolean }[];
@@ -161,7 +160,7 @@ const getRecordingById = async <Key extends keyof Recording>(
 
     const recordingWithVideos = {
         ...recording,
-        recordingsVideos: await getVideos(id as number),
+        recordingsVideos: await getVideos(Number(id)),
     };
 
     return recordingWithVideos as unknown as Pick<Recording, Key> & {
