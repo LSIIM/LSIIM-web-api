@@ -17,10 +17,6 @@ const storage = multer.diskStorage({
 
         cb(null, folderPath);
     },
-    filename: (req, file, cb) => {
-        const { projectVideoTypeId } = req.body;
-        cb(null, projectVideoTypeId + file.originalname);
-    },
 });
 
 const upload = multer({
