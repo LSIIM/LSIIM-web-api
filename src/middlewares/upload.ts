@@ -1,23 +1,20 @@
 import multer from "multer";
 import path from "path";
-import fs from "fs";
 import config from "../config/config";
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         const { id } = req.body;
 
-        const folderPath = path.resolve(__dirname, `../videos/${id}`);
-        // Cria a pasta se ela não existir
-        if (!fs.existsSync(folderPath)) {
-            fs.mkdirSync(folderPath, { recursive: true });
-        }
+        const basePath = config.URL_BASE_PATH || "";
+        const folderPath = path.join(__dirname, basePath, `videos`, String(id));
+
         cb(null, folderPath);
     },
     filename: (req, file, cb) => {
         const { projectVideoTypeId } = req.body;
         cb(null, projectVideoTypeId + file.originalname);
-    }
+    },
 });
 
 const upload = multer({

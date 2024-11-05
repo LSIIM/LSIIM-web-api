@@ -26,8 +26,7 @@ const createRecording: yup.ObjectSchema<tValidCreateSchema<tNovoRecording>> = yu
                             recordingDate: yup.date().required("Deve ser passado um recordingDate."),
                             moveId: yup.number().integer().required("Deve ser passado um moveId."),
                             projectId: yup.number().integer().required("Deve ser passado um projectId."),
-                            camInfoId: yup.number().integer().required("Deve ser passado um camInfoId."),
-                            videos: yup
+                            recordingsVideos: yup
                                 .array(
                                     yup
                                         .object({
@@ -104,7 +103,7 @@ const createAnnAndRes: yup.ObjectSchema<tValidCreateSchema<tNovoAnnotationVideo>
                 .array(
                     yup
                         .object({
-                            recordingVideoId: yup.number().required("Deve ser passado um projectVideoTypeId."),
+                            recordingVideoId: yup.number().required("Deve ser passado um recordingVideoId."),
                             comment: yup.string(),
                             events: yup
                                 .array(

@@ -138,7 +138,7 @@ model Recording {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  videos RecordingVideo[]
+  recordingsVideos RecordingVideo[]
 
   @@map("recordings")
 }

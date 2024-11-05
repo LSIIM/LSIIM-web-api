@@ -965,8 +965,6 @@ async function seed() {
             description: "Não realiza o movimento dos olhos (direita)",
         }
     ];
-
-    
     
     const dataEventTypes = [
         {
@@ -985,6 +983,16 @@ async function seed() {
             isTemporal: true,
         },
     ];
+    const dataRecordingsVideo =[{
+        projectVideoTypeId: 1,
+        camIdUsed: 1,
+        recordingId: 1
+    },
+    {
+        projectVideoTypeId: 1,
+        camIdUsed: 1,
+        recordingId: 2
+    }]
 
     try {
         await prisma.$transaction([
@@ -1016,11 +1024,15 @@ async function seed() {
             prisma.recording.createMany({
                 data: dataRecordings,
             }),
+            prisma.recordingVideo.createMany({
+                data: dataRecordingsVideo,
+            }),
         ]);
     } catch (error) {
         console.error("Error inserting data:", error);
     }
 }
+
 
 seed()
     .then(async () => {

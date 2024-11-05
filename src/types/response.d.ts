@@ -65,7 +65,7 @@ export type tNovoResultsTypeOptions = PartialEntity<ResultTypeOptions, "name" | 
 export type tNovoRecording = PartialEntity<
     Recording,
     "ignore" | "observation" | "patientId" | "recordingDate" | "moveId" | "projectId"
-> & { videos: tNovoRecordingVideo[] };
+> & { recordingsVideos: tNovoRecordingVideo[] };
 
 export type tNovoRecordingVideo = PartialEntiry<RecordingVideo, "projectVideoTypeId" | "camIdUsed">;
 
