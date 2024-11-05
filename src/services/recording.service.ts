@@ -35,9 +35,7 @@ const createRecording = async (novoRecording: tNovoRecording[]): Promise<Recordi
  * @param {number} recordingId - ID do recording
  * @returns {Promise<{id: number, projectVideoTypeId: number, camIdUsed: number, url: string, isMain: boolean}[]>}
  */
-const getVideos = async (
-    recordingId: number
-): Promise<{ id: number; projectVideoTypeId: number; camIdUsed: number; url: string; isMain: boolean }[]> => {
+const getVideos = async (recordingId: number): Promise<RecordingVideo[]> => {
     const pathBase = "/videos";
 
     try {
@@ -56,10 +54,9 @@ const getVideos = async (
         const videos = recordingVideos.map((video) => ({
             ...video,
             url: `${process.env.URL_BASE_PATH ? process.env.URL_BASE_PATH.replace(/\/$/, "") : ""}/${pathBase.replace(/^\//, "")}/${recordingId}/${video.projectVideoTypeId}.mp4`,
-            isMain: video.projectVideoType.isMain ?? false,
         }));
 
-        return videos;
+        return videos as unknown as RecordingVideo[];
     } catch (err) {
         console.log(err);
         return [];
@@ -99,25 +96,23 @@ const queryRecording = async <Key extends keyof Recording>(
         "createdAt",
         "updatedAt",
     ] as Key[]
-): Promise<(Pick<Recording, Key> & { recordingsVideos: { id: number; projectVideoTypeId: number; camIdUsed: number; url: string; isMain: boolean }[] })[]> => {
+): Promise<
+    (Pick<Recording, Key> & {
+        recordingsVideos: { id: number; projectVideoTypeId: number; camIdUsed: number; url: string; isMain: boolean }[];
+    })[]
+> => {
     const limit = query.limit;
     const page = query.page;
     const sortBy = query.sortBy ?? "id";
     const sortType = query.sortType ?? "asc";
-
-    // Define o objeto `select` explicitamente
-    const selectFields = keys.reduce((acc, key) => {
-        acc[key] = true;
-        return acc;
-    }, {} as Record<Key, boolean>);
-
+    
     const recordings = await prisma.recording.findMany({
         where: query.where,
-        select: selectFields,
+        select: keys.reduce((obj, k) => ({ ...obj, [k]: true }), {}),
         orderBy: sortBy ? { [sortBy]: sortType } : undefined,
         take: limit,
         skip: page !== undefined && limit !== undefined ? page * limit : undefined,
-    });
+    }) as Recording[];
 
     const recordingsWithVideos = await Promise.all(
         recordings.map(async (recording) => ({
@@ -125,8 +120,11 @@ const queryRecording = async <Key extends keyof Recording>(
             recordingsVideos: await getVideos(recording.id as number),
         }))
     );
+    console.log(recordingsWithVideos)
 
-    return recordingsWithVideos as unknown as (Pick<Recording, Key> & { recordingsVideos: { id: number; projectVideoTypeId: number; camIdUsed: number; url: string; isMain: boolean }[] })[];
+    return recordingsWithVideos as unknown as (Pick<Recording, Key> & {
+        recordingsVideos: { id: number; projectVideoTypeId: number; camIdUsed: number; url: string; isMain: boolean }[];
+    })[];
 };
 
 /**
@@ -150,25 +148,25 @@ const getRecordingById = async <Key extends keyof Recording>(
         "createdAt",
         "updatedAt",
     ] as Key[]
-): Promise<Pick<Recording, Key> & { recordingsVideos: { id: number; projectVideoTypeId: number; camIdUsed: number; url: string; isMain: boolean }[] }> => {
-    // Define o objeto `select` explicitamente
-    const selectFields = keys.reduce((acc, key) => {
-        acc[key] = true;
-        return acc;
-    }, {} as Record<Key, boolean>);
-
+): Promise<
+    Pick<Recording, Key> & {
+        recordingsVideos: { id: number; projectVideoTypeId: number; camIdUsed: number; url: string; isMain: boolean }[];
+    }
+> => {
     const recording = await prisma.recording.findUnique({
         where: { id: Number(id) },
-        select: selectFields,
+        select: keys.reduce((obj, k) => ({ ...obj, [k]: true }), {}),
     });
     if (!recording) throw new ApiError(httpStatus.NOT_FOUND, "Recording não encontrado.");
 
     const recordingWithVideos = {
         ...recording,
-        recordingsVideos: await getVideos(id),
+        recordingsVideos: await getVideos(id as number),
     };
 
-    return recordingWithVideos as unknown as Pick<Recording, Key> & { recordingsVideos: { id: number; projectVideoTypeId: number; camIdUsed: number; url: string; isMain: boolean }[] };
+    return recordingWithVideos as unknown as Pick<Recording, Key> & {
+        recordingsVideos: { id: number; projectVideoTypeId: number; camIdUsed: number; url: string; isMain: boolean }[];
+    };
 };
 
 const createAnnotation = async (
