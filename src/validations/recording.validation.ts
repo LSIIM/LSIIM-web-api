@@ -30,8 +30,11 @@ const createRecording: yup.ObjectSchema<tValidCreateSchema<tNovoRecording>> = yu
                                 .array(
                                     yup
                                         .object({
-                                            projectVideoTypeId: yup.number().required("Deve ser passado um projectVideoTypeId."),
+                                            projectVideoTypeId: yup
+                                                .number()
+                                                .required("Deve ser passado um projectVideoTypeId."),
                                             camIdUsed: yup.number().required("Deve ser passado um camIdUsed."),
+                                            file: yup.string().required("Deve ser passado um file"),
                                         })
                                         .noUnknown(true)
                                         .strict()
@@ -115,16 +118,15 @@ const createAnnAndRes: yup.ObjectSchema<tValidCreateSchema<tNovoAnnotationVideo>
                                     })
                                 )
                                 .required("Deve ser passado um annotationEvents."),
-                            results: yup
-                                .array(
-                                    yup.object({
-                                        resultTypeId: yup.number().required("Deve ser passado um resultTypeId."),
-                                        resultTypeOptionId: yup
-                                            .number()
-                                            .required("Deve ser passado um resultTypeOptionId."),
-                                        scalarResults: yup.number(),
-                                    })
-                                )
+                            results: yup.array(
+                                yup.object({
+                                    resultTypeId: yup.number().required("Deve ser passado um resultTypeId."),
+                                    resultTypeOptionId: yup
+                                        .number()
+                                        .required("Deve ser passado um resultTypeOptionId."),
+                                    scalarResults: yup.number(),
+                                })
+                            ),
                         })
                         .noUnknown(true)
                         .strict()
@@ -171,5 +173,5 @@ export default {
     queryRecording,
     getRecording,
     createAnnAndRes,
-    queryAnnotatioVideo
+    queryAnnotatioVideo,
 };

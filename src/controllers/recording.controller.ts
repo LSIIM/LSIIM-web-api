@@ -9,7 +9,7 @@ import {
     ReqCreateRecording,
     ReqQueryAnnotationVideo,
 } from "../validations/recording.validation";
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from "express";
 
 // Middleware para processar o corpo da requisição
 const reqInterceptorJson = (req: Request, res: Response, next: NextFunction) => {
@@ -17,14 +17,17 @@ const reqInterceptorJson = (req: Request, res: Response, next: NextFunction) => 
         req.body.data = req.body.data.map((recording: any) => {
             return {
                 ...recording,
-                ignore: recording.ignore === 'true', // Convertendo string para boolean
+                projectId: Number(recording.projectId),
+                ignore: recording.ignore === "true", // Convertendo string para boolean
                 patientId: Number(recording.patientId), // Convertendo para number
                 moveId: Number(recording.moveId), // Convertendo para number
                 recordingDate: new Date(recording.recordingDate), // Convertendo para Date
                 recordingsVideos: recording.recordingsVideos.map((video: any) => {
                     return {
                         ...video,
-                        file: video.file // Ajustar se precisar extrair o nome do arquivo
+                        camIdUsed: Number(video.camIdUsed),
+                        projectVideoTypeId: Number(video.projectVideoTypeId),
+                        file: video.file, // Ajustar se precisar extrair o nome do arquivo
                     };
                 }),
             };
@@ -32,13 +35,15 @@ const reqInterceptorJson = (req: Request, res: Response, next: NextFunction) => 
     }
     next();
 };
+
 const createRecording = catchAsync(async (req, res) => {
     const validRequest = req as unknown as ReqCreateRecording;
     const { data: recording } = validRequest.body;
     const files = req.files as Express.Multer.File[];
+
     // Verifica se os arquivos foram recebidos
     if (!files || files.length === 0) {
-        res.status(400).send('Nenhum arquivo foi enviado');
+        res.status(400).send("Nenhum arquivo foi enviado");
         return;
     }
     // Adicionar os nomes dos arquivos ao objeto de gravação
@@ -78,7 +83,7 @@ const queryAnnotatioVideo = catchAsync(async (req, res) => {
 
     const annotations = await recordingService.queryAnnotatioVideo(Number(recordingId), validRequest.query);
     res.send(annotations);
-})
+});
 
 export default {
     createRecording,
@@ -86,5 +91,5 @@ export default {
     getRecording,
     createAnnAndRes,
     queryAnnotatioVideo,
-    reqInterceptorJson
+    reqInterceptorJson,
 };
