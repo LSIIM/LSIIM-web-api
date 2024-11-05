@@ -22,7 +22,15 @@ const queryProject = async <Key extends keyof Project>(
         sortType?: "asc" | "desc";
         where?: { projectName?: string };
     },
-    keys: Key[] = ["id", "projectName", "createdAt", "updatedAt", "movesInfo"] as Key[]
+    keys: Key[] = [
+        "id",
+        "projectName",
+        "description",
+        "patientSpecialFetauresTemplate",
+        "createdAt",
+        "updatedAt",
+        "movesInfo",
+    ] as Key[]
 ): Promise<Pick<Project, Key>[]> => {
     const limit = query.limit;
     const page = query.page;
@@ -34,7 +42,7 @@ const queryProject = async <Key extends keyof Project>(
         where: query.where,
         select: {
             ...keys.reduce((acc, key) => ({ ...acc, [key]: true }), {}),
-            projectsVideoTypes: { include: { recordVideoType: { include: { camInfo: true } } } },
+            projectsVideoTypes: { include: { videos: { include: { camInfo: true } } } },
         },
         orderBy: sortBy ? { [sortBy]: sortType } : undefined,
         take: limit,
@@ -162,7 +170,12 @@ const queryEventsResults = async <Key extends keyof AnnotationVideo>(
     const events = await prisma.project.findMany({
         where: { id: Number(project.id) },
         select: {
-            projectsVideoTypes: { select: { id:true, annotationVideos: { select: { id:true,events: true, results: true } } } },
+            projectsVideoTypes: {
+                select: {
+                    id: true,
+                    videos: { select: { annotationVideos: { select: { id: true, events: true, results: true } } } },
+                },
+            },
         },
         orderBy: sortBy ? { [sortBy]: sortType } : undefined,
         take: limit,

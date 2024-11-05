@@ -7,226 +7,146 @@ async function seed() {
         {
             name: "Antonia",
             birthDate: new Date("2021-04-29"), // Converte a string para Date
-            isPremature: 1,
-            gestationalAge: 38,
-            atipicidades: "olhar descontinuo acompanhamento horizontal",
         },
         {
             name: "Davi",
             birthDate: new Date("2021-05-11"), // Converte a string para Date
-            isPremature: 1,
-            gestationalAge: 38,
-            atipicidades:
-                "olhar breve no horizontal, estrabismo convergente, tempo de fixação instável e descontinuidade do olhar no RVO",
         },
         {
             name: "Arthur",
             birthDate: new Date("2020-07-28"),
-            isPremature: 1,
-            gestationalAge: 39,
-            atipicidades: "sem alteração",
         },
         {
             name: "Elisa",
             birthDate: new Date("2021-03-21"),
-            isPremature: 1,
-            gestationalAge: 40,
-            atipicidades: "sem alteração",
         },
         {
             name: "Lara",
             birthDate: new Date("2020-07-01"),
-            isPremature: 1,
-            gestationalAge: 37,
-            atipicidades: "não realiza RVO",
         },
         {
             name: "Pietra",
             birthDate: new Date("2020-11-27"),
-            isPremature: 1,
-            gestationalAge: 41,
-            atipicidades: "sem alteração",
         },
         {
             name: "Anthony",
             birthDate: new Date("2021-05-26"), // Converte a string para Date
-            isPremature: 1,
-            gestationalAge: 39,
-            atipicidades: "não realiza todos",
         },
         {
             name: "Ana Beatriz",
             birthDate: new Date("2021-02-22"),
-            isPremature: 1,
-            gestationalAge: 39,
-            atipicidades: "sem alteração",
         },
         {
             name: "Giusepe",
             birthDate: new Date("2020-11-16"),
-            isPremature: 1,
-            gestationalAge: 32,
-            atipicidades: "sem alteração",
         },
         {
             name: "Louise",
             birthDate: new Date("2020-12-22"),
-            isPremature: 1,
-            gestationalAge: 30,
-            atipicidades:
-                "acompanhamento horizontal descontínuo, estrabismo convergente, fixação instável, não realiza RVO",
         },
         {
             name: "Yohan",
             birthDate: new Date("2021-04-16"),
-            isPremature: 1,
-            gestationalAge: 39.0,
-            atipicidades: "sem alteração",
         },
         {
             name: "Bernardo",
             birthDate: new Date("2021-10-14"),
-            isPremature: 1,
-            gestationalAge: 36,
-            atipicidades: "acompanhamento horizontal descontínuo",
+
         },
         {
             name: "Luna",
             birthDate: new Date("2021-05-04"),
-            isPremature: 1,
-            gestationalAge: 39,
-            atipicidades: "estrabismo convergente, acompanhamento horizontal breve, não realiza campo visual e RVO",
         },
         {
             name: "Rebeca",
             birthDate: new Date("2021-03-12"),
-            isPremature: 1,
-            gestationalAge: 26,
-            atipicidades: "estrabismo convergente",
         },
         {
             name: "Bento",
             birthDate: new Date("2021-06-21"),
-            isPremature: 1,
-            gestationalAge: 38.0,
-            atipicidades: "sem alteração",
         },
         {
             name: "Emanuel",
             birthDate: new Date("2021-03-13"),
-            isPremature: 1,
-            gestationalAge: 37,
-            atipicidades: "sem alteração",
         },
         {
             name: "Jorge Luis",
             birthDate: new Date("2021-09-26"),
-            isPremature: 1,
-            gestationalAge: 28,
-            atipicidades: "sem alteração",
         },
         {
             name: "Maria Cecilia",
             birthDate: new Date("2022-12-28"),
-            isPremature: 1,
-            gestationalAge: 29,
-            atipicidades:
-                "acompanhamento vertical breve, não realiza acompanhamento visual horizontal para direita e é breve, não realiza campo visual esquerdo, tempo de fixação instável, olhar descontínuo no RVO",
         },
         {
             name: "Maria Isis",
             birthDate: new Date("2022-12-28"),
-            isPremature: 1,
-            gestationalAge: 29,
-            atipicidades:
-                "não realiza acompanhamento vertical, horizontal, campo visual D, RVO, tempo de fixação instável, estrabismo convergente",
         },
         {
             name: "Otavio",
             birthDate: new Date("2019-04-16"),
-            isPremature: 1,
-            gestationalAge: 40,
-            atipicidades: "horizontal descontínuo",
         },
         {
             name: "Theo",
             birthDate: new Date("2021-06-24"),
-            isPremature: 1,
-            gestationalAge: 37,
-            atipicidades: "horizontal e RVO descontínuo",
         },
         {
             name: "Felipe",
             birthDate: new Date("2019-09-22"),
-            isPremature: 1,
-            gestationalAge: 33.0,
-            atipicidades: "não tem vídeo",
         },
         {
             name: "Murialdo",
             birthDate: new Date("2022-12-28"),
-            isPremature: 1,
-            gestationalAge: 29,
-            atipicidades: "vertical e horizontal descontínuo, fixação instável, não realiza RVO ",
         },
         {
             name: "Vinicius",
             birthDate: new Date("2021-12-01"),
-            isPremature: 1,
-            gestationalAge: 26,
-            atipicidades: "não realiza vertical caudal, horizontal D breve e E descontínuo, RVO descontínuo",
         },
         {
             name: "Alana",
             birthDate: new Date("2022-03-27"),
-            isPremature: 1,
-            gestationalAge: 29.0,
-            atipicidades: "choro",
         },
         {
             name: "Joao Batista",
             birthDate: new Date("2022-12-01"),
-            isPremature: 1,
-            gestationalAge: 38,
-            atipicidades: "vertical descontínuo",
         },
         {
             name: "Arthur",
             birthDate: new Date("2021-12-23"),
-            isPremature: 1,
-            gestationalAge: 38,
-            atipicidades: "vertical, horizontal e RVO descontínuos, fixação instável",
         },
         {
             name: "Gael",
             birthDate: new Date("2021-07-22"),
-            isPremature: 1,
-            gestationalAge: 40,
-            atipicidades: "sem alteração",
         },
         {
             name: "Levi",
             birthDate: new Date("2022-05-23"),
-            isPremature: 1,
-            gestationalAge: 31,
-            atipicidades: "não realiza vertical, horizontal, campo visual e RVO, fixação instável",
         },
-        { name: "Iara", birthDate: new Date("1900-01-01"), isPremature: 0, gestationalAge: 0, atipicidades: "" },
-        { name: "Benjamin", birthDate: new Date("2022-11-08"), isPremature: 1, gestationalAge: 39, atipicidades: "" },
-        { name: "Miguel", birthDate: new Date("2021-12-10"), isPremature: 1, gestationalAge: 30, atipicidades: "" },
-        { name: "Victor", birthDate: new Date("2022-07-03"), isPremature: 1, gestationalAge: 40, atipicidades: "" },
-        { name: "Gabriel", birthDate: new Date("2022-10-10"), isPremature: 1, gestationalAge: 39, atipicidades: "" },
-        { name: "Erick", birthDate: new Date("2022-07-31"), isPremature: 1, gestationalAge: 41, atipicidades: "" },
-        { name: "Ana Sther", birthDate: new Date("2022-04-21"), isPremature: 1, gestationalAge: 33, atipicidades: "" },
-        { name: "Davi", birthDate: new Date("2022-06-19"), isPremature: 1, gestationalAge: 23, atipicidades: "" },
+        { name: "Iara", birthDate: new Date("1900-01-01") },
+        { name: "Benjamin", birthDate: new Date("2022-11-08") },
+        { name: "Miguel", birthDate: new Date("2021-12-10") },
+        { name: "Victor", birthDate: new Date("2022-07-03") },
+        { name: "Gabriel", birthDate: new Date("2022-10-10") },
+        { name: "Erick", birthDate: new Date("2022-07-31") },
+        { name: "Ana Sther", birthDate: new Date("2022-04-21") },
+        { name: "Davi", birthDate: new Date("2022-06-19") },
     ];
 
     const dataProject = [
         {
             projectName: "camera fixa",
+            description: "aaaa",
+            patientSpecialFetauresTemplate: {
+                feature3: "Valor 3",
+                feature4: "Valor 4"
+              }
         },
         {
             projectName: "vestivel",
+            description: "bbbb",
+            patientSpecialFetauresTemplate: {
+                feature3: "Valor 3",
+                feature4: "Valor 4"
+              }
         },
     ];
 
@@ -283,18 +203,22 @@ async function seed() {
         {
             description: "HorizontalSlow_Cammoving",
             projectId: 1,
+            defaultCamId: 1
         },
         {
             description: "HorizontalAbrupt_Cammoving",
             projectId: 1,
+            defaultCamId: 1
         },
         {
             description: "VerticalSlow_Cammoving",
             projectId: 1,
+            defaultCamId: 2
         },
         {
             description: "HorizontalHead_Camfixed",
             projectId: 1,
+            defaultCamId: 2
         },
     ];
 
@@ -964,7 +888,8 @@ async function seed() {
             resultTypeId: 1,
             name: "Não Realiza",
             description: "...",
-        },{
+        },
+        {
             resultTypeId: 2,
             name: "Continuo",
             description: "Acompanhamento visual Contínuo",
@@ -983,7 +908,8 @@ async function seed() {
             resultTypeId: 2,
             name: "Não Realiza",
             description: "...",
-        },{
+        },
+        {
             resultTypeId: 3,
             name: "Continuo",
             description: "Acompanhamento visual Contínuo",
@@ -1002,7 +928,8 @@ async function seed() {
             resultTypeId: 3,
             name: "Não Realiza",
             description: "...",
-        },{
+        },
+        {
             resultTypeId: 4,
             name: "Continuo",
             description: "Acompanhamento visual Contínuo",
@@ -1031,7 +958,8 @@ async function seed() {
             resultTypeId: 5,
             name: "Não realiza",
             description: "Não realiza acompanhamento visual",
-        },{
+        },
+        {
             resultTypeId: 6,
             name: "Realiza",
             description: "Encontra estímulo na períferia",
@@ -1091,15 +1019,10 @@ async function seed() {
     ];
 
     try {
-        // Manipulação de dataBabyInfo para tratar o campo `isPremature`
-        const updatedPatient = dataPatient.map((baby) => ({
-            ...baby,
-            isPremature: baby.isPremature === 1, // Transforma 1 em true e 0 em false
-        }));
         await prisma.$transaction([
             // Manipulação específica de `babyInfo` para tratar o campo `isPremature`
             prisma.patient.createMany({
-                data: updatedPatient,
+                data: dataPatient,
             }),
             prisma.project.createMany({
                 data: dataProject,

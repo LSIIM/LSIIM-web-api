@@ -13,8 +13,13 @@ import {
 const createRecording = catchAsync(async (req, res) => {
     const validRequest = req as unknown as ReqCreateRecording;
     const { data: recording } = validRequest.body;
-
-    const recordingCriado = await recordingService.createRecording(recording);
+    const files = req.files as Express.Multer.File[];
+    // Verifica se os arquivos foram recebidos
+    if (!files || files.length === 0) {
+        res.status(400).send('Nenhum arquivo foi enviado');
+        return;
+    }
+    const recordingCriado = await recordingService.createRecording(recording, files);
     res.status(httpStatus.CREATED).send(recordingCriado);
 });
 

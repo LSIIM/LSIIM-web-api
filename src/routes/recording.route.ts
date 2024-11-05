@@ -4,11 +4,12 @@ import { yupValidate } from "../middlewares/validate";
 import recordingValidation, { ReqQueryRecording } from "../validations/recording.validation";
 import { recordingController } from "../controllers";
 import { fnSubjects } from "../config/subjects";
+import upload from "../middlewares/upload";
 const router = express.Router();
 
 router
     .route("/")
-    .post(yupValidate(recordingValidation.createRecording), (req, res, next) => {
+    .post(upload.array("videos", 2), yupValidate(recordingValidation.createRecording), (req, res, next) => {
         try {
             recordingController.createRecording(req, res, next);
         } catch (error) {

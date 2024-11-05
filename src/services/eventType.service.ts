@@ -21,7 +21,7 @@ const queryEventType = async <Key extends keyof EventType>(
         sortType?: "asc" | "desc";
         where?: { name?: string };
     },
-    keys: Key[] = ["name", "description", "isTemporal"] as Key[]
+    keys: Key[] = ["id", "name", "description", "isTemporal"] as Key[]
 ): Promise<Pick<EventType, Key>[]> => {
     const limit = query.limit;
     const page = query.page;
@@ -41,13 +41,14 @@ const queryEventType = async <Key extends keyof EventType>(
 
 const getEventType = async <Key extends keyof EventType>(
     id: number,
-    keys: Key[] = ["name", "description", "isTemporal"] as Key[]
+    keys: Key[] = ["id", "name", "description", "isTemporal"] as Key[]
 ): Promise<Pick<EventType, Key> | null> => {
     return (await prisma.eventType.findUnique({
         where: { id: Number(id) },
         select: keys.reduce((acc, key) => ({ ...acc, [key]: true }), {}),
     })) as Promise<Pick<EventType, Key> | null>;
 };
+
 
 export default {
     createEventType,

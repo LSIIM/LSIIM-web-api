@@ -27,6 +27,23 @@ const createPatient: yup.ObjectSchema<tValidCreateSchema<tNovoPatient>> = yup.ob
                             isPremature: yup.boolean().required("Deve ser passado se é prematuro."),
                             gestationalAge: yup.number().required("Deve ser passado a idade gestacional(semanas)."),
                             atipicidade: yup.string(),
+                            patientSpecialFeatures: yup
+                                .array(
+                                    yup
+                                        .object({
+                                            specialFeatureTemplate: yup
+                                                .string()
+                                                .required("Deve ser passado um specialFeatureTemplate."),
+                                            projectId: yup
+                                                .number()
+                                                .integer()
+                                                .required("Deve ser passado um projectId."),
+                                        })
+                                        .noUnknown(true)
+                                        .strict()
+                                )
+                                .required("Deve ser passado um patientSpecialFeatures.")
+                                .min(1, "Deve ser passado ao menos um patientSpecialFeatures."),
                         })
                         .noUnknown(true)
                         .strict()

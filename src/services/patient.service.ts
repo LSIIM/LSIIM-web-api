@@ -4,12 +4,18 @@ import prisma from "../client";
 import ApiError from "../utils/apiError";
 import { PartialEntity, tNovoPatient } from "../types/response";
 
-const createPatient = async (newBabyInfo: tNovoPatient[]): Promise<Patient[]> => {
-    const patient = prisma.patient.createManyAndReturn({
-        data: newBabyInfo,
+const createPatient = async (novoPatient: tNovoPatient[]): Promise<Patient[]> => {
+    const patient = novoPatient.map((patient) => {
+        return prisma.patient.create({
+            data: {
+                ...patient,
+                patientSpecialFeatures: {
+                    create: patient.patientSpecialFeatures,
+                },
+            },
+        });
     });
-
-    const [patientCriados] = await prisma.$transaction([patient]);
+    const patientCriados = await prisma.$transaction([...patient]);
 
     return patientCriados;
 };
@@ -30,9 +36,8 @@ const queryPatient = async <Key extends keyof Patient>(
         "id",
         "name",
         "birthDate",
-        "isPremature",
-        "gestationalAge",
-        "atipicidades",
+        "observation",
+        "patientSpecialFeatures",
         "createdAt",
         "updatedAt",
     ] as Key[]
@@ -55,7 +60,7 @@ const queryPatient = async <Key extends keyof Patient>(
 };
 
 /**
- * Get baby info by id
+ * Get Patient info by id
  * @param {number} id
  */
 
@@ -65,9 +70,8 @@ const getPatientById = async <Key extends keyof Patient>(
         "id",
         "name",
         "birthDate",
-        "isPremature",
-        "gestationalAge",
-        "atipicidades",
+        "observation",
+        "patientSpecialFeatures",
         "createdAt",
         "updatedAt",
     ] as Key[]
@@ -79,12 +83,12 @@ const getPatientById = async <Key extends keyof Patient>(
 };
 
 /**
- * Update BabyInfo by id
- * @param {object} dadosBabyInfo
+ * Update PatientInfo by id
+ * @param {object} dadosPatientInfo
  * @return {Promise<Patient>}
  */
 const updatePatient = async <Key extends keyof Patient>(
-    dadosBabyInfo: {
+    dadosPatientInfo: {
         name?: string;
         birthDate?: Date;
         isPremature?: boolean;
@@ -95,20 +99,19 @@ const updatePatient = async <Key extends keyof Patient>(
         "id",
         "name",
         "birthDate",
-        "isPremature",
-        "gestationalAge",
-        "atipicidade",
+        "observation",
+        "patientSpecialFeatures",
         "createdAt",
         "updatedAt",
     ] as Key[]
 ): Promise<Pick<Patient, Key> | null> => {
     //Busca bebê info pelo id, confere se existe
-    const patientToEdit = await getPatientById(dadosBabyInfo.id);
+    const patientToEdit = await getPatientById(dadosPatientInfo.id);
     if (!patientToEdit) throw new ApiError(httpStatus.NOT_FOUND, "Informações do bebê não encontradas.");
 
     const updatePatient = prisma.patient.update({
-        where: { id: dadosBabyInfo.id },
-        data: dadosBabyInfo,
+        where: { id: dadosPatientInfo.id },
+        data: dadosPatientInfo,
         select: keys.reduce((acc, key) => ({ ...acc, [key]: true }), {}),
     });
 
@@ -118,13 +121,13 @@ const updatePatient = async <Key extends keyof Patient>(
 };
 
 /**
- * Delete BabyInfo by id
+ * Delete PatientInfo by id
  * @param {number} id
  */
 const deletePatient = async (id: number): Promise<void> => {
     //Busca bebê info pelo id, confere se existe
-    const babyInfoToDelete = await getPatientById(id);
-    if (!babyInfoToDelete) throw new ApiError(httpStatus.NOT_FOUND, "Informações do bebê não encontradas.");
+    const patientInfoToDelete = await getPatientById(id);
+    if (!patientInfoToDelete) throw new ApiError(httpStatus.NOT_FOUND, "Informações do bebê não encontradas.");
 
     await prisma.patient.delete({ where: { id } });
 };

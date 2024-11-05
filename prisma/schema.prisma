@@ -56,14 +56,12 @@ model Token {
 }
 
 model Patient {
-  id             Int      @id @default(autoincrement())
-  name           String
-  birthDate      DateTime
-  isPremature    Boolean
-  gestationalAge Int
-  atipicidades   String?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id          Int      @id @default(autoincrement())
+  name        String
+  birthDate   DateTime
+  observation String?  @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   recordings             Recording[]
   patientSpecialFeatures PatientProjectSpecialFeature[]
@@ -98,25 +96,28 @@ model PatientProject {
 }
 
 model CamInfo {
-  id               Int                      @id @default(autoincrement())
-  model            String
-  isInfraRed       Boolean
-  framerate        Float?
-  createdAt        DateTime                 @default(now())
-  updatedAt        DateTime                 @updatedAt
-  recordVideoTypes RecordVideoTypeCamUsed[]
+  id         Int              @id @default(autoincrement())
+  model      String
+  isInfraRed Boolean
+  framerate  Float?
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
   //projectVideoTypes ProjectVideoType[]
+  videos     RecordingVideo[]
+  movesInfo  MoveInfo[]
 
   @@map("cam_info")
 }
 
 model MoveInfo {
-  id          Int      @id @default(autoincrement())
-  description String
-  projectId   Int
-  project     Project  @relation(fields: [projectId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id           Int      @id @default(autoincrement())
+  description  String
+  projectId    Int
+  project      Project  @relation(fields: [projectId], references: [id])
+  defaultCamId Int
+  defaultCam   CamInfo  @relation(fields: [defaultCamId], references: [id])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   recordings Recording[]
 
@@ -127,7 +128,7 @@ model Recording {
   id            Int       @id @default(autoincrement())
   ignore        Boolean
   observation   String?
-  patientId     Int       @map("babyId")
+  patientId     Int
   patient       Patient   @relation(fields: [patientId], references: [id])
   recordingDate DateTime
   moveId        Int?
@@ -137,17 +138,29 @@ model Recording {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  recordVideoTypes RecordVideoTypeCamUsed[]
-  annotationVideos AnnotationVideo[]
+  videos RecordingVideo[]
 
   @@map("recordings")
 }
 
+model RecordingVideo {
+  id                 Int               @id @default(autoincrement())
+  projectVideoTypeId Int
+  projectVideoType   ProjectVideoType  @relation(fields: [projectVideoTypeId], references: [id])
+  recordingId        Int
+  recording          Recording         @relation(fields: [recordingId], references: [id])
+  camIdUsed          Int
+  camInfo            CamInfo           @relation(fields: [camIdUsed], references: [id])
+  annotationVideos   AnnotationVideo[]
+}
+
 model Project {
-  id          Int      @id @default(autoincrement())
-  projectName String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                             Int      @id @default(autoincrement())
+  projectName                    String
+  description                    String
+  patientSpecialFetauresTemplate Json
+  createdAt                      DateTime @default(now())
+  updatedAt                      DateTime @updatedAt
 
   projectsVideoTypes            ProjectVideoType[]
   projectSpecialFeatures        ProjectSpecialFeature[]
@@ -156,49 +169,34 @@ model Project {
   recordings                    Recording[]
   patientProjects               PatientProject[]
   UserProjects                  UserProject[]
-  EventTypeProjects             EventTypeProject[]
+  eventTypeProjects             EventTypeProject[]
   resultTypeProjects            ResultTypeProject[]
 
   @@map("projects")
 }
 
 model ProjectSpecialFeature {
-  id                     Int      @id @default(autoincrement())
-  specialFeatureTemplate Json
-  projectId              Int
-  project                Project  @relation(fields: [projectId], references: [id])
-  createdAt              DateTime @default(now())
-  updatedAt              DateTime @updatedAt
+  id             Int      @id @default(autoincrement())
+  specialFeature Json
+  projectId      Int
+  project        Project  @relation(fields: [projectId], references: [id])
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   @@map("project_special_features")
 }
 
 model ProjectVideoType {
-  id               Int                      @id @default(autoincrement())
-  isMain           Boolean
-  typeName         String
-  projectId        Int
-  project          Project                  @relation(fields: [projectId], references: [id])
-  createdAt        DateTime                 @default(now())
-  updatedAt        DateTime                 @updatedAt
-  recordVideoType  RecordVideoTypeCamUsed[]
-  annotationVideos AnnotationVideo[]
+  id        Int              @id @default(autoincrement())
+  isMain    Boolean
+  typeName  String
+  projectId Int
+  project   Project          @relation(fields: [projectId], references: [id])
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  videos    RecordingVideo[]
 
   @@map("project_video_type")
-}
-
-model RecordVideoTypeCamUsed {
-  id                 Int              @id @default(autoincrement())
-  camIdUsed          Int?
-  camInfo            CamInfo?        @relation(fields: [camIdUsed], references: [id])
-  recordingId        Int
-  recording          Recording        @relation(fields: [recordingId], references: [id])
-  projectVideoTypeId Int
-  projectVideoType   ProjectVideoType @relation(fields: [projectVideoTypeId], references: [id])
-  createdAt          DateTime         @default(now())
-  updatedAt          DateTime         @updatedAt
-
-  @@map("record_video_type_cam_used")
 }
 
 model AnnotationResult {
@@ -217,16 +215,14 @@ model AnnotationResult {
 }
 
 model AnnotationVideo {
-  id                 Int                @id @default(autoincrement())
-  comment            String?
-  recordingId        Int
-  recording          Recording          @relation(fields: [recordingId], references: [id])
-  projectVideoTypeId Int
-  projectVideoType   ProjectVideoType   @relation(fields: [projectVideoTypeId], references: [id])
-  createdAt          DateTime           @default(now())
-  updatedAt          DateTime           @updatedAt
-  events             AnnotationEvent[]
-  results            AnnotationResult[]
+  id               Int                @id @default(autoincrement())
+  comment          String?
+  recordingVideoId Int
+  recordingVideo   RecordingVideo     @relation(fields: [recordingVideoId], references: [id])
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  events           AnnotationEvent[]
+  results          AnnotationResult[]
 
   @@map("annotation_video")
 }

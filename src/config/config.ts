@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import path from 'path';
 import Joi from 'joi'; //
+import e from 'express';
 
 
 dotenv.config({path: path.join(process.cwd(), '.env')})
@@ -23,6 +24,7 @@ const envSchema = Joi.object()
             .default(10)
             .description('minutes after which verify email token expires'),
         RECORDINGS_PATH: Joi.string().description('path to the recordings'),
+        URL_BASE_PATH: Joi.string().description('base path for the url'),
         // SMTP_HOST: Joi.string().description('server that will send the emails'),
         // SMTP_PORT: Joi.number().description('port to connect to the email server'),
         // SMTP_USERNAME: Joi.string().description('username for email server'),
@@ -50,6 +52,7 @@ export default {
         verifyEmailExpirationMinutes: envVars.JWT_VERIFY_EMAIL_EXPIRATION_MINUTES,
     },
     recordingPath: envVars.RECORDINGS_PATH,
+    URL_BASE_PATH: envVars.URL_BASE_PATH,
     // email:{
     //     smtp:{
     //         host: envVars.SMTP_HOST,

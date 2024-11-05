@@ -1,4 +1,18 @@
-import { User, Patient, Recording, EventType, Annotation, ResultTypeOptions, Result, AnnotationVideo, AnnotationEvent, AnnotationResult } from "@prisma/client";
+import {
+    User,
+    Patient,
+    Recording,
+    EventType,
+    Annotation,
+    ResultTypeOptions,
+    Result,
+    AnnotationVideo,
+    AnnotationEvent,
+    AnnotationResult,
+    RecordingVideo,
+    PatientProjectSpecialFeature,
+    Project,
+} from "@prisma/client";
 
 export interface TokenResponse {
     token: string;
@@ -10,39 +24,37 @@ export interface AuthTokensResponse {
     refresh?: TokenResponse;
 }
 //TIPOS DERIVADOS
-//ANNOTATION
-export type tNovoAnnotation = PartialEntity<Annotation,| "projectVideoTypeId"> & {
-    comment?: string;
-    results: tNovoAnnotationResults[];
-};
 //ANNOTATION VIDEO
-export type tNovoAnnotationVideo = PartialEntity<AnnotationVideo, "projectVideoTypeId" > & {
+export type tNovoAnnotationVideo = PartialEntity<AnnotationVideo, "recordingVideoId"> & {
     comment?: string;
     events: tNovoAnnotationEvent[];
-    results: tNovoAnnotationResults[];
+    results?: tNovoAnnotationResults[];
 };
 //ECENT TYPE
 export type tNovoEventType = PartialEntity<EventType, "name" | "description" | "isTemporal">;
 
 //ANNOTATION EVENT
-export type tNovoAnnotationEvent = PartialEntity<AnnotationEvent, "eventTypeId" | "frames" > 
+export type tNovoAnnotationEvent = PartialEntity<AnnotationEvent, "eventTypeId" | "frames">;
 
 //USER
 export type tNovoUser = PartialEntity<User, "name" | "email" | "password" | "documento" | "role">;
 
 //Patient
-export type tNovoPatient = PartialEntity<Patient, "name" | "birthDate" | "isPremature" | "gestationalAge">;
+export type tNovoPatient = PartialEntity<Patient, "name" | "birthDate" | "isPremature" | "gestationalAge"> & {
+    patientSpecialFeatures: tNovoPatientProjectSF[];
+};
+export type tNovoProject = PartialEntity<Project, "projectName" | "description" | "patientSpecialFetauresTemplate">;
 
+export type tNovoPatientSpecialFeatures = PartialEntity<
+    PatientProjectSpecialFeature,
+    "specialFeatureTemplate" | "projectId"
+>;
 //RESULTS
-export type tNovoAnnotationResults = PartialEntity<
-    AnnotationResult,
-    "resultTypeId"  | "resultTypeOptionId"  > & { scalarResult?: number };
+export type tNovoAnnotationResults = PartialEntity<AnnotationResult, "resultTypeId" | "resultTypeOptionId"> & {
+    scalarResult?: number;
+};
 
-
-
-export type tNovoAnnResult = { events: tNovoAnnotationVideo[]; results: tNovoAnnotationResults[] };
-
-
+export type tNovoAnnResult = { events: tNovoAnnotationVideo[]; results?: tNovoAnnotationResults[] };
 
 //RESULTYPE
 export type tNovoResultType = PartialEntity<ResultTypeOptions, "name" | "description">;
@@ -52,8 +64,10 @@ export type tNovoResultsTypeOptions = PartialEntity<ResultTypeOptions, "name" | 
 //RECORDING
 export type tNovoRecording = PartialEntity<
     Recording,
-    "ignore" | "observation" | "patientId" | "recordingDate" | "moveId" | "projectId" | "camInfoId"
->;
+    "ignore" | "observation" | "patientId" | "recordingDate" | "moveId" | "projectId"
+> & { videos: tNovoRecordingVideo[] };
+
+export type tNovoRecordingVideo = PartialEntiry<RecordingVideo, "projectVideoTypeId" | "camIdUsed">;
 
 //TIPOS AUXILIARESj
 export type PartialEntity<Entity, Keys extends keyof Entity> = {

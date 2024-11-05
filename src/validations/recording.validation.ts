@@ -25,9 +25,20 @@ const createRecording: yup.ObjectSchema<tValidCreateSchema<tNovoRecording>> = yu
                             patientId: yup.number().integer().required("Deve ser passado um babyId."),
                             recordingDate: yup.date().required("Deve ser passado um recordingDate."),
                             moveId: yup.number().integer().required("Deve ser passado um moveId."),
-                            movAux: yup.boolean().required("Deve ser passado um movAux."),
                             projectId: yup.number().integer().required("Deve ser passado um projectId."),
                             camInfoId: yup.number().integer().required("Deve ser passado um camInfoId."),
+                            videos: yup
+                                .array(
+                                    yup
+                                        .object({
+                                            projectVideoTypeId: yup.number().required("Deve ser passado um projectVideoTypeId."),
+                                            camIdUsed: yup.number().required("Deve ser passado um camIdUsed."),
+                                        })
+                                        .noUnknown(true)
+                                        .strict()
+                                )
+                                .required("Deve ser passado um videos.")
+                                .min(1, "Deve ser passado ao menos um video."),
                         })
                         .noUnknown(true)
                         .strict()
@@ -93,7 +104,7 @@ const createAnnAndRes: yup.ObjectSchema<tValidCreateSchema<tNovoAnnotationVideo>
                 .array(
                     yup
                         .object({
-                            projectVideoTypeId: yup.number().required("Deve ser passado um projectVideoTypeId."),
+                            recordingVideoId: yup.number().required("Deve ser passado um projectVideoTypeId."),
                             comment: yup.string(),
                             events: yup
                                 .array(
@@ -115,7 +126,6 @@ const createAnnAndRes: yup.ObjectSchema<tValidCreateSchema<tNovoAnnotationVideo>
                                         scalarResults: yup.number(),
                                     })
                                 )
-                                .required("Deve ser passado um annotationResults."),
                         })
                         .noUnknown(true)
                         .strict()
