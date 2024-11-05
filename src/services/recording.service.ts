@@ -12,6 +12,7 @@ const createRecording = async (novoRecording: tNovoRecording[]): Promise<Recordi
         //caminho para armazenar video
         const files: Express.Multer.File[] = []; // Initialize the files array
         const videos = files.map((file) => file.filename);
+        
         return prisma.recording.create({
             data: {
                 ...recording,
