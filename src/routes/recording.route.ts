@@ -9,13 +9,18 @@ const router = express.Router();
 
 router
     .route("/")
-    .post(upload.array("videos", 2), yupValidate(recordingValidation.createRecording), (req, res, next) => {
-        try {
-            recordingController.createRecording(req, res, next);
-        } catch (error) {
-            next(error);
+    .post(
+        upload.array("videos", 10),
+        recordingController.reqInterceptorJson,
+        yupValidate(recordingValidation.createRecording),
+        (req, res, next) => {
+            try {
+                recordingController.createRecording(req, res, next);
+            } catch (error) {
+                next(error);
+            }
         }
-    })
+    )
     .get(yupValidate(recordingValidation.queryRecording), (req, res, next) => {
         try {
             const validRequest = req as unknown as ReqQueryRecording;

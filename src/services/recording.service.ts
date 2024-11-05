@@ -7,21 +7,18 @@ import config from "../config/config";
 import fs from "fs";
 import path from "path";
 
-const createRecording = async (novoRecording: tNovoRecording[], files: Express.Multer.File[]): Promise<Recording[]> => {
+const createRecording = async (novoRecording: tNovoRecording[]): Promise<Recording[]> => {
     const createdRecordings = novoRecording.map((recording, index) => {
         //caminho para armazenar video
-        const recordingDir = path.join(__dirname, config.URL_BASE_PATH, "videos", String(index));
-        if (!fs.existsSync(recordingDir)) fs.mkdirSync(recordingDir, { recursive: true });
-
-        const videoFilePath = path.join(recordingDir, files[index].originalname);
-        fs.writeFileSync(videoFilePath, files[index].buffer);
+        const files: Express.Multer.File[] = []; // Initialize the files array
+        const videos = files.map((file) => file.filename);
         return prisma.recording.create({
             data: {
                 ...recording,
                 recordingsVideos: {
                     create: recording.recordingsVideos.map((video) => ({
                         ...video,
-                        videoPath: videoFilePath,
+                        file: videos,
                     })),
                 },
             },

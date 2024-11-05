@@ -9,7 +9,29 @@ import {
     ReqCreateRecording,
     ReqQueryAnnotationVideo,
 } from "../validations/recording.validation";
+import { Request, Response, NextFunction } from 'express';
 
+// Middleware para processar o corpo da requisição
+const reqInterceptorJson = (req: Request, res: Response, next: NextFunction) => {
+    if (req.body && req.body.data) {
+        req.body.data = req.body.data.map((recording: any) => {
+            return {
+                ...recording,
+                ignore: recording.ignore === 'true', // Convertendo string para boolean
+                patientId: Number(recording.patientId), // Convertendo para number
+                moveId: Number(recording.moveId), // Convertendo para number
+                recordingDate: new Date(recording.recordingDate), // Convertendo para Date
+                recordingsVideos: recording.recordingsVideos.map((video: any) => {
+                    return {
+                        ...video,
+                        file: video.file // Ajustar se precisar extrair o nome do arquivo
+                    };
+                }),
+            };
+        });
+    }
+    next();
+};
 const createRecording = catchAsync(async (req, res) => {
     const validRequest = req as unknown as ReqCreateRecording;
     const { data: recording } = validRequest.body;
@@ -19,7 +41,13 @@ const createRecording = catchAsync(async (req, res) => {
         res.status(400).send('Nenhum arquivo foi enviado');
         return;
     }
-    const recordingCriado = await recordingService.createRecording(recording, files);
+    // Adicionar os nomes dos arquivos ao objeto de gravação
+    recording.forEach((rec, index) => {
+        rec.recordingsVideos.forEach((video) => {
+            video.file = files[index].filename; // Atribuir o nome do arquivo correspondente
+        });
+    });
+    const recordingCriado = await recordingService.createRecording(recording);
     res.status(httpStatus.CREATED).send(recordingCriado);
 });
 
@@ -57,5 +85,6 @@ export default {
     queryRecording,
     getRecording,
     createAnnAndRes,
-    queryAnnotatioVideo
+    queryAnnotatioVideo,
+    reqInterceptorJson
 };
