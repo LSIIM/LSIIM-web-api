@@ -51,7 +51,6 @@ async function seed() {
         {
             name: "Bernardo",
             birthDate: new Date("2021-10-14"),
-
         },
         {
             name: "Luna",
@@ -137,16 +136,16 @@ async function seed() {
             description: "aaaa",
             patientSpecialFetauresTemplate: {
                 feature3: "Valor 3",
-                feature4: "Valor 4"
-              }
+                feature4: "Valor 4",
+            },
         },
         {
             projectName: "vestivel",
             description: "bbbb",
             patientSpecialFetauresTemplate: {
                 feature3: "Valor 3",
-                feature4: "Valor 4"
-              }
+                feature4: "Valor 4",
+            },
         },
     ];
 
@@ -203,22 +202,22 @@ async function seed() {
         {
             description: "HorizontalSlow_Cammoving",
             projectId: 1,
-            defaultCamId: 1
+            defaultCamId: 1,
         },
         {
             description: "HorizontalAbrupt_Cammoving",
             projectId: 1,
-            defaultCamId: 1
+            defaultCamId: 1,
         },
         {
             description: "VerticalSlow_Cammoving",
             projectId: 1,
-            defaultCamId: 2
+            defaultCamId: 2,
         },
         {
             description: "HorizontalHead_Camfixed",
             projectId: 1,
-            defaultCamId: 2
+            defaultCamId: 2,
         },
     ];
 
@@ -882,7 +881,7 @@ async function seed() {
             name: "Não realiza",
             description: "Não realiza o acompanhamento visual",
         },
-    
+
         // Rastreamento visual horizontal (RSH) - resultTypeId: 2
         {
             resultTypeId: 2,
@@ -904,7 +903,7 @@ async function seed() {
             name: "Não realiza",
             description: "Não realiza o acompanhamento visual",
         },
-    
+
         // Campo visual esquerda (CVE) - resultTypeId: 3
         {
             resultTypeId: 3,
@@ -916,7 +915,7 @@ async function seed() {
             name: "Não realiza",
             description: "Não encontra o estímulo na periferia (esquerda)",
         },
-    
+
         // Campo visual direita (CVD) - resultTypeId: 4
         {
             resultTypeId: 4,
@@ -928,7 +927,7 @@ async function seed() {
             name: "Não realiza",
             description: "Não encontra o estímulo na periferia (direita)",
         },
-    
+
         // Fixação visual (FV) - resultTypeId: 5
         {
             resultTypeId: 5,
@@ -940,7 +939,7 @@ async function seed() {
             name: "Instável",
             description: "Fixação visual instável",
         },
-    
+
         // Reflexo vestíbulo-ocular esquerda (RVE) - resultTypeId: 6
         {
             resultTypeId: 6,
@@ -952,7 +951,7 @@ async function seed() {
             name: "Não realiza",
             description: "Não realiza o movimento dos olhos (esquerda)",
         },
-    
+
         // Reflexo vestíbulo-ocular direita (RVD) - resultTypeId: 7
         {
             resultTypeId: 7,
@@ -963,9 +962,9 @@ async function seed() {
             resultTypeId: 7,
             name: "Não realiza",
             description: "Não realiza o movimento dos olhos (direita)",
-        }
+        },
     ];
-    
+
     const dataEventTypes = [
         {
             name: "Encontrou estímulo periférico",
@@ -983,16 +982,1788 @@ async function seed() {
             isTemporal: true,
         },
     ];
-    const dataRecordingsVideo =[{
-        projectVideoTypeId: 1,
-        camIdUsed: 1,
-        recordingId: 1
-    },
-    {
-        projectVideoTypeId: 1,
-        camIdUsed: 1,
-        recordingId: 2
-    }]
+    const dataRecordingsVideo = [
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 1,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 1,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 2,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 2,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 3,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 3,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 4,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 4,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 5,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 5,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 6,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 6,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 7,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 7,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 8,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 8,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 9,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 9,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 10,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 10,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 11,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 11,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 12,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 12,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 13,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 13,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 14,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 14,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 15,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 15,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 16,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 16,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 17,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 17,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 18,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 18,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 19,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 19,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 20,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 20,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 21,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 21,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 22,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 22,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 23,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 23,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 24,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 24,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 25,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 25,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 26,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 26,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 27,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 27,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 28,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 28,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 29,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 29,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 30,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 30,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 31,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 31,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 32,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 32,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 33,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 33,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 34,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 34,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 35,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 35,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 36,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 36,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 37,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 37,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 38,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 38,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 39,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 39,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 40,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 40,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 41,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 41,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 42,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 42,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 43,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 43,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 44,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 44,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 45,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 45,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 46,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 46,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 47,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 47,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 48,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 48,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 49,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 49,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 50,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 50,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 51,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 51,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 52,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 52,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 53,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 53,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 54,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 54,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 55,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 55,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 56,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 56,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 57,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 57,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 58,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 58,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 59,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 59,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 60,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 60,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 61,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 61,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 62,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 62,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 63,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 63,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 64,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 64,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 65,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 65,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 66,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 66,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 67,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 67,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 68,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 68,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 69,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 69,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 70,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 70,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 71,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 71,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 72,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 72,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 73,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 73,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 74,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 74,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 75,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 75,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 76,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 76,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 77,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 77,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 78,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 78,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 79,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 79,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 80,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 80,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 81,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 81,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 82,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 82,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 83,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 83,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 84,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 84,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 85,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 85,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 86,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 86,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 87,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 87,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 88,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 88,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 89,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 89,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 90,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 90,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 91,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 91,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 92,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 92,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 93,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 93,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 94,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 94,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 95,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 95,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 96,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 96,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 97,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 97,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 98,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 98,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 99,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 99,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 100,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 100,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 101,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 101,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 102,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 102,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 103,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 103,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 104,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 104,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 105,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 105,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 106,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 106,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 107,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 107,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 108,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 108,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 109,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 109,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 110,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 110,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 111,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 111,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 112,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 112,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 113,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 113,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 114,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 114,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 115,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 115,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 116,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 116,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 117,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 117,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 118,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 118,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 119,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 119,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 120,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 120,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 121,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 121,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 122,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 122,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 123,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 123,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 124,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 124,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 125,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 125,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 126,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 126,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 127,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 127,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 128,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 128,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 129,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 129,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 130,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 130,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 131,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 131,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 132,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 132,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 133,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 133,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 134,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 134,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 135,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 135,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 136,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 136,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 137,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 137,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 138,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 138,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 139,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 139,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 140,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 140,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 141,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 141,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 142,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 142,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 143,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 143,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 144,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 144,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 145,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 145,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 146,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 146,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 147,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 147,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 148,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 148,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 149,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 149,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 150,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 150,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 151,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 151,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 152,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 152,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 153,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 153,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 154,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 154,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 155,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 155,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 156,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 156,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 157,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 157,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 158,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 158,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 159,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 159,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 160,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 160,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 161,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 161,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 162,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 162,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 163,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 163,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 164,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 164,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 165,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 165,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 166,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 166,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 167,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 167,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 168,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 168,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 169,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 169,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 170,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 170,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 171,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 171,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 172,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 172,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 173,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 173,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 174,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 174,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 175,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 175,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 176,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 176,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 177,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 177,
+        },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 178,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 178,
+        },
+    ];
 
     try {
         await prisma.$transaction([
@@ -1032,7 +2803,6 @@ async function seed() {
         console.error("Error inserting data:", error);
     }
 }
-
 
 seed()
     .then(async () => {
