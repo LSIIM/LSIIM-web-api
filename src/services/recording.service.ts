@@ -267,10 +267,7 @@ const queryAnnotatioVideo = async <Key extends keyof AnnotationVideo>(
 
     const annotations = await prisma.recordingVideo.findFirst({
         where: { recordingId: Number(recording.id) },
-        select: {
-            recordingId: true,
-            annotationVideos: { select: { events: true, results: true, recordingVideoId: true } },
-        },
+        select: { recordingId: true, annotationVideos: { select: { events: true, results: true, recordingVideoId: true } } },
         orderBy: sortBy ? { [sortBy]: sortType } : undefined,
         take: limit,
         skip: page !== undefined && limit !== undefined ? page * limit : undefined,
