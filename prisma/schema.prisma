@@ -125,19 +125,18 @@ model MoveInfo {
 }
 
 model Recording {
-  id            Int       @id @default(autoincrement())
-  ignore        Boolean
-  observation   String?
-  patientId     Int
-  patient       Patient   @relation(fields: [patientId], references: [id])
-  recordingDate DateTime
-  moveId        Int?
-  moveInfo      MoveInfo? @relation(fields: [moveId], references: [id])
-  projectId     Int
-  project       Project   @relation(fields: [projectId], references: [id])
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-
+  id               Int              @id @default(autoincrement())
+  ignore           Boolean
+  observation      String?
+  patientId        Int
+  patient          Patient          @relation(fields: [patientId], references: [id])
+  recordingDate    DateTime
+  moveId           Int?
+  moveInfo         MoveInfo?        @relation(fields: [moveId], references: [id])
+  projectId        Int
+  project          Project          @relation(fields: [projectId], references: [id])
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
   recordingsVideos RecordingVideo[]
 
   @@map("recordings")
@@ -150,6 +149,7 @@ model RecordingVideo {
   recordingId        Int
   recording          Recording         @relation(fields: [recordingId], references: [id])
   camIdUsed          Int
+  file               String
   camInfo            CamInfo           @relation(fields: [camIdUsed], references: [id])
   annotationVideos   AnnotationVideo[]
 }

@@ -1,14 +1,13 @@
-import multer from "multer";
+import multer, {Options} from "multer";
 import path from "path";
 import fs from "fs";
 import config from "../config/config";
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const { id } = req.body;
-
+        const { id} = req.body
         const basePath = config.URL_BASE_PATH || "";
-        const folderPath = path.join(__dirname, basePath, `videos`, String(id));
+        const folderPath = path.join(__dirname, '..', `..`, 'uploads');
         // Verificar se o diretório existe
         if (!fs.existsSync(folderPath)) {
             // Criar diretório se não existir
@@ -17,19 +16,15 @@ const storage = multer.diskStorage({
 
         cb(null, folderPath);
     },
+    filename(req, file, callback) {
+        callback(null, `${Date.now()}-${file.originalname}`);
+    }
 });
 
 const upload = multer({
     storage,
-    fileFilter: (req, file, cb) => {
-        if (file.mimetype === "video/mp4" || file.mimetype === "video/avi") {
-            cb(null, true);
-        } else {
-            cb(new Error("Formato de arquivo inválido. Apenas arquivos mp4 e avi são aceitos."));
-        }
-    },
     limits: {
-        fileSize: 100 * 1024 * 1024, // Limite de 100MB por arquivo
+        fileSize: 1000 * 1024 * 1024, // Limite de 100MB por arquivo
     },
 });
 
