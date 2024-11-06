@@ -986,13 +986,10 @@ async function seed() {
     const dataRecordingsVideo =[{
         projectVideoTypeId: 1,
         camIdUsed: 1,
-        recordingId: 1
-    },
-    {
-        projectVideoTypeId: 1,
-        camIdUsed: 1,
-        recordingId: 2
-    }]
+        recordingId: 1,
+        file: "xxx"
+        
+    },]
 
     try {
         await prisma.$transaction([

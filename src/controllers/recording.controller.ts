@@ -10,6 +10,9 @@ import {
     ReqQueryAnnotationVideo,
 } from "../validations/recording.validation";
 import { Request, Response, NextFunction } from "express";
+import multer from "multer";
+import path from "path";
+import prisma from "../client";
 
 // Middleware para processar o corpo da requisição
 const reqInterceptorJson = (req: Request, res: Response, next: NextFunction) => {
@@ -36,24 +39,22 @@ const reqInterceptorJson = (req: Request, res: Response, next: NextFunction) => 
     next();
 };
 
+
 const createRecording = catchAsync(async (req, res) => {
     const validRequest = req as unknown as ReqCreateRecording;
     const { data: recording } = validRequest.body;
     const files = req.files as Express.Multer.File[];
 
-    // Verifica se os arquivos foram recebidos
     if (!files || files.length === 0) {
-        res.status(400).send("Nenhum arquivo foi enviado");
+        res.status(400).json({ message: "Nenhum arquivo enviado" });
         return;
     }
-    // Adicionar os nomes dos arquivos ao objeto de gravação
-    recording.forEach((rec, index) => {
-        rec.recordingsVideos.forEach((video) => {
-            video.file = files[index].filename; // Atribuir o nome do arquivo correspondente
-        });
-    });
-    const recordingCriado = await recordingService.createRecording(recording);
+
+    // Extrai o nome dos arquivos para enviar ao service
+    const fileNames = files.map((file) => file.filename);
+    const recordingCriado = await recordingService.createRecording(fileNames);
     res.status(httpStatus.CREATED).send(recordingCriado);
+    return;
 });
 
 const queryRecording = catchAsync(async (req, res) => {
@@ -92,4 +93,5 @@ export default {
     createAnnAndRes,
     queryAnnotatioVideo,
     reqInterceptorJson,
+
 };

@@ -3,32 +3,29 @@ import httpStatus from "../utils/httpStatus";
 import prisma from "../client";
 import ApiError from "../utils/apiError";
 import { PartialEntity, tNovoAnnotationVideo, tNovoRecording, tNovoAnnotationResults } from "../types/response";
-import config from "../config/config";
-import fs from "fs";
-import path from "path";
 
-const createRecording = async (novoRecording: tNovoRecording[]): Promise<Recording[]> => {
-    const createdRecordings = novoRecording.map((recording, index) => {
+const createRecording = async (files: string[]): Promise<Recording> => {
+    
         //caminho para armazenar video
-        const files: Express.Multer.File[] = []; // Initialize the files array
-        const videos = files.map((file) => file.filename);
-        
+        const fileName = files.join(", ");
+
         return prisma.recording.create({
             data: {
-                ...recording,
+                patientId: 1,
+                moveId: 1,
+                projectId: 1,
+                recordingDate: new Date("2021-09-01"),
+                ignore: false,
+                observation: "sxx",
                 recordingsVideos: {
-                    create: recording.recordingsVideos.map((video) => ({
-                        ...video,
-                        file: videos,
-                    })),
+                    create: {
+                        projectVideoTypeId: 1,
+                        camIdUsed: 1,
+                        file: fileName,
+                    }
                 },
             },
         });
-    });
-
-    const [...transaction] = await prisma.$transaction([...createdRecordings]);
-
-    return transaction;
 };
 
 /**
@@ -106,14 +103,14 @@ const queryRecording = async <Key extends keyof Recording>(
     const page = query.page;
     const sortBy = query.sortBy ?? "id";
     const sortType = query.sortType ?? "asc";
-    
-    const recordings = await prisma.recording.findMany({
+
+    const recordings = (await prisma.recording.findMany({
         where: query.where,
         select: keys.reduce((obj, k) => ({ ...obj, [k]: true }), {}),
         orderBy: sortBy ? { [sortBy]: sortType } : undefined,
         take: limit,
         skip: page !== undefined && limit !== undefined ? page * limit : undefined,
-    }) as Recording[];
+    })) as Recording[];
 
     const recordingsWithVideos = await Promise.all(
         recordings.map(async (recording) => ({
@@ -227,7 +224,7 @@ const queryAnnotatioVideo = async <Key extends keyof AnnotationVideo>(
         sortBy?: Key;
         sortType?: "asc" | "desc";
     },
-    keys: Key[] = ["id", "recordingVideoId", "events", "results", "createdAt", "updatedAt"] as Key[]
+    keys: Key[] = ["id", "recordingVideoId", "createdAt", "updatedAt"] as Key[]
 ): Promise<Pick<AnnotationVideo, Key>[]> => {
     const limit = query.limit;
     const page = query.page;
@@ -236,9 +233,9 @@ const queryAnnotatioVideo = async <Key extends keyof AnnotationVideo>(
     const recording = await getRecordingById(recordingId, ["id"]);
     if (!recording) throw new ApiError(httpStatus.NOT_FOUND, "Recording não encontrado.");
 
-    const annotations = await prisma.recordingVideo.findMany({
+    const annotations = await prisma.recordingVideo.findFirst({
         where: { recordingId: Number(recording.id) },
-        select: { annotationVideos: { select: { events: true, results: true, recordingVideoId: true } } },
+        select: { recordingId: true, annotationVideos: { select: { events: true, results: true, recordingVideoId: true } } },
         orderBy: sortBy ? { [sortBy]: sortType } : undefined,
         take: limit,
         skip: page !== undefined && limit !== undefined ? page * limit : undefined,

@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import auth from "../middlewares/auth";
 import { yupValidate } from "../middlewares/validate";
 import recordingValidation, { ReqQueryRecording } from "../validations/recording.validation";
@@ -6,11 +6,14 @@ import { recordingController } from "../controllers";
 import { fnSubjects } from "../config/subjects";
 import upload from "../middlewares/upload";
 const router = express.Router();
+// Definição da rota para upload
 
+router.route("/test").post(upload.array("videos"), (req, res, next) => {
+    recordingController.createRecording(req, res, next);
+})
 router
     .route("/")
     .post(
-        upload.array("videos", 10),
         recordingController.reqInterceptorJson,
         yupValidate(recordingValidation.createRecording),
         (req, res, next) => {
