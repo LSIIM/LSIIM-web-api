@@ -2763,6 +2763,16 @@ async function seed() {
             camIdUsed: 2,
             recordingId: 178,
         },
+        {
+            projectVideoTypeId: 1,
+            camIdUsed: 1,
+            recordingId: 179,
+        },
+        {
+            projectVideoTypeId: 2,
+            camIdUsed: 2,
+            recordingId: 179,
+        },
     ];
 
     try {
