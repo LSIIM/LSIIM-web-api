@@ -236,9 +236,9 @@ const queryAnnotatioVideo = async <Key extends keyof AnnotationVideo>(
     const recording = await getRecordingById(recordingId, ["id"]);
     if (!recording) throw new ApiError(httpStatus.NOT_FOUND, "Recording não encontrado.");
 
-    const annotations = await prisma.recordingVideo.findMany({
+    const annotations = await prisma.recordingVideo.findFirst({
         where: { recordingId: Number(recording.id) },
-        select: { annotationVideos: { select: { events: true, results: true, recordingVideoId: true } } },
+        select: { recordingId: true, annotationVideos: { select: { events: true, results: true, recordingVideoId: true } } },
         orderBy: sortBy ? { [sortBy]: sortType } : undefined,
         take: limit,
         skip: page !== undefined && limit !== undefined ? page * limit : undefined,
