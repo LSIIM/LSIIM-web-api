@@ -149,7 +149,7 @@ model RecordingVideo {
   recordingId        Int
   recording          Recording         @relation(fields: [recordingId], references: [id])
   camIdUsed          Int
-  file               String
+  file               String?
   camInfo            CamInfo           @relation(fields: [camIdUsed], references: [id])
   annotationVideos   AnnotationVideo[]
 }

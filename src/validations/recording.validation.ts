@@ -34,7 +34,7 @@ const createRecording: yup.ObjectSchema<tValidCreateSchema<tNovoRecording>> = yu
                                                 .number()
                                                 .required("Deve ser passado um projectVideoTypeId."),
                                             camIdUsed: yup.number().required("Deve ser passado um camIdUsed."),
-                                            file: yup.string().required("Deve ser passado um file"),
+                                            file: yup.string()
                                         })
                                         .noUnknown(true)
                                         .strict()

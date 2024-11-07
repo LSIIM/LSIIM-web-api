@@ -3,29 +3,56 @@ import httpStatus from "../utils/httpStatus";
 import prisma from "../client";
 import ApiError from "../utils/apiError";
 import { PartialEntity, tNovoAnnotationVideo, tNovoRecording, tNovoAnnotationResults } from "../types/response";
+import path from "path";
+import fs from "fs";
+import config from "../config/config";
+import { runPythonScript } from "../utils/pythonScript";
+const createRecording = async (novoRecording: tNovoRecording[], files: string[]): Promise<Recording[]> => {
+    const urlPath = config.URL_BASE_PATH;
+    // Cria a pasta temporária para armazenar os vídeos
+    const tempFolderPath = path.join(__dirname, urlPath, "videos", "temp");
+    if (!fs.existsSync(tempFolderPath)) {
+        fs.mkdirSync(tempFolderPath, { recursive: true });
+    }
 
-const createRecording = async (files: string[]): Promise<Recording> => {
-    
-        //caminho para armazenar video
-        const fileName = files.join(", ");
-
+    // Concatena os nomes dos arquivos
+    const fileName = files.join(", ");
+    const recordingToCreate = novoRecording.map((recording) => {
         return prisma.recording.create({
             data: {
-                patientId: 1,
-                moveId: 1,
-                projectId: 1,
-                recordingDate: new Date("2021-09-01"),
-                ignore: false,
-                observation: "sxx",
+                ...recording,
                 recordingsVideos: {
-                    create: {
-                        projectVideoTypeId: 1,
-                        camIdUsed: 1,
+                    create: recording.recordingsVideos.map((video) => ({
+                        ...video,
                         file: fileName,
-                    }
+                    })),
                 },
             },
         });
+    });
+    // Executa a transação e cria o recording no banco
+    const recordingCriado = await prisma.$transaction([...recordingToCreate]);
+
+    // Renomeia a pasta temporária para o ID do novo recording
+    const newFolderPath = path.join(__dirname, urlPath, "videos", `${recordingCriado[0].id}`);
+    if (!fs.existsSync(newFolderPath)) {
+        fs.mkdirSync(newFolderPath, { recursive: true });
+    }
+
+    // Move os arquivos da pasta temporária para a nova pasta
+    files.forEach((file) => {
+        const tempFilePath = path.join(tempFolderPath, file);
+        const newFilePath = path.join(newFolderPath, file);
+
+        fs.renameSync(tempFilePath, newFilePath);
+    });
+
+    await runPythonScript();
+
+    if (fs.readdirSync(tempFolderPath).length >= 0) {
+        fs.rmSync(tempFolderPath, { recursive: true });
+    }
+    return recordingCriado;
 };
 
 /**
@@ -172,11 +199,16 @@ const createAnnotation = async (
 ): Promise<AnnotationVideo[]> => {
     const recordingParaAnotacao = await prisma.recordingVideo.findFirst({
         where: { recordingId: recordingId },
+        select: { annotationVideos: true },
     });
     if (!recordingParaAnotacao) throw new ApiError(httpStatus.NOT_FOUND, "Recording não encontrado.");
     const annotationToCreate = annotationVideo.map((annotation) => ({
         ...annotation,
     }));
+
+    //verificar se existe anotacao para o recordingId passado
+    if (recordingParaAnotacao.annotationVideos.length > 0)
+        throw new ApiError(httpStatus.BAD_REQUEST, "Já existe anotação para este recording.");
 
     //função para verificar se projectVideoType é main
     const isMain = async (projectVideoTypeId: number) => {
@@ -235,7 +267,10 @@ const queryAnnotatioVideo = async <Key extends keyof AnnotationVideo>(
 
     const annotations = await prisma.recordingVideo.findFirst({
         where: { recordingId: Number(recording.id) },
-        select: { recordingId: true, annotationVideos: { select: { events: true, results: true, recordingVideoId: true } } },
+        select: {
+            recordingId: true,
+            annotationVideos: { select: { events: true, results: true, recordingVideoId: true } },
+        },
         orderBy: sortBy ? { [sortBy]: sortType } : undefined,
         take: limit,
         skip: page !== undefined && limit !== undefined ? page * limit : undefined,

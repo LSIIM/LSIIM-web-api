@@ -10,35 +10,17 @@ import {
     ReqQueryAnnotationVideo,
 } from "../validations/recording.validation";
 import { Request, Response, NextFunction } from "express";
-import multer from "multer";
-import path from "path";
-import prisma from "../client";
+import { run } from "node:test";
+import { runPythonScript } from "../utils/pythonScript";
 
 // Middleware para processar o corpo da requisição
-const reqInterceptorJson = (req: Request, res: Response, next: NextFunction) => {
-    if (req.body && req.body.data) {
-        req.body.data = req.body.data.map((recording: any) => {
-            return {
-                ...recording,
-                projectId: Number(recording.projectId),
-                ignore: recording.ignore === "true", // Convertendo string para boolean
-                patientId: Number(recording.patientId), // Convertendo para number
-                moveId: Number(recording.moveId), // Convertendo para number
-                recordingDate: new Date(recording.recordingDate), // Convertendo para Date
-                recordingsVideos: recording.recordingsVideos.map((video: any) => {
-                    return {
-                        ...video,
-                        camIdUsed: Number(video.camIdUsed),
-                        projectVideoTypeId: Number(video.projectVideoTypeId),
-                        file: video.file, // Ajustar se precisar extrair o nome do arquivo
-                    };
-                }),
-            };
-        });
-    }
+const reqInterceptorMulter = (req: Request, res: Response, next: NextFunction) => {
+    if (!req.body.recordings) throw new ApiError(httpStatus.BAD_REQUEST, "Nenhum recording enviado");
+
+    req.body = JSON.parse(req.body.recordings);
+
     next();
 };
-
 
 const createRecording = catchAsync(async (req, res) => {
     const validRequest = req as unknown as ReqCreateRecording;
@@ -49,10 +31,12 @@ const createRecording = catchAsync(async (req, res) => {
         res.status(400).json({ message: "Nenhum arquivo enviado" });
         return;
     }
-
+    const ttt = await runPythonScript();
+    console.log(ttt);
+    
     // Extrai o nome dos arquivos para enviar ao service
     const fileNames = files.map((file) => file.filename);
-    const recordingCriado = await recordingService.createRecording(fileNames);
+    const recordingCriado = await recordingService.createRecording(recording, fileNames);
     res.status(httpStatus.CREATED).send(recordingCriado);
     return;
 });
@@ -92,6 +76,5 @@ export default {
     getRecording,
     createAnnAndRes,
     queryAnnotatioVideo,
-    reqInterceptorJson,
-
+    reqInterceptorJson: reqInterceptorMulter,
 };

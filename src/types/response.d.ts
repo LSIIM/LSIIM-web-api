@@ -67,7 +67,7 @@ export type tNovoRecording = PartialEntity<
     "ignore" | "observation" | "patientId" | "recordingDate" | "moveId" | "projectId"
 > & { recordingsVideos: tNovoRecordingVideo[] };
 
-export type tNovoRecordingVideo = PartialEntiry<RecordingVideo, "projectVideoTypeId" | "camIdUsed"> ;
+export type tNovoRecordingVideo = PartialEntiry<RecordingVideo, "projectVideoTypeId" | "camIdUsed"> & {file?: string};
 
 //TIPOS AUXILIARESj
 export type PartialEntity<Entity, Keys extends keyof Entity> = {

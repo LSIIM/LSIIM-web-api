@@ -5,16 +5,17 @@ import recordingValidation, { ReqQueryRecording } from "../validations/recording
 import { recordingController } from "../controllers";
 import { fnSubjects } from "../config/subjects";
 import upload from "../middlewares/upload";
+import { reqInterceptor } from "../middlewares/reqInterceptor";
 const router = express.Router();
 // Definição da rota para upload
 
-router.route("/test").post(upload.array("videos"), (req, res, next) => {
-    recordingController.createRecording(req, res, next);
-})
+
 router
     .route("/")
     .post(
+        upload.array("videos"),
         recordingController.reqInterceptorJson,
+        reqInterceptor,
         yupValidate(recordingValidation.createRecording),
         (req, res, next) => {
             try {
