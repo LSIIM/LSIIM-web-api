@@ -10,7 +10,7 @@ import { runPythonScript } from "../utils/pythonScript";
 const createRecording = async (novoRecording: tNovoRecording[], files: string[]): Promise<Recording[]> => {
     const urlPath = config.URL_BASE_PATH;
     // Cria a pasta temporária para armazenar os vídeos
-    const tempFolderPath = path.join(__dirname, '..','..', "videos", "temp");
+    const tempFolderPath = path.join(__dirname, "..", "..", "videos", "temp");
     if (!fs.existsSync(tempFolderPath)) {
         fs.mkdirSync(tempFolderPath, { recursive: true });
     }
@@ -34,7 +34,7 @@ const createRecording = async (novoRecording: tNovoRecording[], files: string[])
     const recordingCriado = await prisma.$transaction([...recordingToCreate]);
 
     // Renomeia a pasta temporária para o ID do novo recording
-    const newFolderPath = path.join(__dirname, '..','..', "videos", "videos", `${recordingCriado[0].id}`);
+    const newFolderPath = path.join(__dirname, "..", "..", "videos", "videos", `${recordingCriado[0].id}`);
     if (!fs.existsSync(newFolderPath)) {
         fs.mkdirSync(newFolderPath, { recursive: true });
     }
@@ -267,7 +267,16 @@ const queryAnnotatioVideo = async <Key extends keyof AnnotationVideo>(
 
     const annotations = await prisma.recordingVideo.findFirst({
         where: { recordingId: Number(recording.id) },
-        select: { recordingId: true, annotationVideos: { select: { events: true, results: true, recordingVideoId: true } } },
+        select: {
+            recordingId: true,
+            annotationVideos: {
+                select: {
+                    events: { include: { eventType: { select: { name: true } } } },
+                    results: true,
+                    recordingVideoId: true,
+                },
+            },
+        },
         orderBy: sortBy ? { [sortBy]: sortType } : undefined,
         take: limit,
         skip: page !== undefined && limit !== undefined ? page * limit : undefined,
