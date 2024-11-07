@@ -2,12 +2,14 @@ import os
 import cv2
 
 def extract_frames_from_folder(folder_path):
-    print(f'Extracting frames from {folder_path}')
     for file in os.listdir(folder_path):
         # verifica se é um arquivo de video mp4
-        
         if not file.endswith('.mp4'):
             continue
+        #verificar se o arquivo jpg já existe
+        if os.path.exists(folder_path + file.split('.')[0] + '.jpg'):
+            continue
+        
         video = cv2.VideoCapture(folder_path + file)
         ret, frame = video.read()
         if ret:
@@ -15,7 +17,7 @@ def extract_frames_from_folder(folder_path):
         video.release()
 
 if __name__ == '__main__':
-    folder_path = '/Users/viniciusrosa/Desktop/Vinicius/Lsiim/LSIIM-web-api/uploads' # path to the folder with the videos
+    folder_path = '/videos' # path to the folder with the videos
     for recording_folders in os.listdir(folder_path):
         # verifica se é uma pasta
         if os.path.isdir(folder_path + '/' + recording_folders):
