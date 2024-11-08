@@ -8,6 +8,7 @@ import httpStatus from '../utils/httpStatus';
 export const errorConverter: ErrorRequestHandler = (err, req, res, next) => {
     let error = err;
     if (!(error instanceof ApiError)) {
+      console.log(error)
       const statusCode =
         error.statusCode || error instanceof Prisma.PrismaClientKnownRequestError
           ? httpStatus.BAD_REQUEST
@@ -24,6 +25,7 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
     statusCode = httpStatus.INTERNAL_SERVER_ERROR;
     message = httpStatus['INTERNAL_SERVER_ERROR'];
   }
+  console.log(err)
 
   res.locals.errorMessage = err.message;
 

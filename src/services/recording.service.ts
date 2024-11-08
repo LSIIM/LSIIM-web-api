@@ -79,6 +79,7 @@ const getVideos = async (recordingId: number): Promise<RecordingVideo[]> => {
         const videos = recordingVideos.map((video) => ({
             ...video,
             url: `${process.env.URL_BASE_PATH ? process.env.URL_BASE_PATH.replace(/\/$/, "") : ""}/${pathBase.replace(/^\//, "")}/${recordingId}/${video.projectVideoTypeId}.mp4`,
+            thumb: `${process.env.URL_BASE_PATH ? process.env.URL_BASE_PATH.replace(/\/$/, "") : ""}/${pathBase.replace(/^\//, "")}/${recordingId}/${video.projectVideoTypeId}.jpg`,
         }));
 
         return videos as unknown as RecordingVideo[];
