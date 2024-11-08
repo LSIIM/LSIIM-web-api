@@ -1,4 +1,4 @@
-FROM node:20.18.0 AS build
+FROM lsiim_api_base:latest AS build
 
 # # PORT DATABASE_URL JWT_SECRET JWT_ACCESS_EXPIRATION_MINUTES JWT_REFRESH_EXPIRATION_DAYS URL_BASE_PATH JWT_REFRESH_EXPIRATION_DAYS RECORDINGS_PATH
 ARG PORT
@@ -11,16 +11,6 @@ ARG JWT_REFRESH_EXPIRATION_DAYS
 
 WORKDIR /app
 
-# install python3 and pip
-RUN apt-get update && apt-get install -y python3 python3-pip
-# isntall python-opencv
-RUN pip install --break-system-packages opencv-python
-RUN alias python=python3
-# set the alias to be permanent
-RUN echo "alias python=python3" >> ~/.bashrc
-RUN ln -s /usr/bin/python3 /usr/bin/python
-
-RUN apt-get update && apt-get install ffmpeg libsm6 libxext6  -y
 
 
 
