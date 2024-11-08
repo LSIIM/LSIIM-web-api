@@ -6,7 +6,7 @@ import config from "../config/config";
 
 // Função para criar uma pasta temporária
 function createTempFolder() {
-    const tempFolderPath = path.join(__dirname, '..','..', "videos", 'temp');
+    const tempFolderPath = path.join( "/videos", 'temp');
     if (!fs.existsSync(tempFolderPath)) {
         fs.mkdirSync(tempFolderPath, { recursive: true });
     }

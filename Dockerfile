@@ -20,6 +20,7 @@ RUN alias python=python3
 RUN echo "alias python=python3" >> ~/.bashrc
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
+RUN apt-get update && apt-get install ffmpeg libsm6 libxext6  -y
 
 
 
@@ -37,6 +38,11 @@ COPY .env .env
 RUN yarn
 RUN npx prisma db seed
 RUN yarn build
+
+# copia pasta python para o dist
+# Ensure the target directory exists before copying
+RUN mkdir -p /app/src/utils/python && cp -r /app/src/utils/python /app/dist/src/utils/python
+
 
 
 CMD ["yarn", "start"]
