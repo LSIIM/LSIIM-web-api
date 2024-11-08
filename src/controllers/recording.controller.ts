@@ -31,8 +31,8 @@ const createRecording = catchAsync(async (req, res) => {
         res.status(400).json({ message: "Nenhum arquivo enviado" });
         return;
     }
-    const ttt = await runPythonScript();
-    console.log(ttt);
+    await runPythonScript();
+    
     
     // Extrai o nome dos arquivos para enviar ao service
     const fileNames = files.map((file) => file.filename);

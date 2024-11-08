@@ -205,10 +205,19 @@ const createAnnotation = async (
     const annotationToCreate = annotationVideo.map((annotation) => ({
         ...annotation,
     }));
-
+    //TODO: AJEITAR A DELEÇÕES DA ANOTACAO
     //verificar se existe anotacao para o recordingId passado
-    if (recordingParaAnotacao.annotationVideos.length > 0)
-        throw new ApiError(httpStatus.BAD_REQUEST, "Já existe anotação para este recording.");
+    if (recordingParaAnotacao.annotationVideos.length > 0){
+        const _deleteEvents = await prisma.annotationEvent.deleteMany({
+            where: { annotationVideoId: recordingParaAnotacao.annotationVideos[0].id },
+        });
+        const _deleteResults = await prisma.annotationResult.deleteMany({
+            where: { annotationVideoId: recordingParaAnotacao.annotationVideos[0].id },
+        });
+        const _deleteAnnotation = await prisma.annotationVideo.delete({
+            where: { id: recordingParaAnotacao.annotationVideos[0].id },
+        });
+    };
 
     //função para verificar se projectVideoType é main
     const isMain = async (projectVideoTypeId: number) => {
