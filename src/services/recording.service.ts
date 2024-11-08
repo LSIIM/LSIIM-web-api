@@ -29,12 +29,21 @@ const createRecording = async (novoRecording: tNovoRecording[], files: string[])
 
     const fileName = files[0];
 
-    const tempFolderPath = path.join(config.recordingPath, fileName.split("<>")[0]);
+    const tempFolderPath = path.join(config.recordingPath, fileName.split("_")[0]);
+    
     
     const newFolderPath = path.join(config.recordingPath, `${recordingId}`);
     // Renomeia a pasta temporária para o ID do novo recording
     fs.renameSync(tempFolderPath, newFolderPath);
-    // Move os arquivos da pasta temporária para a nova pasta
+
+    // renomeia os arquivos de video para removei o uuid antes do -
+    // Move os arquivos da pasta temporária para a nova pasta (depois do _ é o nome do arquivo) para todos os arquivos da nova pasta
+    fs.readdirSync(newFolderPath).forEach((file) => {
+        const newFileName = file.split("_")[1];
+        console.log(`Renomeando ${file} para ${newFileName}`);
+        fs.renameSync(path.join (newFolderPath, file), path.join(newFolderPath, newFileName));
+    }
+    );
     
 
     // Apagar a pasta temporaria se existe

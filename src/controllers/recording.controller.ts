@@ -32,7 +32,7 @@ const createRecording = catchAsync(async (req, res) => {
         return;
     }
     
-    //await runPythonScript();
+    await runPythonScript();
     
     
     // Extrai o nome dos arquivos para enviar ao service
