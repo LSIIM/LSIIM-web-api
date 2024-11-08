@@ -5,7 +5,6 @@ import ApiError from "../utils/apiError";
 import { PartialEntity, tNovoAnnotationVideo, tNovoRecording, tNovoAnnotationResults } from "../types/response";
 import path from "path";
 import fs from "fs";
-import config from "../config/config";
 import { runPythonScript } from "../utils/pythonScript"
 import { randomUUID } from "crypto";
 const createRecording = async (novoRecording: tNovoRecording[], files: string[]): Promise<Recording[]> => {
@@ -25,8 +24,14 @@ const createRecording = async (novoRecording: tNovoRecording[], files: string[])
 
         // Move os arquivos para a pasta temporária específica deste recording
         files.forEach((file) => {
+            const sourceFilePath = path.resolve(process.cwd(), file); // Caminho absoluto para garantir acesso ao arquivo
             const newTempFilePath = path.join(tempFolderPath, file);
-            fs.copyFileSync(file, newTempFilePath);  // Copia o arquivo para a pasta temporária
+
+            if (fs.existsSync(sourceFilePath)) {
+                fs.copyFileSync(sourceFilePath, newTempFilePath); // Copia o arquivo
+            } else {
+                console.error(`Arquivo não encontrado: ${sourceFilePath}`);
+            }
         });
 
         // Adiciona a criação de gravação à transação
