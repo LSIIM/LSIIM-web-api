@@ -5,77 +5,39 @@ import ApiError from "../utils/apiError";
 import { PartialEntity, tNovoAnnotationVideo, tNovoRecording, tNovoAnnotationResults } from "../types/response";
 import path from "path";
 import fs from "fs";
-import { runPythonScript } from "../utils/pythonScript"
-import { randomUUID } from "crypto";
+import config from "../config/config";
 const createRecording = async (novoRecording: tNovoRecording[], files: string[]): Promise<Recording[]> => {
-  
-    // Array para armazenar os objetos de criação de gravações para a transação e os caminhos temporários
-    const recordingToCreate: any[] = [];
-    const tempFolders: any[] = [];
-
-    novoRecording.forEach((recording) => {
-        const tempFolderUUID = randomUUID();
-        const tempFolderPath = path.join("/videos", tempFolderUUID);
-
-        // Cria uma pasta temporária única para cada recording
-        if (!fs.existsSync(tempFolderPath)) {
-            fs.mkdirSync(tempFolderPath, { recursive: true });
-        }
-
-        // Move os arquivos para a pasta temporária específica deste recording
-        files.forEach((file) => {
-            const sourceFilePath = path.resolve(process.cwd(), file); // Caminho absoluto para garantir acesso ao arquivo
-            const newTempFilePath = path.join(tempFolderPath, file);
-
-            if (fs.existsSync(sourceFilePath)) {
-                fs.copyFileSync(sourceFilePath, newTempFilePath); // Copia o arquivo
-            } else {
-                console.error(`Arquivo não encontrado: ${sourceFilePath}`);
-            }
-        });
-
-        // Adiciona a criação de gravação à transação
-        recordingToCreate.push(
-            prisma.recording.create({
-                data: {
-                    ...recording,
-                    recordingsVideos: {
-                        create: recording.recordingsVideos.map((video) => ({
-                            ...video,
-                            file: files.join(", "),
-                        })),
-                    },
+    
+    // Concatena os nomes dos arquivos
+    const recordingToCreate = novoRecording.map((recording, index) => {
+        return prisma.recording.create({
+            data: {
+                ...recording,
+                recordingsVideos: {
+                    create: recording.recordingsVideos.map((video) => ({
+                        ...video,
+                        file: files[index],
+                    })),
                 },
-            })
-        );
-
-        // Armazena o caminho temporário para renomear depois
-        tempFolders.push(tempFolderPath);
+            },
+        });
     });
-
-    // Executa a transação e cria todos os recordings no banco
+    // Executa a transação e cria o recording no banco
     const recordingCriado = await prisma.$transaction([...recordingToCreate]);
 
-    // Para cada recording criado, renomeia a pasta temporária com UUID para o ID do recording no banco
-    recordingCriado.forEach((recording, index) => {
-        const tempFolderPath = tempFolders[index];
-        const newFolderPath = path.join("/videos", `${recording.id}`);
+    const recordingId = recordingCriado[0].id;
 
-        // Renomeia a pasta temporária para o ID do recording
-        if (fs.existsSync(tempFolderPath)) {
-            fs.renameSync(tempFolderPath, newFolderPath);
-        }
-    });
+    const fileName = files[0];
 
-    await runPythonScript();
+    const tempFolderPath = path.join(config.recordingPath, fileName.split("<>")[0]);
+    
+    const newFolderPath = path.join(config.recordingPath, `${recordingId}`);
+    // Renomeia a pasta temporária para o ID do novo recording
+    fs.renameSync(tempFolderPath, newFolderPath);
+    // Move os arquivos da pasta temporária para a nova pasta
+    
 
-    // Limpeza: Remove qualquer pasta temporária residual que não foi renomeada
-    fs.readdirSync(path.join("/videos")).forEach((folder) => {
-        const folderPath = path.join("/videos", folder);
-        if (fs.existsSync(folderPath)) {
-            fs.rmSync(folderPath, { recursive: true });
-        }
-    });
+    // Apagar a pasta temporaria se existe
 
     return recordingCriado;
 };

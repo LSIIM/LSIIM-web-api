@@ -1,12 +1,12 @@
-import multer, { Options } from "multer";
+import multer from "multer";
 import path from "path";
 import fs from "fs";
+import { randomUUID } from "crypto";
 import config from "../config/config";
 
-
 // Função para criar uma pasta temporária
-function createTempFolder() {
-    const tempFolderPath = path.join( "/videos", 'temp');
+function createTempFolder(tempUUID: string) {
+    const tempFolderPath = path.join(config.recordingPath, tempUUID);
     if (!fs.existsSync(tempFolderPath)) {
         fs.mkdirSync(tempFolderPath, { recursive: true });
     }
@@ -16,11 +16,14 @@ function createTempFolder() {
 // Configuração do multer para salvar na pasta temporária
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const tempFolderPath = createTempFolder();
+        const tempUUID = randomUUID();
+        (req as any).tempUUID = tempUUID;
+        // UUID passado pelo controller
+        const tempFolderPath = createTempFolder(tempUUID);
         cb(null, tempFolderPath);
     },
     filename: (req, file, callback) => {
-        callback(null, file.originalname);
+        callback(null, `${(req as any).tempUUID}<>${file.originalname}`);
     },
 });
 const upload = multer({

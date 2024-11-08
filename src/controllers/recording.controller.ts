@@ -31,8 +31,8 @@ const createRecording = catchAsync(async (req, res) => {
         res.status(400).json({ message: "Nenhum arquivo enviado" });
         return;
     }
-    console.log(validRequest.body)
-    await runPythonScript();
+    
+    //await runPythonScript();
     
     
     // Extrai o nome dos arquivos para enviar ao service
