@@ -1,5 +1,12 @@
 # API - LSIIM
 
+## Docker
+
+build base: `docker build -f "./Dockerfile_base" -t lsiim_api_latest:latest . `
+build compose `docker-compose build`
+up compose `docker-compose up -d`
+
+## Local
 ### Pré-requisitos:
 
 - Primeiro deve-se instalar o [NodeJs - v20.18.0](https://nodejs.org/en/download/package-manager).
