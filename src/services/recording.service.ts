@@ -6,55 +6,72 @@ import { PartialEntity, tNovoAnnotationVideo, tNovoRecording, tNovoAnnotationRes
 import path from "path";
 import fs from "fs";
 import config from "../config/config";
-import { runPythonScript } from "../utils/pythonScript";
+import { runPythonScript } from "../utils/pythonScript"
+import { randomUUID } from "crypto";
 const createRecording = async (novoRecording: tNovoRecording[], files: string[]): Promise<Recording[]> => {
-    const urlPath = config.URL_BASE_PATH;
-    // Cria a pasta temporária para armazenar os vídeos
-    const tempFolderPath = path.join( "/videos", "temp");
-    if (!fs.existsSync(tempFolderPath)) {
-        fs.mkdirSync(tempFolderPath, { recursive: true });
-    }
+  
+    // Array para armazenar os objetos de criação de gravações para a transação e os caminhos temporários
+    const recordingToCreate: any[] = [];
+    const tempFolders: any[] = [];
 
-    // Concatena os nomes dos arquivos
-    const fileName = files.join(", ");
-    const recordingToCreate = novoRecording.map((recording) => {
-        return prisma.recording.create({
-            data: {
-                ...recording,
-                recordingsVideos: {
-                    create: recording.recordingsVideos.map((video) => ({
-                        ...video,
-                        file: fileName,
-                    })),
-                },
-            },
-        });
-    });
-    // Executa a transação e cria o recording no banco
-    const recordingCriado = await prisma.$transaction([...recordingToCreate]);
+    novoRecording.forEach((recording) => {
+        const tempFolderUUID = randomUUID();
+        const tempFolderPath = path.join("/videos", tempFolderUUID);
 
-    // Para cada recording criado, cria uma pasta e move os arquivos
-    recordingCriado.forEach((recording) => {
-        // Cria a nova pasta para o recording específico
-        const newFolderPath = path.join("/videos", `${recording.id}`);
-        if (!fs.existsSync(newFolderPath)) {
-            fs.mkdirSync(newFolderPath, { recursive: true });
+        // Cria uma pasta temporária única para cada recording
+        if (!fs.existsSync(tempFolderPath)) {
+            fs.mkdirSync(tempFolderPath, { recursive: true });
         }
 
-        // Move os arquivos da pasta temporária para a nova pasta específica para o recording
+        // Move os arquivos para a pasta temporária específica deste recording
         files.forEach((file) => {
-            const tempFilePath = path.join(tempFolderPath, file);
-            const newFilePath = path.join(newFolderPath, file);
-
-            fs.renameSync(tempFilePath, newFilePath);
+            const newTempFilePath = path.join(tempFolderPath, file);
+            fs.copyFileSync(file, newTempFilePath);  // Copia o arquivo para a pasta temporária
         });
+
+        // Adiciona a criação de gravação à transação
+        recordingToCreate.push(
+            prisma.recording.create({
+                data: {
+                    ...recording,
+                    recordingsVideos: {
+                        create: recording.recordingsVideos.map((video) => ({
+                            ...video,
+                            file: files.join(", "),
+                        })),
+                    },
+                },
+            })
+        );
+
+        // Armazena o caminho temporário para renomear depois
+        tempFolders.push(tempFolderPath);
+    });
+
+    // Executa a transação e cria todos os recordings no banco
+    const recordingCriado = await prisma.$transaction([...recordingToCreate]);
+
+    // Para cada recording criado, renomeia a pasta temporária com UUID para o ID do recording no banco
+    recordingCriado.forEach((recording, index) => {
+        const tempFolderPath = tempFolders[index];
+        const newFolderPath = path.join("/videos", `${recording.id}`);
+
+        // Renomeia a pasta temporária para o ID do recording
+        if (fs.existsSync(tempFolderPath)) {
+            fs.renameSync(tempFolderPath, newFolderPath);
+        }
     });
 
     await runPythonScript();
 
-    if (fs.readdirSync(tempFolderPath).length >= 0) {
-        fs.rmSync(tempFolderPath, { recursive: true });
-    }
+    // Limpeza: Remove qualquer pasta temporária residual que não foi renomeada
+    fs.readdirSync(path.join("/videos")).forEach((folder) => {
+        const folderPath = path.join("/videos", folder);
+        if (fs.existsSync(folderPath)) {
+            fs.rmSync(folderPath, { recursive: true });
+        }
+    });
+
     return recordingCriado;
 };
 
