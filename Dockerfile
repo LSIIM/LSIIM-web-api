@@ -9,8 +9,19 @@ ARG JWT_REFRESH_EXPIRATION_DAYS
 ARG URL_BASE_PATH
 ARG JWT_REFRESH_EXPIRATION_DAYS
 
-
 WORKDIR /app
+
+# install python3 and pip
+RUN apt-get update && apt-get install -y python3 python3-pip
+# isntall python-opencv
+RUN pip install --break-system-packages opencv-python
+RUN alias python=python3
+# set the alias to be permanent
+RUN echo "alias python=python3" >> ~/.bashrc
+RUN ln -s /usr/bin/python3 /usr/bin/python
+
+
+
 
 COPY package.json package.json
 COPY prisma prisma
