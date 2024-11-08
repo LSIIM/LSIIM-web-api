@@ -26,7 +26,7 @@ COPY tsconfig.json tsconfig.json
 COPY .env .env
 
 RUN yarn
-RUN npx prisma db seed
+# RUN npx prisma db seed # tirei o seed do build. temos que fazer manualmente dentro do docker se quisermos fazer uma seed
 RUN yarn build
 
 # copia pasta python para o dist

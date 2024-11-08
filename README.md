@@ -6,6 +6,8 @@ build base: `docker build -f "./Dockerfile_base" -t lsiim_api_latest:latest . `
 build compose `docker-compose build`
 up compose `docker-compose up -d`
 
+caso precise fazer uma seed, entre no container ou execute no terminal (se estiver local): `npx prisma db seed`
+
 ## Local
 ### Pré-requisitos:
 
