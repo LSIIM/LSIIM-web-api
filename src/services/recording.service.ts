@@ -33,18 +33,21 @@ const createRecording = async (novoRecording: tNovoRecording[], files: string[])
     // Executa a transação e cria o recording no banco
     const recordingCriado = await prisma.$transaction([...recordingToCreate]);
 
-    // Renomeia a pasta temporária para o ID do novo recording
-    const newFolderPath = path.join( "/videos", `${recordingCriado[0].id}`);
-    if (!fs.existsSync(newFolderPath)) {
-        fs.mkdirSync(newFolderPath, { recursive: true });
-    }
+    // Para cada recording criado, cria uma pasta e move os arquivos
+    recordingCriado.forEach((recording) => {
+        // Cria a nova pasta para o recording específico
+        const newFolderPath = path.join("/videos", `${recording.id}`);
+        if (!fs.existsSync(newFolderPath)) {
+            fs.mkdirSync(newFolderPath, { recursive: true });
+        }
 
-    // Move os arquivos da pasta temporária para a nova pasta
-    files.forEach((file) => {
-        const tempFilePath = path.join(tempFolderPath, file);
-        const newFilePath = path.join(newFolderPath, file);
+        // Move os arquivos da pasta temporária para a nova pasta específica para o recording
+        files.forEach((file) => {
+            const tempFilePath = path.join(tempFolderPath, file);
+            const newFilePath = path.join(newFolderPath, file);
 
-        fs.renameSync(tempFilePath, newFilePath);
+            fs.renameSync(tempFilePath, newFilePath);
+        });
     });
 
     await runPythonScript();
