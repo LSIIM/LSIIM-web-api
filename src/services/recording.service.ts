@@ -6,8 +6,9 @@ import { PartialEntity, tNovoAnnotationVideo, tNovoRecording, tNovoAnnotationRes
 import path from "path";
 import fs from "fs";
 import config from "../config/config";
+
+
 const createRecording = async (novoRecording: tNovoRecording[], files: string[]): Promise<Recording[]> => {
-    
     // Concatena os nomes dos arquivos
     const recordingToCreate = novoRecording.map((recording, index) => {
         return prisma.recording.create({
@@ -24,27 +25,25 @@ const createRecording = async (novoRecording: tNovoRecording[], files: string[])
     });
     // Executa a transação e cria o recording no banco
     const recordingCriado = await prisma.$transaction([...recordingToCreate]);
-
-    const recordingId = recordingCriado[0].id;
-
-    const fileName = files[0];
-
-    const tempFolderPath = path.join(config.recordingPath, fileName.split("_")[0]);
     
-    
-    const newFolderPath = path.join(config.recordingPath, `${recordingId}`);
-    // Renomeia a pasta temporária para o ID do novo recording
-    fs.renameSync(tempFolderPath, newFolderPath);
+    recordingCriado.forEach((recording, index) => {
+        const recordingId = recording.id;
 
-    // renomeia os arquivos de video para removei o uuid antes do -
-    // Move os arquivos da pasta temporária para a nova pasta (depois do _ é o nome do arquivo) para todos os arquivos da nova pasta
-    fs.readdirSync(newFolderPath).forEach((file) => {
-        const newFileName = file.split("_")[1];
-        console.log(`Renomeando ${file} para ${newFileName}`);
-        fs.renameSync(path.join (newFolderPath, file), path.join(newFolderPath, newFileName));
-    }
-    );
-    
+        const fileName = files[index];
+        const tempFolderPath = path.join(config.recordingPath, fileName.split("_")[0]);
+
+        const newFolderPath = path.join(config.recordingPath, `${recordingId}`);
+        // Renomeia a pasta temporária para o ID do novo recording
+        fs.renameSync(tempFolderPath, newFolderPath);
+
+        // renomeia os arquivos de video para remover o uuid antes do -
+        // Move os arquivos da pasta temporária para a nova pasta (depois do _ é o nome do arquivo) para todos os arquivos da nova pasta
+        fs.readdirSync(newFolderPath).forEach((file) => {
+            const newFileName = file.split("_")[1];
+            console.log(`Renomeando ${file} para ${newFileName}`);
+            fs.renameSync(path.join(newFolderPath, file), path.join(newFolderPath, newFileName));
+        });
+    });
 
     // Apagar a pasta temporaria se existe
 
@@ -204,7 +203,7 @@ const createAnnotation = async (
     }));
     //TODO: AJEITAR A DELEÇÕES DA ANOTACAO
     //verificar se existe anotacao para o recordingId passado
-    if (recordingParaAnotacao.annotationVideos.length > 0){
+    if (recordingParaAnotacao.annotationVideos.length > 0) {
         const _deleteEvents = await prisma.annotationEvent.deleteMany({
             where: { annotationVideoId: recordingParaAnotacao.annotationVideos[0].id },
         });
@@ -214,7 +213,7 @@ const createAnnotation = async (
         const _deleteAnnotation = await prisma.annotationVideo.delete({
             where: { id: recordingParaAnotacao.annotationVideos[0].id },
         });
-    };
+    }
 
     //função para verificar se projectVideoType é main
     const isMain = async (projectVideoTypeId: number) => {
@@ -249,7 +248,7 @@ const createAnnotation = async (
         });
     });
 
-    const [...transaction] = await prisma.$transaction([...createdAnnotations]);
+    const transaction = await prisma.$transaction([...createdAnnotations]);
 
     return transaction as unknown as (AnnotationVideo & AnnotationResult)[];
 };
@@ -290,6 +289,22 @@ const queryAnnotatioVideo = async <Key extends keyof AnnotationVideo>(
 
     return annotations as unknown as Pick<AnnotationVideo, Key>[];
 };
+
+//Pegar anotações pelo recordingVideoId
+const getAnnotation = async (recordingVideoId: number): Promise<AnnotationVideo> => {
+    const annotation = await prisma.annotationVideo.findFirst({
+        where: { recordingVideoId },
+        include: {
+            events: {
+                include: { eventType: { select: { name: true } } },
+            },
+            results: true,
+        },
+    });
+    if (!annotation) throw new ApiError(httpStatus.NOT_FOUND, "Anotação não encontrada.");
+
+    return annotation;
+}
 export default {
     createRecording,
     queryRecording,
