@@ -1,8 +1,14 @@
-import httpStatus from '../utils/httpStatus';
+import httpStatus from "../utils/httpStatus";
 import ApiError from "../utils/apiError";
 import catchAsync from "../utils/catchAsync";
 import { resultTypeService } from "../services";
-import { ReqQueryResultType, ReqGetResultType, ReqCreateResultType } from "../validations/resultType.validation";
+import {
+    ReqQueryResultType,
+    ReqGetResultType,
+    ReqCreateResultType,
+    ReqUpdateResultType,
+    ReqDeleteResultType,
+} from "../validations/resultType.validation";
 
 const createResultType = catchAsync(async (req, res) => {
     const validRequest = req as unknown as ReqCreateResultType;
@@ -21,14 +27,29 @@ const queryResultType = catchAsync(async (req, res) => {
 
 const getResultType = catchAsync(async (req, res) => {
     const validRequest = req as unknown as ReqGetResultType;
-
-    const resultType = await resultTypeService.getResultTypeById(validRequest.params.id);
+    const {id} = validRequest.params
+    const resultType = await resultTypeService.getResultTypeById(Number(id));
     res.send(resultType);
 });
 
+const updateResultType = catchAsync(async (req, res) => {
+    const validRequest = req as unknown as ReqUpdateResultType;
+    const eventTypeInfos = { id: Number(validRequest.params.id), ...validRequest.body.data };
 
+    const resultTypeAtualizado = await resultTypeService.updateResultType(eventTypeInfos);
+    res.status(httpStatus.OK).send(resultTypeAtualizado);
+});
+
+const deleteResultType = catchAsync(async (req, res) => {
+    const validRequest = req as unknown as ReqDeleteResultType;
+    const { id } = validRequest.params;
+    await resultTypeService.deleteResultType(Number(id));
+    res.status(httpStatus.NO_CONTENT).send();
+});
 export default {
     createResultType,
     queryResultType,
     getResultType,
+    updateResultType,
+    deleteResultType,
 };

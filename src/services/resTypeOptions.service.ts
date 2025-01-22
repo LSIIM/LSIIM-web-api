@@ -1,17 +1,25 @@
-import {  ResultTypeOption } from "@prisma/client";
+import { ResultTypeOption } from "@prisma/client";
 import httpStatus from "../utils/httpStatus";
 import prisma from "../client";
 import ApiError from "../utils/apiError";
-import { tNovoResultsTypeOptions } from "../types/response";
+import { PartialEntity, tNovoResultsTypeOptions } from "../types/response";
 
 const createResultTypeOptions = async (
+    resultTypeId: number,
     novoResultTypeOptions: tNovoResultsTypeOptions[]
 ): Promise<ResultTypeOption[]> => {
-    const _createResultTypeOptions = prisma.resultTypeOption.createManyAndReturn({
-        data: novoResultTypeOptions,
-    });
+    // const findResultType = await prisma.resultTypeOption.findFirst({
+    //     where: { resultTypeId: Number(resultTypeId) },
+    // });
+    // if (findResultType) throw new ApiError(httpStatus.BAD_REQUEST, "Já existe resultTypeOptions com esse resultTypeId");
 
-    const [resultTypeOptionsCriados] = await prisma.$transaction([_createResultTypeOptions]);
+    const _createResultTypeOptions = novoResultTypeOptions.map((resultTypeOption) =>
+        prisma.resultTypeOption.create({
+            data: { ...resultTypeOption, resultTypeId: resultTypeId },
+        })
+    );
+
+    const resultTypeOptionsCriados = await prisma.$transaction([..._createResultTypeOptions]);
     return resultTypeOptionsCriados;
 };
 
@@ -41,16 +49,46 @@ const queryResultTypeOptions = async <Key extends keyof ResultTypeOption>(
     return resultTypeOptions as Pick<ResultTypeOption, Key>[];
 };
 
-const getResultTypeOptionsById = async (resultTypeOptionsId: number): Promise<ResultTypeOption> => {
+const getResultTypeOptionsById = async (id: number): Promise<ResultTypeOption> => {
     const resultTypeOptions = await prisma.resultTypeOption.findUnique({
-        where: { id: resultTypeOptionsId },
+        where: { id: Number(id) },
     });
 
-    if (!resultTypeOptions) {
-        throw new ApiError(httpStatus.NOT_FOUND, "ResultTypeOptions not found");
-    }
+    if (!resultTypeOptions) throw new ApiError(httpStatus.NOT_FOUND, "ResultTypeOptions not found");
 
     return resultTypeOptions;
 };
 
-export default { createResultTypeOptions, queryResultTypeOptions, getResultTypeOptionsById };
+const updateResultTypeOptions = async (
+    resultTypeinfo: tNovoResultsTypeOptions & PartialEntity<ResultTypeOption, "id">
+): Promise<ResultTypeOption> => {
+    const findResultType = await getResultTypeOptionsById(Number(resultTypeinfo.id));
+    if (!findResultType) throw new ApiError(httpStatus.NOT_FOUND, "Not found");
+
+    const _updateResultTypeOptions = prisma.resultTypeOption.update({
+        where: { id: Number(resultTypeinfo.id) },
+        data: { ...resultTypeinfo },
+    });
+
+    const updatedResultTypeOptions = await prisma.$transaction([_updateResultTypeOptions]);
+    return updatedResultTypeOptions as unknown as ResultTypeOption ;
+};
+
+const deleteResultTypeOptions = async (id: number): Promise<void> => {
+    const findResultType = await getResultTypeOptionsById(Number(id));
+    if (!findResultType) throw new ApiError(httpStatus.NOT_FOUND, "Not found");
+
+    const _deleteResultTypeOptions = prisma.resultTypeOption.delete({
+        where: { id: Number(id) },
+    });
+
+    await prisma.$transaction([_deleteResultTypeOptions]);
+};
+
+export default {
+    createResultTypeOptions,
+    queryResultTypeOptions,
+    getResultTypeOptionsById,
+    updateResultTypeOptions,
+    deleteResultTypeOptions,
+};

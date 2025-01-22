@@ -1,4 +1,4 @@
-import httpStatus from '../utils/httpStatus';
+import httpStatus from "../utils/httpStatus";
 import tokenService from "./token.service";
 import userService from "./user.service";
 import ApiError from "../utils/apiError";
@@ -20,13 +20,13 @@ const loginUserWithEmailAndPassword = async (email: string, password: string): P
         "id",
         "name",
         "email",
-        "role",
         "documento",
+        "isSysAdmin",
         "createdAt",
         "updatedAt",
         "password",
     ]);
-    
+
     if (!user || !(await isPasswordMatch(password, user.password as string)))
         throw new ApiError(httpStatus.UNAUTHORIZED, "Usuário não encontrado");
 
@@ -66,7 +66,7 @@ const logout = async ({ refreshToken, accessToken }: { refreshToken: string; acc
     if (!refreshTokenData || !accessTokenData) {
         throw new ApiError(httpStatus.NOT_FOUND, "Token não encontrado.");
     }
-    const batch = await prisma.token.deleteMany({ where: { id: { in: [refreshTokenData.id, accessTokenData.id] } } });
+    await prisma.token.deleteMany({ where: { id: { in: [refreshTokenData.id, accessTokenData.id] } } });
 };
 
 export default {

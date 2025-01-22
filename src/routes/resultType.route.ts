@@ -22,12 +22,28 @@ router
         }
     });
 
-router.get("/:id", yupValidate(resultTypeValidation.getResultTypeById), (req, res, next) => {
-    try {
-        resultTypeController.getResultType(req, res, next);
-    } catch (error) {
-        next(error);
-    }
-});
+router
+    .route("/:id")
+    .get(yupValidate(resultTypeValidation.getResultTypeById), (req, res, next) => {
+        try {
+            resultTypeController.getResultType(req, res, next);
+        } catch (error) {
+            next(error);
+        }
+    })
+    .patch(yupValidate(resultTypeValidation.updateResultType), (req, res, next) => {
+        try {
+            resultTypeController.updateResultType(req, res, next);
+        } catch (error) {
+            next(error);
+        }
+    })
+    .delete(yupValidate(resultTypeValidation.deleteResultType), (req, res, next) => {
+        try {
+            resultTypeController.deleteResultType(req, res, next);
+        } catch (error) {
+            next(error);
+        }
+    });
 
 export default router;

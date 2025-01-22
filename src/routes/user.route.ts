@@ -10,7 +10,7 @@ const router = express.Router();
 
 router
     .route("/")
-    .post(auth('manageUsers'), yupValidate(userValidation.createUser), (req, res, next) => {
+    .post(yupValidate(userValidation.createUser), (req, res, next) => {
         try {
             const validRequest = req as unknown as ReqCreateUser;
             const arrParams = validRequest.body.data;

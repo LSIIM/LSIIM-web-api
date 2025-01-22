@@ -26,12 +26,28 @@ router
         }
     });
 
-router.route("/:id").get(yupValidate(eventTypeValidation.getEventType), (req, res, next) => {
-    try {
-        eventTypeController.getEventType(req, res, next);
-    } catch (error) {
-        next(error);
-    }
-});
+router
+    .route("/:id")
+    .get(yupValidate(eventTypeValidation.getEventType), (req, res, next) => {
+        try {
+            eventTypeController.getEventType(req, res, next);
+        } catch (error) {
+            next(error);
+        }
+    })
+    .patch(yupValidate(eventTypeValidation.updateEventType), (req, res, next) => {
+        try {
+            eventTypeController.updateEventType(req, res, next);
+        } catch (error) {
+            next(error);
+        }
+    })
+    .delete(yupValidate(eventTypeValidation.deleteEventType), (req, res, next) => {
+        try {
+            eventTypeController.deleteEventType(req, res, next);
+        } catch (error) {
+            next(error);
+        }
+    });
 
 export default router;

@@ -42,6 +42,8 @@ const createRecording = catchAsync(async (req, res) => {
     return;
 });
 
+
+
 const queryRecording = catchAsync(async (req, res) => {
     const validRequest = req as unknown as ReqQueryRecording;
 
@@ -51,7 +53,7 @@ const queryRecording = catchAsync(async (req, res) => {
 const getRecording = catchAsync(async (req, res) => {
     const validRequest = req as unknown as ReqGetRecording;
 
-    const recording = await recordingService.getRecordingById(validRequest.params.id);
+    const recording = await recordingService.getRecordingById(Number(validRequest.params.id));
     res.send(recording);
 });
 

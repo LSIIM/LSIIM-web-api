@@ -9,8 +9,8 @@ const createPatient = async (novoPatient: tNovoPatient[]): Promise<Patient[]> =>
         return prisma.patient.create({
             data: {
                 ...patient,
-                patientSpecialFeatures: {
-                    create: patient.patientSpecialFeatures,
+                projects: {
+                    create: patient.projects.map((ppsf) => ({ ...ppsf })),
                 },
             },
         });
@@ -31,17 +31,16 @@ const createPatient = async (novoPatient: tNovoPatient[]): Promise<Patient[]> =>
  * @returns {Promise<QueryResult>}
  */
 const queryPatient = async <Key extends keyof Patient>(
-    query: { limit?: number; page?: number; sortBy?: Key; sortType?: "asc" | "desc"; where?: { name?: string } },
-    keys: Key[] = [
-        "id",
-        "name",
-        "birthDate",
-        "observation",
-        "patientSpecialFeatures",
-        "createdAt",
-        "updatedAt",
-    ] as Key[]
+    query: {
+        limit?: number;
+        page?: number;
+        sortBy?: Key;
+        sortType?: "asc" | "desc";
+        where?: { name?: string; birthDate?: Date; projectId?: number };
+    },
+    keys: Key[] = ["id", "name", "birthDate", "observation", "projects", "ativo"] as Key[]
 ): Promise<Pick<Patient, Key>[]> => {
+    const { name, birthDate, projectId } = query.where ?? {};
     const limit = query.limit;
     const page = query.page;
     const sortBy = query.sortBy ?? "name";
@@ -49,7 +48,15 @@ const queryPatient = async <Key extends keyof Patient>(
 
     //Busca informações do BEBE
     const patient = await prisma.patient.findMany({
-        where: query.where,
+        where: {
+            name,
+            birthDate,
+            projects: {
+                some: {
+                    projectId,
+                },
+            },
+        },
         select: keys.reduce((acc, key) => ({ ...acc, [key]: true }), {}),
         orderBy: sortBy ? { [sortBy]: sortType } : undefined,
         take: limit,
@@ -66,15 +73,7 @@ const queryPatient = async <Key extends keyof Patient>(
 
 const getPatientById = async <Key extends keyof Patient>(
     id: number,
-    keys: Key[] = [
-        "id",
-        "name",
-        "birthDate",
-        "observation",
-        "patientSpecialFeatures",
-        "createdAt",
-        "updatedAt",
-    ] as Key[]
+    keys: Key[] = ["id", "name", "birthDate", "observation", "projects", "ativo", "createdAt", "updatedAt"] as Key[]
 ): Promise<Pick<Patient, Key> | null> => {
     return (await prisma.patient.findUnique({
         where: { id: Number(id) },
@@ -88,34 +87,31 @@ const getPatientById = async <Key extends keyof Patient>(
  * @return {Promise<Patient>}
  */
 const updatePatient = async <Key extends keyof Patient>(
-    dadosPatientInfo: {
-        name?: string;
-        birthDate?: Date;
-        isPremature?: boolean;
-        gestationalAge?: number;
-        atipicidade?: string;
-    } & PartialEntity<Patient, "id">,
-    keys: Key[] = [
-        "id",
-        "name",
-        "birthDate",
-        "observation",
-        "patientSpecialFeatures",
-        "createdAt",
-        "updatedAt",
-    ] as Key[]
+    dadosPatientInfo: tNovoPatient & PartialEntity<Patient, "id">,
+    keys: Key[] = ["id", "name", "birthDate", "observation", "projects", "ativo", "createdAt", "updatedAt"] as Key[]
 ): Promise<Pick<Patient, Key> | null> => {
     //Busca bebê info pelo id, confere se existe
     const patientToEdit = await getPatientById(dadosPatientInfo.id);
     if (!patientToEdit) throw new ApiError(httpStatus.NOT_FOUND, "Informações do bebê não encontradas.");
 
+    const _deletePatientProjects = prisma.patientProjectSpecialFeature.deleteMany({
+        where: {
+            patientId: dadosPatientInfo.id,
+        },
+    });
+
     const updatePatient = prisma.patient.update({
         where: { id: dadosPatientInfo.id },
-        data: dadosPatientInfo,
+        data: {
+            ...dadosPatientInfo,
+            projects: {
+                create: dadosPatientInfo.projects.map((ppsf) => ({ ...ppsf })),
+            },
+        },
         select: keys.reduce((acc, key) => ({ ...acc, [key]: true }), {}),
     });
 
-    const [updatedPatient] = await prisma.$transaction([updatePatient]);
+    const [_, updatedPatient] = await prisma.$transaction([_deletePatientProjects, updatePatient]);
 
     return updatedPatient as Pick<Patient, Key> | null;
 };
@@ -126,10 +122,15 @@ const updatePatient = async <Key extends keyof Patient>(
  */
 const deletePatient = async (id: number): Promise<void> => {
     //Busca bebê info pelo id, confere se existe
-    const patientInfoToDelete = await getPatientById(id);
+    const patientInfoToDelete = await getPatientById(Number(id));
     if (!patientInfoToDelete) throw new ApiError(httpStatus.NOT_FOUND, "Informações do bebê não encontradas.");
 
-    await prisma.patient.delete({ where: { id } });
+    await prisma.patient.update({
+        where: { id: Number(id) },
+        data: {
+            ativo: false,
+        },
+    });
 };
 export default {
     createPatient,

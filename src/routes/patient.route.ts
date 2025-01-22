@@ -10,9 +10,6 @@ router
     .route("/")
     .post(yupValidate(babyValidation.createPatient), (req, res, next) => {
         try {
-            // const validRequest = req as unknown as ReqCreateBabyInfo;
-            // const arrParams = validRequest.body.data;
-
             patientController.createPatient(req, res, next);
         } catch (error) {
             next(error);
@@ -20,24 +17,34 @@ router
     })
     .get(yupValidate(babyValidation.queryPatient), (req, res, next) => {
         try {
-            const validRequest = req as unknown as ReqQueryPatient;
-            const params = validRequest.query.where;
-
             patientController.queryPatient(req, res, next);
         } catch (error) {
             next(error);
         }
     });
 
-router.route("/:id").get(yupValidate(babyValidation.getPatient), (req, res, next) => {
-    try {
-        // const validRequest = req as unknown as ReqGetBabyInfo;
-        // const params = validRequest.params;
-
-        patientController.getPatient(req, res, next);
-    } catch (error) {
-        next(error);
-    }
-});
+router
+    .route("/:id")
+    .get(yupValidate(babyValidation.getPatient), (req, res, next) => {
+        try {
+            patientController.getPatient(req, res, next);
+        } catch (error) {
+            next(error);
+        }
+    })
+    .patch(yupValidate(babyValidation.updatePatient), (req, res, next) => {
+        try {
+            patientController.updatePatient(req, res, next);
+        } catch (error) {
+            next(error);
+        }
+    })
+    .delete(yupValidate(babyValidation.deletePatient), (req, res, next) => {
+        try {
+            patientController.deletePatient(req, res, next);
+        } catch (error) {
+            next(error);
+        }
+    });
 
 export default router;

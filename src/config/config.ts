@@ -1,7 +1,6 @@
 import dotenv from 'dotenv';
 import path from 'path';
 import Joi from 'joi'; //
-import e from 'express';
 
 
 dotenv.config({path: path.join(process.cwd(), '.env')})

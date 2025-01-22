@@ -6,10 +6,8 @@ import { recordingController } from "../controllers";
 import { fnSubjects } from "../config/subjects";
 import upload from "../middlewares/upload";
 import { reqInterceptor } from "../middlewares/reqInterceptor";
+
 const router = express.Router();
-// Definição da rota para upload
-
-
 router
     .route("/")
     .post(

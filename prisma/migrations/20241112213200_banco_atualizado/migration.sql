@@ -123,7 +123,7 @@ CREATE TABLE "RecordingVideo" (
     "projectVideoTypeId" INTEGER NOT NULL,
     "recordingId" INTEGER NOT NULL,
     "camIdUsed" INTEGER NOT NULL,
-    "file" TEXT NOT NULL,
+    "file" TEXT,
 
     CONSTRAINT "RecordingVideo_pkey" PRIMARY KEY ("id")
 );

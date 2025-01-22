@@ -2,6 +2,22 @@ import { AnnotationVideo, MoveInfo, Project, ProjectVideoType } from "@prisma/cl
 import httpStatus from "../utils/httpStatus";
 import prisma from "../client";
 import ApiError from "../utils/apiError";
+import { PartialEntity, tNovoMoveInfo, tNovoProject, tNovoProjectVideoType } from "../types/response";
+
+/**
+ * Create a project
+ * @param {Project} project - Projeto a ser criado
+ * @returns {Promise<Project>}
+ */
+const createProject = async (novoProject: tNovoProject[]): Promise<Project[]> => {
+    const project = novoProject.map((project) => {
+        return prisma.project.createManyAndReturn({
+            data: { ...project },
+        });
+    });
+    const [projectCreated] = await prisma.$transaction([...project]);
+    return projectCreated;
+};
 
 /**
  * Query for project video type
@@ -13,7 +29,6 @@ import ApiError from "../utils/apiError";
  * @param {Object} [query.where] - Opções de where para usar no prisma
  * @returns {Promise<QueryResult>}
  */
-
 const queryProject = async <Key extends keyof Project>(
     query: {
         limit?: number;
@@ -27,6 +42,7 @@ const queryProject = async <Key extends keyof Project>(
         "projectName",
         "description",
         "patientSpecialFetauresTemplate",
+        "ativo",
         "createdAt",
         "updatedAt",
         "movesInfo",
@@ -60,18 +76,60 @@ const queryProject = async <Key extends keyof Project>(
 
 const getProjectById = async <Key extends keyof Project>(
     id: number,
-    keys: Key[] = ["id", "projectName", "createdAt", "updatedAt", "projectsVideoTypes"] as Key[]
+    keys: Key[] = [
+        "id",
+        "projectName",
+        "patientSpecialFetauresTemplate",
+        "description",
+        "ativo",
+        "createdAt",
+        "updatedAt",
+        "projectsVideoTypes",
+    ] as Key[]
 ): Promise<Pick<Project, Key>> => {
     const project = await prisma.project.findUnique({
         where: { id: Number(id) },
-        include: {
-            movesInfo: true,
-        },
+        select: { ...keys.reduce((acc, key) => ({ ...acc, [key]: true }), {}), movesInfo: true },
     });
 
     if (!project) throw new ApiError(httpStatus.NOT_FOUND, "Projeto não encontrado.");
 
-    return project;
+    return project as unknown as Pick<Project, Key>;
+};
+const updateProject = async (projectInfos: tNovoProject & PartialEntity<Project, "id">) => {
+    const projectToEdit = await getProjectById(Number(projectInfos.id));
+    if (!projectToEdit) throw new ApiError(httpStatus.NOT_FOUND, "Projeto não encontrado.");
+    const updateProject = prisma.project.update({
+        where: { id: Number(projectInfos.id) },
+        data: {
+            ...projectInfos,
+        },
+    });
+    const projectUpdated = await prisma.$transaction([updateProject]);
+    return projectUpdated;
+};
+
+const deleteProject = async (id: number) => {
+    const projectToDelete = await getProjectById(Number(id));
+    if (!projectToDelete) throw new ApiError(httpStatus.NOT_FOUND, "Projeto não encontrado.");
+    const deleteProject = prisma.project.update({
+        where: { id: Number(id) },
+        data: {
+            ativo: false,
+        },
+    });
+    await prisma.$transaction([deleteProject]);
+};
+
+//!PROJECT VIDEO TYPE
+const createProjectVideoType = async (projectVideoType: tNovoProjectVideoType[]): Promise<ProjectVideoType[]> => {
+    const createProjectVideoType = projectVideoType.map((projectVideoType) => {
+        return prisma.projectVideoType.create({
+            data: { ...projectVideoType },
+        });
+    });
+    const [projectVideoTypeCreated] = await prisma.$transaction([...createProjectVideoType]);
+    return [projectVideoTypeCreated];
 };
 
 /**
@@ -92,7 +150,7 @@ const queryProjectVideoType = async <Key extends keyof ProjectVideoType>(
         sortBy?: Key;
         sortType?: "asc" | "desc";
     },
-    keys: Key[] = ["id", "isMain", "typeName"] as Key[]
+    keys: Key[] = ["id", "isMain", "typeName", "project"] as Key[]
 ): Promise<Pick<ProjectVideoType, Key>[]> => {
     const limit = query.limit;
     const page = query.page;
@@ -112,6 +170,53 @@ const queryProjectVideoType = async <Key extends keyof ProjectVideoType>(
     return projectVideoTypes as Pick<ProjectVideoType, Key>[];
 };
 
+const getProjectVideoTypeById = async <Key extends keyof ProjectVideoType>(
+    id: number,
+    keys: Key[] = ["id", "isMain", "typeName", "projectId", "project"] as Key[]
+): Promise<Pick<ProjectVideoType, Key>> => {
+    const projectVideoType = await prisma.projectVideoType.findUnique({
+        where: { id: Number(id) },
+        select: keys.reduce((acc, key) => ({ ...acc, [key]: true }), {}),
+    });
+    if (!projectVideoType) throw new ApiError(httpStatus.NOT_FOUND, "Projeto Video Type não encontrado.");
+    return projectVideoType as Pick<ProjectVideoType, Key>;
+};
+
+const updateProjectVideoType = async (
+    projectVideoType: tNovoProjectVideoType & PartialEntity<ProjectVideoType, "id">
+): Promise<ProjectVideoType> => {
+    const projectVideoTypeToEdit = await getProjectVideoTypeById(Number(projectVideoType.id));
+    if (!projectVideoTypeToEdit) throw new ApiError(httpStatus.NOT_FOUND, "Projeto Video Type não encontrado.");
+    const updateProjectVideoType = prisma.projectVideoType.update({
+        where: { id: Number(projectVideoType.id) },
+        data: {
+            ...projectVideoType,
+        },
+    });
+    const projectVideoTypeUpdated = await prisma.$transaction([updateProjectVideoType]);
+    return projectVideoTypeUpdated as unknown as ProjectVideoType;
+};
+
+const deleteProjectVideoType = async (id: number): Promise<void> => {
+    const projectVideoTypeToDelete = await getProjectVideoTypeById(Number(id));
+    if (!projectVideoTypeToDelete) throw new ApiError(httpStatus.NOT_FOUND, "Projeto Video Type não encontrado.");
+    const deleteProjectVideoType = prisma.projectVideoType.delete({
+        where: { id: Number(id) },
+    });
+    await prisma.$transaction([deleteProjectVideoType]);
+};
+
+//!MOVES INFO
+const createMovesInfo = async (projectId: number, movesInfo: tNovoMoveInfo[]): Promise<MoveInfo[]> => {
+    const _createMovesInfo = movesInfo.map((moveInfo) => {
+        return prisma.moveInfo.create({
+            data: { ...moveInfo, projectId: projectId },
+        });
+    });
+
+    const movesInfoCreated = await prisma.$transaction([..._createMovesInfo]);
+    return movesInfoCreated;
+};
 /**
  *
  * @param projectId - Id do projeto
@@ -130,7 +235,7 @@ const queryMovesInfo = async <Key extends keyof MoveInfo>(
         sortBy?: Key;
         sortType?: "asc" | "desc";
     },
-    keys: Key[] = ["id", "description"] as Key[]
+    keys: Key[] = ["id", "description", "projectId", "project", "defaultCamId", "defaultCam"] as Key[]
 ): Promise<Pick<MoveInfo, Key>[]> => {
     const limit = query.limit;
     const page = query.page;
@@ -148,6 +253,44 @@ const queryMovesInfo = async <Key extends keyof MoveInfo>(
     });
 
     return moves as Pick<MoveInfo, Key>[];
+};
+
+const getMoveInfoById = async <Key extends keyof MoveInfo>(
+    id: number,
+    keys: Key[] = ["id", "description", "projectId", "project", "defaultCamId", "defaultCam"] as Key[]
+): Promise<Pick<MoveInfo, Key>> => {
+    const moveInfo = await prisma.moveInfo.findUnique({
+        where: { id: Number(id) },
+        select: keys.reduce((acc, key) => ({ ...acc, [key]: true }), {}),
+    });
+    if (!moveInfo) throw new ApiError(httpStatus.NOT_FOUND, "Move Info não encontrado.");
+    return moveInfo as Pick<MoveInfo, Key>;
+};
+
+const updateMoveInfo = async (moveInfo: tNovoMoveInfo & PartialEntity<MoveInfo, "id">): Promise<MoveInfo> => {
+    const moveInfoToEdit = await getMoveInfoById(Number(moveInfo.id));
+    if (!moveInfoToEdit) throw new ApiError(httpStatus.NOT_FOUND, "Move Info não encontrado.");
+
+    const updateMoveInfo = prisma.moveInfo.update({
+        where: { id: Number(moveInfo.id) },
+        data: {
+            ...moveInfo,
+        },
+    });
+
+    const moveInfoUpdated = await prisma.$transaction([updateMoveInfo]);
+    return moveInfoUpdated as unknown as MoveInfo;
+};
+
+const deleteMoveInfo = async (id: number): Promise<void> => {
+    const moveInfoToDelete = await getMoveInfoById(Number(id));
+    if (!moveInfoToDelete) throw new ApiError(httpStatus.NOT_FOUND, "Move Info não encontrado.");
+
+    const deleteMoveInfo = prisma.moveInfo.delete({
+        where: { id: Number(id) },
+    });
+
+    await prisma.$transaction([deleteMoveInfo]);
 };
 
 const queryEventsResults = async <Key extends keyof AnnotationVideo>(
@@ -186,9 +329,23 @@ const queryEventsResults = async <Key extends keyof AnnotationVideo>(
 };
 
 export default {
-    queryProjectVideoType,
+    createProject,
     getProjectById,
+    updateProject,
+    deleteProject,
     queryProject,
+
+    createProjectVideoType,
+    queryProjectVideoType,
+    getProjectVideoTypeById,
+    updateProjectVideoType,
+    deleteProjectVideoType,
+
+    createMovesInfo,
     queryMovesInfo,
+    getMoveInfoById,
+    updateMoveInfo,
+    deleteMoveInfo,
+
     queryEventsResults,
 };

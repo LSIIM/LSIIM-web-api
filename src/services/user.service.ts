@@ -1,5 +1,5 @@
-import { User, Role } from "@prisma/client";
-import httpStatus from '../utils/httpStatus';
+import { User } from "@prisma/client";
+import httpStatus from "../utils/httpStatus";
 import prisma from "../client";
 import ApiError from "../utils/apiError";
 import { encryptPassword } from "../utils/encryption";
@@ -10,7 +10,7 @@ import { PartialEntity, tNovoUser } from "../types/response";
  * @param {Object} newUsers => Usuários a serem criados
  * @returns {Promise<User[]>}
  */
-const createUsers = async (newUsers: tNovoUser[]): Promise<User[]> => {
+const createUsers = async (newUsers: tNovoUser[]) => {
     //Verifica a existência de e-mais repetidos
     const userWithSameEmail = await prisma.user.findFirst({
         select: { id: true, email: true },
@@ -19,22 +19,33 @@ const createUsers = async (newUsers: tNovoUser[]): Promise<User[]> => {
     if (userWithSameEmail) throw new ApiError(httpStatus.BAD_REQUEST, "E-mail já cadastrado");
     // Gera as senhas encriptadas antes da criação
     for (const user of newUsers) {
-        if (!user.password) user.password = user.documento; // Atribui o CPF à senha se estiver vazia
-
+        if (!user.password) user.password = user.documento; // Atribui o documento à senha se estiver vazia
         user.password = await encryptPassword(user.password);
     }
     //TODO - não retornar senha
-    const createUsers = prisma.user.createManyAndReturn({
-        data: newUsers.map(({ name, email, password, documento, role }) => ({
-            name,
-            email,
-            password,
-            documento,
-            role,
-        })),
+    const createUsers = newUsers.map((user) => {
+        return prisma.user.create({
+            data: {
+                name: user.name,
+                email: user.email,
+                password: user.password,
+                documento: user.documento,
+                isSysAdmin: user.isSysAdmin,
+                userProjects:
+                    user.isSysAdmin === false 
+                        ? {
+                              create: {
+                                  projectId: user.userProjects?.projectId ?? 0,
+                                  isProjectAdmin: user.userProjects?.isProjectAdmin ?? false,
+                              },
+                          }
+                        : undefined,
+            },
+            omit:{password:true}
+        });
     });
 
-    const [usuarioCriados] = await prisma.$transaction([createUsers]);
+    const usuarioCriados = await prisma.$transaction([...createUsers]);
 
     return usuarioCriados;
 };
@@ -50,8 +61,8 @@ const createUsers = async (newUsers: tNovoUser[]): Promise<User[]> => {
  * @returns {Promise<QueryResult>}
  */
 const queryUsers = async <Key extends keyof User>(
-    query: { limit?: number; page?: number; sortBy?: Key; sortType?: "asc" | "desc"; where?: { role?: Role } },
-    keys: Key[] = ["id", "name", "email", "role", "documento", "createdAt", "updatedAt"] as Key[]
+    query: { limit?: number; page?: number; sortBy?: Key; sortType?: "asc" | "desc"; where?: { name?: string } },
+    keys: Key[] = ["id", "name", "email", "isSysAdmin", "documento", "createdAt", "updatedAt"] as Key[]
 ): Promise<Pick<User, Key>[]> => {
     const limit = query.limit;
     const page = query.page;
@@ -94,7 +105,7 @@ const getUserById = async <Key extends keyof User>(
  */
 const getUserByEmail = async <Key extends keyof User>(
     email: string,
-    keys: Key[] = ["id", "email", "name", "password", "role", "documento", "createdAt", "updatedAt"] as Key[]
+    keys: Key[] = ["id", "email", "name", "password", "isSysAdmin", "documento", "createdAt", "updatedAt"] as Key[]
 ): Promise<Pick<User, Key> | null> => {
     return prisma.user.findUnique({
         where: { email },
@@ -123,7 +134,7 @@ const blOutroUsuarioComEsteEmail = async (email: string, userId?: number): Promi
  * @returns {Promise<User>}
  */
 const updateUserById = async <Key extends keyof User>(
-    dadosUser: { name?: string; email?: string; password?: string } & PartialEntity<User, "id">,
+    dadosUser: { name?: string; email?: string; password?: string; document?: string } & PartialEntity<User, "id">,
     keys: Key[] = ["id", "email", "name", "role", "documento", "updatedAt", "createdAt"] as Key[]
 ): Promise<Pick<User, Key> | null> => {
     const user = await getUserById(dadosUser.id);
@@ -155,7 +166,7 @@ const deleteUseById = async (id: number): Promise<void> => {
     //TODO - EVITAR DELETES DE ADMINS(caso único admin)
 
     await prisma.user.delete({
-        where: { id: Number(user.id )},
+        where: { id: Number(user.id) },
     });
 };
 

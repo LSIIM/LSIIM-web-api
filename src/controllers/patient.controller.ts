@@ -2,7 +2,13 @@ import httpStatus from "../utils/httpStatus";
 import ApiError from "../utils/apiError";
 import catchAsync from "../utils/catchAsync";
 import { patientService } from "../services";
-import { ReqCreatePatient, ReqGetPatient, ReqQueryPatient } from "../validations/patient.validation";
+import {
+    ReqCreatePatient,
+    ReqGetPatient,
+    ReqQueryPatient,
+    ReqUpdatePatient,
+    ReqDeletePatient,
+} from "../validations/patient.validation";
 
 const createPatient = catchAsync(async (req, res) => {
     const validRequest = req as unknown as ReqCreatePatient;
@@ -28,8 +34,27 @@ const getPatient = catchAsync(async (req, res) => {
     res.send(babyInfo);
 });
 
+const updatePatient = catchAsync(async (req, res) => {
+    const validRequest = req as unknown as ReqUpdatePatient;
+    const dadosPatientInfo = { id: validRequest.params.id, ...validRequest.body.data };
+
+    const babyInfo = await patientService.updatePatient(dadosPatientInfo);
+    res.send(babyInfo);
+});
+
+const deletePatient = catchAsync(async (req, res) => {
+    const validRequest = req as unknown as ReqDeletePatient;
+    const patientExists = await patientService.getPatientById(validRequest.params.id);
+    if (!patientExists) throw new ApiError(httpStatus.NOT_FOUND, "Patient not found");
+
+    await patientService.deletePatient(validRequest.params.id);
+    res.status(httpStatus.NO_CONTENT).send();
+});
+
 export default {
     createPatient,
     queryPatient,
     getPatient,
+    updatePatient,
+    deletePatient,
 };

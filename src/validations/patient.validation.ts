@@ -24,20 +24,18 @@ const createPatient: yup.ObjectSchema<tValidCreateSchema<tNovoPatient>> = yup.ob
                                 .min(3, "O nome deve ter no mínimo 3 caracteres.")
                                 .max(50, "O nome deve ter no máximo 50 caracteres."),
                             birthDate: yup.date().required("Deve ser passado uma data de nascimento."),
-                            isPremature: yup.boolean().required("Deve ser passado se é prematuro."),
-                            gestationalAge: yup.number().required("Deve ser passado a idade gestacional(semanas)."),
-                            atipicidade: yup.string(),
-                            patientSpecialFeatures: yup
+                            observation: yup.string().required("Deve ser passado uma observação."),
+                            projects: yup
                                 .array(
                                     yup
                                         .object({
-                                            specialFeatureTemplate: yup
-                                                .string()
-                                                .required("Deve ser passado um specialFeatureTemplate."),
                                             projectId: yup
                                                 .number()
                                                 .integer()
                                                 .required("Deve ser passado um projectId."),
+                                            patientSpecialFeatures: yup
+                                                .object()
+                                                .required("Deve ser passado um specialFeatureTemplate."),
                                         })
                                         .noUnknown(true)
                                         .strict()
@@ -56,7 +54,7 @@ const createPatient: yup.ObjectSchema<tValidCreateSchema<tNovoPatient>> = yup.ob
 });
 
 const queryPatient: yup.ObjectSchema<
-    tValidQuerySchema<PartialEntity<Patient, "name">, PartialEntity<Patient, "name" | "createdAt">>
+    tValidQuerySchema<PartialEntity<Patient, "name" | "birthDate">, PartialEntity<Patient, "name" | "createdAt">>
 > = yup.object({
     query: yup
         .object({
@@ -67,6 +65,8 @@ const queryPatient: yup.ObjectSchema<
             where: yup
                 .object({
                     name: yup.string(),
+                    birthDate: yup.date(),
+                    projectId: yup.number().integer(),
                 })
                 .noUnknown(true)
                 .strict(),
@@ -87,12 +87,71 @@ const getPatient: yup.ObjectSchema<tValidParamsSchema<PartialEntity<Patient, "id
         .noUnknown(true),
 });
 
+const updatePatient: yup.ObjectSchema<tValidUpdateSchema<PartialEntity<Patient, "id">, tNovoPatient>> = yup.object({
+    params: yup
+        .object({
+            id: yup
+                .number()
+                .integer()
+                .required("Deve ser passado um id.")
+                .transform((value) => (typeof value === "string" ? parseInt(value) : value)),
+        })
+        .required("Deve ser passado um params.")
+        .noUnknown(true),
+    body: yup
+        .object({
+            data: yup
+                .object({
+                    name: yup
+                        .string()
+                        .required("Deve ser passado um nome.")
+                        .min(3, "O nome deve ter no mínimo 3 caracteres.")
+                        .max(50, "O nome deve ter no máximo 50 caracteres."),
+                    birthDate: yup.date().required("Deve ser passado uma data de nascimento."),
+                    observation: yup.string().required("Deve ser passado uma observação."),
+                    projects: yup
+                        .array(
+                            yup
+                                .object({
+                                    projectId: yup.number().integer().required("Deve ser passado um projectId."),
+                                    patientSpecialFeatures: yup
+                                        .object()
+                                        .required("Deve ser passado um specialFeatureTemplate."),
+                                })
+                                .noUnknown(true)
+                                .strict()
+                        )
+                        .required("Deve ser passado um array de projects."),
+                })
+                .noUnknown(true)
+                .strict(),
+        })
+        .noUnknown(true)
+        .strict(),
+});
+
+const deletePatient: yup.ObjectSchema<tValidDeleteSchema<PartialEntity<Patient, "id">>> = yup.object({
+    params: yup
+        .object({
+            id: yup
+                .number()
+                .integer()
+                .required("Deve ser passado um id.")
+                .transform((value) => (typeof value === "string" ? parseInt(value) : value)),
+        })
+        .noUnknown(true)
+});
+
 export type ReqCreatePatient = InferType<typeof createPatient>;
 export type ReqQueryPatient = InferType<typeof queryPatient>;
 export type ReqGetPatient = InferType<typeof getPatient>;
+export type ReqUpdatePatient = InferType<typeof updatePatient>;
+export type ReqDeletePatient = InferType<typeof deletePatient>;
 
 export default {
     createPatient,
     queryPatient,
     getPatient,
+    updatePatient,
+    deletePatient,
 };

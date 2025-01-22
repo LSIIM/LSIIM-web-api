@@ -1,17 +1,28 @@
-import {  ResultTypeOption } from "@prisma/client";
+import { ResultTypeOption } from "@prisma/client";
 import yup from "../config/yup";
 import {
     tNovoResultsTypeOptions,
     PartialEntity,
-    tValidCreateSchema,
     tValidDeleteSchema,
     tValidParamsSchema,
     tValidQuerySchema,
     tValidUpdateSchema,
+    tValidCreateSchemaWithParams,
 } from "../types/response";
 import { InferType } from "yup";
 
-const createResultTypeOptions: yup.ObjectSchema<tValidCreateSchema<tNovoResultsTypeOptions>> = yup.object({
+const createResultTypeOptions: yup.ObjectSchema<
+    tValidCreateSchemaWithParams<PartialEntity<ResultTypeOption, "resultTypeId">, tNovoResultsTypeOptions>
+> = yup.object({
+    params: yup
+        .object({
+            resultTypeId: yup
+                .number()
+                .integer()
+                .required("Deve ser passado um resultTypeId.")
+                .transform((value) => (typeof value === "string" ? parseInt(value) : value)),
+        })
+        .noUnknown(true),
     body: yup
         .object({
             data: yup
@@ -20,7 +31,6 @@ const createResultTypeOptions: yup.ObjectSchema<tValidCreateSchema<tNovoResultsT
                         .object({
                             name: yup.string().required("Deve ser passado um name."),
                             description: yup.string().required("Deve ser passado um description."),
-                            resultTypeId: yup.number().required("Deve ser passado um resultTypeId."),
                         })
                         .noUnknown(true)
                         .strict()
@@ -56,14 +66,66 @@ const getResultTypeOptionsById: yup.ObjectSchema<tValidParamsSchema<PartialEntit
     yup.object({
         params: yup
             .object({
-                id: yup.number().integer().required("Deve ser passado um id."),
+                id: yup
+                    .number()
+                    .integer()
+                    .required("Deve ser passado um id.")
+                    .transform((value) => (typeof value === "string" ? parseInt(value) : value)),
             })
-            .noUnknown(true)
-            .strict(),
+            .required("Deve ser passado um params.")
+            .noUnknown(true),
     });
+
+const updateResultTypeOptions: yup.ObjectSchema<
+    tValidUpdateSchema<PartialEntity<ResultTypeOption, "id">, tNovoResultsTypeOptions>
+> = yup.object({
+    params: yup
+        .object({
+            id: yup
+                .number()
+                .integer()
+                .required("Deve ser passado um id.")
+                .transform((value) => (typeof value === "string" ? parseInt(value) : value)),
+        })
+        .noUnknown(true),
+    body: yup
+        .object({
+            data: yup
+                .object({
+                    name: yup.string().required("Deve ser passado um name."),
+                    description: yup.string().required("Deve ser passado um description."),
+                })
+                .noUnknown(true)
+                .strict(),
+        })
+        .noUnknown(true)
+        .strict(),
+});
+
+const deleteResultTypeOptions: yup.ObjectSchema<tValidDeleteSchema<PartialEntity<ResultTypeOption, "id">>> = yup.object(
+    {
+        params: yup
+            .object({
+                id: yup
+                    .number()
+                    .integer()
+                    .required("Deve ser passado um id.")
+                    .transform((value) => (typeof value === "string" ? parseInt(value) : value)),
+            })
+            .noUnknown(true),
+    }
+);
 
 export type ReqCreateResultTypeOptions = InferType<typeof createResultTypeOptions>;
 export type ReqQueryResultTypeOptions = InferType<typeof queryResultTypeOptions>;
 export type ReqGetResultTypeOptions = InferType<typeof getResultTypeOptionsById>;
+export type ReqUpdateResultTypeOptions = InferType<typeof updateResultTypeOptions>;
+export type ReqDeleteResultTypeOptions = InferType<typeof deleteResultTypeOptions>;
 
-export default { createResultTypeOptions, queryResultTypeOptions, getResultTypeOptionsById };
+export default {
+    createResultTypeOptions,
+    queryResultTypeOptions,
+    getResultTypeOptionsById,
+    updateResultTypeOptions,
+    deleteResultTypeOptions,
+};

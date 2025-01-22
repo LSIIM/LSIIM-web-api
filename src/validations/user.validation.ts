@@ -1,4 +1,4 @@
-import { Role, User } from "@prisma/client";
+import { User } from "@prisma/client";
 import yup from "../config/yup";
 import {
     PartialEntity,
@@ -28,7 +28,16 @@ const createUser: yup.ObjectSchema<tValidCreateSchema<tNovoUser>> = yup.object({
                             email: yup.string().email("Insira um email válido").required("O email é obrigatório."),
                             password: yup.string().default(""),
                             documento: yup.string().required(),
-                            role: yup.string().oneOf(Object.values(Role)).required("Deve ser passado um role."),
+                            isSysAdmin: yup.boolean().required("Deve ser passado um valor para isSysAdmin."),
+                            userProjects: yup
+                                .object({
+                                    projectId: yup.number().required("Deve ser passado um projectId."),
+                                    isProjectAdmin: yup
+                                        .boolean()
+                                        .required("Deve ser passado um valor para isProjectAdmin."),
+                                })
+                                .noUnknown(true)
+                                .strict(),
                         })
                         .noUnknown(true)
                         .strict()
@@ -40,7 +49,7 @@ const createUser: yup.ObjectSchema<tValidCreateSchema<tNovoUser>> = yup.object({
         .strict(),
 });
 
-const queryUsers: yup.ObjectSchema<tValidQuerySchema<PartialEntity<User, "role">, PartialEntity<User, "name">>> =
+const queryUsers: yup.ObjectSchema<tValidQuerySchema<PartialEntity<User, "name">, PartialEntity<User, "name">>> =
     yup.object({
         query: yup
             .object({
@@ -50,7 +59,7 @@ const queryUsers: yup.ObjectSchema<tValidQuerySchema<PartialEntity<User, "role">
                 page: yup.number().integer("O page deve ser um número inteiro."),
                 where: yup
                     .object({
-                        role: yup.string().oneOf(Object.values(Role)),
+                        name: yup.string(),
                     })
                     .noUnknown(true)
                     .strict(),
@@ -59,11 +68,79 @@ const queryUsers: yup.ObjectSchema<tValidQuerySchema<PartialEntity<User, "role">
             .strict(),
     });
 
+const getUserById: yup.ObjectSchema<tValidParamsSchema<PartialEntity<User, "id">>> = yup.object({
+    params: yup
+        .object({
+            id: yup
+                .number()
+                .integer()
+                .required("Deve ser passado um id.")
+                .transform((value) => (typeof value === "string" ? parseInt(value) : value)),
+        })
+        .required("Deve ser passado um params.")
+        .noUnknown(true),
+});
+const updateUser: yup.ObjectSchema<tValidUpdateSchema<PartialEntity<User, "id">, tNovoUser>> = yup.object({
+    params: yup
+        .object({
+            id: yup
+                .number()
+                .integer()
+                .required("Deve ser passado um id.")
+                .transform((value) => (typeof value === "string" ? parseInt(value) : value)),
+        })
+        .required("Deve ser passado um params.")
+        .noUnknown(true),
+    body: yup
+        .object({
+            data: yup
+                .object({
+                    name: yup
+                        .string()
+                        .required("Deve ser passado um nome.")
+                        .min(3, "O nome deve ter no mínimo 3 caracteres.")
+                        .max(50, "O nome deve ter no máximo 50 caracteres."),
+                    email: yup.string().email("Insira um email válido").required("O email é obrigatório."),
+                    password: yup.string().default(""),
+                    documento: yup.string().required(),
+                    isSysAdmin: yup.boolean().required("Deve ser passado um valor para isSysAdmin."),
+                    userProjects: yup
+                        .object({
+                            projectId: yup.number().required("Deve ser passado um projectId."),
+                            isProjectAdmin: yup.boolean().required("Deve ser passado um valor para isProjectAdmin."),
+                        })
+                        .noUnknown(true)
+                        .strict(),
+                })
+                .noUnknown(true)
+                .strict(),
+        })
+        .required("Deve ser passado um body.")
+        .noUnknown(true)
+        .strict(),
+});
+
+const deleteUser: yup.ObjectSchema<tValidDeleteSchema<PartialEntity<User, "id">>> = yup.object({
+    params: yup.object({
+        id: yup
+            .number()
+            .integer()
+            .required("Deve ser passado um id.")
+            .transform((value) => (typeof value === "string" ? parseInt(value) : value)),
+    }),
+});
+
 //TYPES
 export type ReqCreateUser = InferType<typeof createUser>;
 export type ReqQueryUser = InferType<typeof queryUsers>;
+export type ReqGetUserById = InferType<typeof getUserById>;
+export type ReqUpdateUser = InferType<typeof updateUser>;
+export type ReqDeleteUser = InferType<typeof deleteUser>;
 
 export default {
     createUser,
     queryUsers,
+    getUserById,
+    updateUser,
+    deleteUser,
 };

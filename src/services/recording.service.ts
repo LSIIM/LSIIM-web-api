@@ -119,7 +119,7 @@ const queryRecording = async <Key extends keyof Recording>(
     ] as Key[]
 ): Promise<
     (Pick<Recording, Key> & {
-        recordingsVideos: { id: number; projectVideoTypeId: number; camIdUsed: number; url: string; isMain: boolean }[];
+        recordingsVideos: { id: number; projectVideoTypeId: number; camIdUsed: number; url: string; thumb: string; isMain: boolean }[];
     })[]
 > => {
     const limit = query.limit;
@@ -143,7 +143,7 @@ const queryRecording = async <Key extends keyof Recording>(
     );
 
     return recordingsWithVideos as unknown as (Pick<Recording, Key> & {
-        recordingsVideos: { id: number; projectVideoTypeId: number; camIdUsed: number; url: string; isMain: boolean }[];
+        recordingsVideos: { id: number; projectVideoTypeId: number; camIdUsed: number; url: string; thumb: string; isMain: boolean }[];
     })[];
 };
 
@@ -170,7 +170,7 @@ const getRecordingById = async <Key extends keyof Recording>(
     ] as Key[]
 ): Promise<
     Pick<Recording, Key> & {
-        recordingsVideos: { id: number; projectVideoTypeId: number; camIdUsed: number; url: string; isMain: boolean }[];
+        recordingsVideos: { id: number; projectVideoTypeId: number; camIdUsed: number; url: string; thumb: string; isMain: boolean }[];
     }
 > => {
     const recording = await prisma.recording.findUnique({
@@ -185,7 +185,7 @@ const getRecordingById = async <Key extends keyof Recording>(
     };
 
     return recordingWithVideos as unknown as Pick<Recording, Key> & {
-        recordingsVideos: { id: number; projectVideoTypeId: number; camIdUsed: number; url: string; isMain: boolean }[];
+        recordingsVideos: { id: number; projectVideoTypeId: number; camIdUsed: number; url: string; thumb: string; isMain: boolean }[];
     };
 };
 
@@ -261,7 +261,6 @@ const queryAnnotatioVideo = async <Key extends keyof AnnotationVideo>(
         sortBy?: Key;
         sortType?: "asc" | "desc";
     },
-    keys: Key[] = ["id", "recordingVideoId", "createdAt", "updatedAt"] as Key[]
 ): Promise<Pick<AnnotationVideo, Key>[]> => {
     const limit = query.limit;
     const page = query.page;

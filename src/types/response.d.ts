@@ -3,8 +3,9 @@ import {
     Patient,
     Recording,
     EventType,
+    EventTypeProject,
     Annotation,
-    ResultTypeOptions,
+    ResultTypeOption,
     Result,
     AnnotationVideo,
     AnnotationEvent,
@@ -12,6 +13,11 @@ import {
     RecordingVideo,
     PatientProjectSpecialFeature,
     Project,
+    ResultType,
+    ResultTypeProject,
+    ProjectVideoType,
+    MoveInfo,
+    UserProject,
 } from "@prisma/client";
 
 export interface TokenResponse {
@@ -31,24 +37,38 @@ export type tNovoAnnotationVideo = PartialEntity<AnnotationVideo, "recordingVide
     results?: tNovoAnnotationResults[];
 };
 //ECENT TYPE
-export type tNovoEventType = PartialEntity<EventType, "name" | "description" | "isTemporal">;
+export type tNovoEventType = PartialEntity<EventType, "name" | "description" | "isTemporal"> & {
+    eventsTypeProject: tNovoEventTypeProject[];
+};
+
+//EVENT TYPE PROJECT
+export type tNovoEventTypeProject = PartialEntity<EventTypeProject, "projectId">;
 
 //ANNOTATION EVENT
 export type tNovoAnnotationEvent = PartialEntity<AnnotationEvent, "eventTypeId" | "frames">;
 
+//MOVES INFO
+export type tNovoMoveInfo = PartialEntity<MoveInfo, "description" | "defaultCamId">;
 //USER
-export type tNovoUser = PartialEntity<User, "name" | "email" | "password" | "documento" | "role">;
+export type tNovoUser = PartialEntity<User, "name" | "email" | "password" | "documento" | "isSysAdmin"> & {
+    userProjects?: tNovoUserProject;
+};
+
+//USERPROJECT
+export type tNovoUserProject = PartialEntity<UserProject, "projectId" | "isProjectAdmin">;
 
 //Patient
-export type tNovoPatient = PartialEntity<Patient, "name" | "birthDate" | "isPremature" | "gestationalAge"> & {
-    patientSpecialFeatures: tNovoPatientProjectSF[];
+export type tNovoPatient = PartialEntity<Patient, "name" | "birthDate" | "observation"> & {
+    projects: tNovoPatientProjectSpecialFeatures[];
 };
-export type tNovoProject = PartialEntity<Project, "projectName" | "description" | "patientSpecialFetauresTemplate">;
 
-export type tNovoPatientSpecialFeatures = PartialEntity<
-    PatientProjectSpecialFeature,
-    "specialFeatureTemplate" | "projectId"
->;
+export type tNovoPatientProjectSpecialFeatures = PartialEntity<PatientProjectSpecialFeature, "projectId"> & {
+    patientSpecialFeatures: Prisma.JsonObject;
+};
+
+export type tNovoProject = PartialEntity<Project, "projectName" | "description"> & {
+    patientSpecialFetauresTemplate: Prisma.JsonObject;
+};
 //RESULTS
 export type tNovoAnnotationResults = PartialEntity<AnnotationResult, "resultTypeId" | "resultTypeOptionId"> & {
     scalarResult?: number;
@@ -57,17 +77,24 @@ export type tNovoAnnotationResults = PartialEntity<AnnotationResult, "resultType
 export type tNovoAnnResult = { events: tNovoAnnotationVideo[]; results?: tNovoAnnotationResults[] };
 
 //RESULTYPE
-export type tNovoResultType = PartialEntity<ResultTypeOptions, "name" | "description">;
+export type tNovoResultType = PartialEntity<ResultType, "name" | "description"> & {
+    resultsTypeProject: tNovoResultTypeProject[];
+};
+
+export type tNovoResultTypeProject = PartialEntity<ResultTypeProject, "projectId">;
 
 //RESULTTYPEOPTIONS
-export type tNovoResultsTypeOptions = PartialEntity<ResultTypeOptions, "name" | "description" | "resultTypeId">;
+export type tNovoResultsTypeOptions = PartialEntity<ResultTypeOption, "name" | "description">;
 //RECORDING
 export type tNovoRecording = PartialEntity<
     Recording,
     "ignore" | "observation" | "patientId" | "recordingDate" | "moveId" | "projectId"
 > & { recordingsVideos: tNovoRecordingVideo[] };
 
-export type tNovoRecordingVideo = PartialEntiry<RecordingVideo, "projectVideoTypeId" | "camIdUsed"> & {file?: string};
+export type tNovoRecordingVideo = PartialEntiry<RecordingVideo, "projectVideoTypeId" | "camIdUsed"> & { file?: string };
+
+//PROJECT VIDEO TYPE
+export type tNovoProjectVideoType = PartialEntity<ProjectVideoType, "isMain" | "projectId" | "typeName">;
 
 //TIPOS AUXILIARESj
 export type PartialEntity<Entity, Keys extends keyof Entity> = {
@@ -98,6 +125,10 @@ export type tValidQuerySchema<WhereEntity, SortEntity> = {
     query: tQueryParams<WhereEntity, SortEntity>;
 };
 export type tValidCreateSchema<Entity> = { body: tBodyParams<Entity> };
+export type tValidCreateSchemaWithParams<EntityParams, EntityBody> = {
+    params: { [Key in keyof EntityParams]: EntityParams[Key] };
+    body: tBodyParams<EntityBody>;
+};
 export type tValidCustomCreate<Entity> = {
     body: { events: { [Key in keyof Entity]: Entity[Key] }[]; results: { [Key in keyof Entity]: Entity[Key] }[] };
 };

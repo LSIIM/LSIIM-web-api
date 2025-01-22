@@ -17,7 +17,7 @@ const defaultRoutes = [
     { path: "/event-type", route: annotationTypeRoute },
     { path: "/project", route: projectRoute },
     { path: "/result-type", route: resultTypeRoute },
-    { path: "/result-type-options", route: resultTypeOpRoute },
+    { path: "/result-type-option", route: resultTypeOpRoute },
 ];
 
 defaultRoutes.forEach((route) => {
