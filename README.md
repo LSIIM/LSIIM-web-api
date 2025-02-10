@@ -2,7 +2,7 @@
 
 ## Docker
 
-build base: `docker build -f "./Dockerfile_base" -t lsiim_api_latest:latest . `
+build base: `docker build -f "./Dockerfile_base" -t lsiim_api_base:latest . `
 build compose `docker-compose build`
 up compose `docker-compose up -d`
 
