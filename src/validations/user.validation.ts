@@ -10,7 +10,6 @@ import {
     tValidUpdateSchema,
 } from "../types/response";
 import { InferType } from "yup";
-import { query } from "express";
 
 //VALIDATIONS
 const createUser: yup.ObjectSchema<tValidCreateSchema<tNovoUser>> = yup.object({
